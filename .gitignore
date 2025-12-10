@@ -1,0 +1,15 @@
+.env.*
+app/.env
+# Virtual Environment
+.venv/
+venv/
+ENV/
+
+# Environment variables
+.env
+.env.local
+
+# AWS credentials
+aws_credentials.json
+.aws/app/.env
+app/.env
