@@ -1,0 +1,16 @@
+.venv
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+.git
+.gitignore
+.env.local
+.env.*.local
+*.db
+*.log
+.pytest_cache
+.coverage
+htmlcov
+.app/.env
