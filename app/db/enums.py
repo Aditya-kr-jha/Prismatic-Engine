@@ -1,183 +1,226 @@
 from enum import Enum
 
+
 class ContentPillar(str, Enum):
-    PRODUCTIVITY = "productivity"
-    DARK_PSYCHOLOGY = "dark_psychology"
-    RELATIONSHIPS = "relationships"
-    NEUROSCIENCE = "neuroscience"
-    PHILOSOPHY = "philosophy"
-    HEALING_GROWTH = "healing_growth"
-    SELF_CARE = "self_care"
-    SELF_WORTH = "self_worth"
+    PRODUCTIVITY = "PRODUCTIVITY"
+    DARK_PSYCHOLOGY = "DARK_PSYCHOLOGY"
+    RELATIONSHIPS = "RELATIONSHIPS"
+    NEUROSCIENCE = "NEUROSCIENCE"
+    PHILOSOPHY = "PHILOSOPHY"
+    HEALING_GROWTH = "HEALING_GROWTH"
+    SELF_CARE = "SELF_CARE"
+    SELF_WORTH = "SELF_WORTH"
+
+
+PILLAR_SUBREDDITS: dict[ContentPillar, list[str]] = {
+    ContentPillar.PRODUCTIVITY: ["productivity", "getdisciplined"],
+    ContentPillar.DARK_PSYCHOLOGY: ["DarkPsychology101", "socialengineering"],
+    ContentPillar.RELATIONSHIPS: ["relationships", "relationship_advice"],
+    ContentPillar.NEUROSCIENCE: ["neuroscience", "neuro"],
+    ContentPillar.PHILOSOPHY: ["philosophy", "askphilosophy"],
+    ContentPillar.HEALING_GROWTH: ["selfimprovement", "DecidingToBeBetter"],
+    ContentPillar.SELF_CARE: ["selfcare", "Mindfulness"],
+    ContentPillar.SELF_WORTH: ["confidence", "selfesteem"],
+}
+
+# Reverse mapping: subreddit name (lowercase) -> ContentPillar
+SUBREDDIT_TO_PILLAR: dict[str, ContentPillar] = {
+    subreddit.lower(): pillar
+    for pillar, subreddits in PILLAR_SUBREDDITS.items()
+    for subreddit in subreddits
+}
+
 
 class Format(str, Enum):
-    REEL = "reel"
-    CAROUSEL = "carousel"
-    QUOTE = "quote"
+    REEL = "REEL"
+    CAROUSEL = "CAROUSEL"
+    QUOTE = "QUOTE"
+
 
 class SourceType(str, Enum):
-    REDDIT = "reddit"
-    TWITTER = "twitter"
-    PUBMED = "pubmed"
-    GOOGLE_SCHOLAR = "google_scholar"
-    YOUTUBE = "youtube"
-    BOOK = "book"
-    BLOG = "blog"
-    MANUAL = "manual"
-    COMPETITOR = "competitor"
+    REDDIT = "REDDIT"
+    TWITTER = "TWITTER"
+    PUBMED = "PUBMED"
+    GOOGLE_SCHOLAR = "GOOGLE_SCHOLAR"
+    YOUTUBE = "YOUTUBE"
+    BOOK = "BOOK"
+    BLOG = "BLOG"
+    MANUAL = "MANUAL"
+    COMPETITOR = "COMPETITOR"
+
 
 class EmotionalTrigger(str, Enum):
-    FEAR = "fear"
-    VALIDATION = "validation"
-    CURIOSITY = "curiosity"
-    HOPE = "hope"
-    ENVY = "envy"
-    REBELLION = "rebellion"
-    IDENTITY = "identity"
-    EMPOWERMENT = "empowerment"
-    NOSTALGIA = "nostalgia"
+    FEAR = "FEAR"
+    VALIDATION = "VALIDATION"
+    CURIOSITY = "CURIOSITY"
+    HOPE = "HOPE"
+    ENVY = "ENVY"
+    REBELLION = "REBELLION"
+    IDENTITY = "IDENTITY"
+    EMPOWERMENT = "EMPOWERMENT"
+    NOSTALGIA = "NOSTALGIA"
+
 
 class IngestStatus(str, Enum):
-    PENDING = "pending"
-    PROCESSING = "processing"
-    PASSED = "passed"
-    REJECTED = "rejected"
-    ERROR = "error"
+    PENDING = "PENDING"
+    PROCESSING = "PROCESSING"
+    PASSED = "PASSED"
+    REJECTED = "REJECTED"
+    ERROR = "ERROR"
+
 
 class RejectionPhase(str, Enum):
-    PRE_FILTER = "pre_filter"
-    CLASSIFICATION = "classification"
-    STRATEGY = "strategy"
-    QA = "qa"
+    PRE_FILTER = "PRE_FILTER"
+    CLASSIFICATION = "CLASSIFICATION"
+    STRATEGY = "STRATEGY"
+    QA = "QA"
+
 
 class SourceCredibility(str, Enum):
-    HIGH = "high"
-    MEDIUM = "medium"
-    LOW = "low"
+    HIGH = "HIGH"
+    MEDIUM = "MEDIUM"
+    LOW = "LOW"
+
 
 class LifecycleState(str, Enum):
-    ACTIVE = "active"
-    COOLING = "cooling"
-    ARCHIVED = "archived"
-    RETIRED = "retired"
-    RESURRECTED = "resurrected"
+    ACTIVE = "ACTIVE"
+    COOLING = "COOLING"
+    ARCHIVED = "ARCHIVED"
+    RETIRED = "RETIRED"
+    RESURRECTED = "RESURRECTED"
+
 
 class VerificationStatus(str, Enum):
-    VERIFIED = "verified"
-    UNVERIFIED = "unverified"
-    FLAGGED = "flagged"
-    DISPUTED = "disputed"
-    RETRACTED = "retracted"
+    VERIFIED = "VERIFIED"
+    UNVERIFIED = "UNVERIFIED"
+    FLAGGED = "FLAGGED"
+    DISPUTED = "DISPUTED"
+    RETRACTED = "RETRACTED"
+
 
 class DayOfWeek(str, Enum):
-    MONDAY = "monday"
-    TUESDAY = "tuesday"
-    WEDNESDAY = "wednesday"
-    THURSDAY = "thursday"
-    FRIDAY = "friday"
-    SATURDAY = "saturday"
-    SUNDAY = "sunday"
+    MONDAY = "MONDAY"
+    TUESDAY = "TUESDAY"
+    WEDNESDAY = "WEDNESDAY"
+    THURSDAY = "THURSDAY"
+    FRIDAY = "FRIDAY"
+    SATURDAY = "SATURDAY"
+    SUNDAY = "SUNDAY"
+
 
 class ScheduleStatus(str, Enum):
-    SCHEDULED = "scheduled"
-    CREATING = "creating"
-    DRAFT = "draft"
-    QA_PENDING = "qa_pending"
-    QA_PASSED = "qa_passed"
-    QA_FAILED = "qa_failed"
-    PRODUCING = "producing"
-    READY = "ready"
-    DELIVERED = "delivered"
-    PUBLISHED = "published"
-    SKIPPED = "skipped"
-    EMERGENCY = "emergency"
+    SCHEDULED = "SCHEDULED"
+    CREATING = "CREATING"
+    DRAFT = "DRAFT"
+    QA_PENDING = "QA_PENDING"
+    QA_PASSED = "QA_PASSED"
+    QA_FAILED = "QA_FAILED"
+    PRODUCING = "PRODUCING"
+    READY = "READY"
+    DELIVERED = "DELIVERED"
+    PUBLISHED = "PUBLISHED"
+    SKIPPED = "SKIPPED"
+    EMERGENCY = "EMERGENCY"
+
 
 class EventType(str, Enum):
-    HOLIDAY = "holiday"
-    AWARENESS_DAY = "awareness_day"
-    TRENDING_MOMENT = "trending_moment"
-    BRAND_EVENT = "brand_event"
-    CULTURAL = "cultural"
-    SEASONAL = "seasonal"
+    HOLIDAY = "HOLIDAY"
+    AWARENESS_DAY = "AWARENESS_DAY"
+    TRENDING_MOMENT = "TRENDING_MOMENT"
+    BRAND_EVENT = "BRAND_EVENT"
+    CULTURAL = "CULTURAL"
+    SEASONAL = "SEASONAL"
+
 
 class RemixType(str, Enum):
-    CROSS_PILLAR = "cross_pillar"
-    FORMAT_SHIFT = "format_shift"
-    ANGLE_VARIATION = "angle_variation"
-    SEASONAL = "seasonal"
-    PERFORMANCE_BOOST = "performance_boost"
+    CROSS_PILLAR = "CROSS_PILLAR"
+    FORMAT_SHIFT = "FORMAT_SHIFT"
+    ANGLE_VARIATION = "ANGLE_VARIATION"
+    SEASONAL = "SEASONAL"
+    PERFORMANCE_BOOST = "PERFORMANCE_BOOST"
+
 
 class QueueStatus(str, Enum):
-    QUEUED = "queued"
-    SELECTED = "selected"
-    PUBLISHED = "published"
-    SKIPPED = "skipped"
-    EXPIRED = "expired"
+    QUEUED = "QUEUED"
+    SELECTED = "SELECTED"
+    PUBLISHED = "PUBLISHED"
+    SKIPPED = "SKIPPED"
+    EXPIRED = "EXPIRED"
+
 
 class QAStatus(str, Enum):
-    PENDING = "pending"
-    IN_PROGRESS = "in_progress"
-    PASSED = "passed"
-    FAILED = "failed"
-    SKIPPED = "skipped"
+    PENDING = "PENDING"
+    IN_PROGRESS = "IN_PROGRESS"
+    PASSED = "PASSED"
+    FAILED = "FAILED"
+    SKIPPED = "SKIPPED"
+
 
 class Tone(str, Enum):
-    EDGY = "edgy"
-    GENTLE = "gentle"
-    ACADEMIC = "academic"
-    RELATABLE = "relatable"
-    EMPOWERING = "empowering"
+    EDGY = "EDGY"
+    GENTLE = "GENTLE"
+    ACADEMIC = "ACADEMIC"
+    RELATABLE = "RELATABLE"
+    EMPOWERING = "EMPOWERING"
+
 
 class SizeCategory(str, Enum):
-    NICHE = "niche"
-    MEDIUM = "medium"
-    LARGE = "large"
+    NICHE = "NICHE"
+    MEDIUM = "MEDIUM"
+    LARGE = "LARGE"
+
 
 class HashtagStatus(str, Enum):
-    ACTIVE = "active"
-    TESTING = "testing"
-    BANNED = "banned"
-    RETIRED = "retired"
+    ACTIVE = "ACTIVE"
+    TESTING = "TESTING"
+    BANNED = "BANNED"
+    RETIRED = "RETIRED"
+
 
 class AssetType(str, Enum):
-    IMAGE = "image"
-    VIDEO = "video"
-    AUDIO = "audio"
-    CAROUSEL_SET = "carousel_set"
+    IMAGE = "IMAGE"
+    VIDEO = "VIDEO"
+    AUDIO = "AUDIO"
+    CAROUSEL_SET = "CAROUSEL_SET"
+
 
 class ProductionStatus(str, Enum):
-    RENDERING = "rendering"
-    READY = "ready"
-    DELIVERED = "delivered"
-    FAILED = "failed"
+    RENDERING = "RENDERING"
+    READY = "READY"
+    DELIVERED = "DELIVERED"
+    FAILED = "FAILED"
+
 
 class PostingStatus(str, Enum):
-    GENERATED = "generated"
-    DELIVERED = "delivered"
-    REVIEWED = "reviewed"
-    POSTED = "posted"
-    SKIPPED = "skipped"
-    ARCHIVED = "archived"
+    GENERATED = "GENERATED"
+    DELIVERED = "DELIVERED"
+    REVIEWED = "REVIEWED"
+    POSTED = "POSTED"
+    SKIPPED = "SKIPPED"
+    ARCHIVED = "ARCHIVED"
+
 
 class EmergencyStatus(str, Enum):
-    AVAILABLE = "available"
-    USED = "used"
-    EXPIRED = "expired"
+    AVAILABLE = "AVAILABLE"
+    USED = "USED"
+    EXPIRED = "EXPIRED"
+
 
 class SystemEventType(str, Enum):
-    ERROR = "error"
-    WARNING = "warning"
-    INFO = "info"
-    ALERT = "alert"
-    RECOVERY = "recovery"
+    ERROR = "ERROR"
+    WARNING = "WARNING"
+    INFO = "INFO"
+    ALERT = "ALERT"
+    RECOVERY = "RECOVERY"
+
 
 class SystemPhase(str, Enum):
-    INGESTION = "ingestion"
-    PRE_FILTER = "pre_filter"
-    CLASSIFICATION = "classification"
-    STRATEGY = "strategy"
-    CREATION = "creation"
-    QA = "qa"
-    PRODUCTION = "production"
-    DELIVERY = "delivery"
-    LEARNING = "learning"
+    INGESTION = "INGESTION"
+    PRE_FILTER = "PRE_FILTER"
+    CLASSIFICATION = "CLASSIFICATION"
+    STRATEGY = "STRATEGY"
+    CREATION = "CREATION"
+    QA = "QA"
+    PRODUCTION = "PRODUCTION"
+    DELIVERY = "DELIVERY"
+    LEARNING = "LEARNING"

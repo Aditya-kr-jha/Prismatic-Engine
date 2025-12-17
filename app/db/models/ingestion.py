@@ -36,11 +36,10 @@ class RawIngest(SQLModel, table=True):
             postgresql_where=text("content_hash IS NOT NULL"),
         ),
         # ---------- PERFORMANCE INDEXES ----------
-        # Hot queue (pending / processing only)
         Index(
             "ix_raw_ingest_status_active",
             "status",
-            postgresql_where=text("status IN ('pending', 'processing')"),
+            postgresql_where=text("status IN ('PENDING', 'PROCESSING')"),
         ),
         # Batch-based ingestion
         Index(
@@ -93,7 +92,6 @@ class RawIngest(SQLModel, table=True):
     )
 
     # ---------- HARVESTER ----------
-    harvester_id: Optional[str] = Field(default=None)
     batch_id: Optional[uuid.UUID] = Field(default=None)
 
     # ---------- TIMESTAMPS ----------
@@ -124,6 +122,8 @@ class RawIngest(SQLModel, table=True):
         back_populates="raw_ingest"
     )
 
+    # content_atoms: List["ContentAtom"] = Relationship(back_populates="raw_ingest")
+
 
 class RejectedContent(SQLModel, table=True):
     __tablename__ = "rejected_content"
@@ -136,12 +136,6 @@ class RejectedContent(SQLModel, table=True):
             "ix_rejected_content_phase_time",
             "rejection_phase",
             "rejected_at",
-        ),
-        # Optional categorization
-        Index(
-            "ix_rejected_content_category",
-            "rejection_category",
-            postgresql_where=text("rejection_category IS NOT NULL"),
         ),
         # JSONB reasons search
         Index(
@@ -177,11 +171,6 @@ class RejectedContent(SQLModel, table=True):
         sa_column=Column(JSONB, nullable=False),
     )
 
-    # ---------- LEARNING ----------
-    rejection_category: Optional[str] = Field(default=None)
-    could_be_salvaged: bool = Field(default=False)
-    salvage_notes: Optional[str] = Field(default=None)
-
     # ---------- AUDIT ----------
     rejected_at: datetime = Field(
         default_factory=lambda: datetime.now(timezone.utc),
@@ -195,8 +184,4 @@ class RejectedContent(SQLModel, table=True):
     rejected_by: Optional[str] = Field(default="system")
 
     # ---------- RELATIONSHIP ----------
-    rejected_contents: List["RejectedContent"] = Relationship(
-        back_populates="raw_ingest"
-    )
-
-    content_atoms: List["ContentAtom"] = Relationship(back_populates="raw_ingest")
+    raw_ingest: Optional["RawIngest"] = Relationship(back_populates="rejected_contents")

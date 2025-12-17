@@ -1,9 +1,13 @@
 from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
 # Ensure this import matches your actual project structure
+from app.api.ingestion import router as ingestion_router
 from app.db.session import create_db_and_tables
+from app.services.clients import HTTPClientManager
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -14,9 +18,20 @@ async def lifespan(app: FastAPI):
     # Startup: Initialize the database tables
     print("✨ Prismatic Engine: Initializing Core Systems...")
     create_db_and_tables()
+
+    # Startup: Initialize HTTP clients
+    client_manager = HTTPClientManager()
+    await client_manager.startup()
+    app.state.clients = client_manager
+
     yield
+
+    # Shutdown: Close HTTP clients
+    await client_manager.shutdown()
+
     # Shutdown: Clean up resources if necessary
     print("🌑 Prismatic Engine: Shutting down...")
+
 
 app = FastAPI(
     lifespan=lifespan,
@@ -38,6 +53,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Register API routers
+app.include_router(ingestion_router, prefix="/api/v1")
+
+
 @app.get("/")
 def root():
     """
@@ -48,8 +67,9 @@ def root():
         "status": "Online",
         "mode": "Refraction",
         "docs_url": "/docs",
-        "message": "Infinite Content Through Intelligent Refraction."
+        "message": "Infinite Content Through Intelligent Refraction.",
     }
+
 
 @app.get("/health")
 def health_check():
@@ -63,5 +83,5 @@ if __name__ == "__main__":
     import uvicorn
 
     uvicorn.run(
-        "app.main:app", host="0.0.0.0", port=8000, reload=True, log_level="info"
+        "app.main:app", host="127.0.0.1", port=8000, reload=True, log_level="info"
     )

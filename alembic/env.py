@@ -1,18 +1,15 @@
 import sys
+from logging.config import fileConfig
 from pathlib import Path
 
-
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from app.config import settings
-
-from logging.config import fileConfig
-
-from sqlalchemy import engine_from_config, pool
 from alembic import context
+from sqlalchemy import engine_from_config, pool
 from sqlmodel import SQLModel
 
-# Import all models to register them with SQLModel.metadata
+# Add the project root to sys.path so we can import from app
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+from app.config import settings
 
 config = context.config
 
@@ -23,17 +20,11 @@ target_metadata = SQLModel.metadata
 
 
 def get_database_url() -> str:
-    """Return database URL based on environment."""
-    BASE_DIR = Path(__file__).resolve().parent.parent
-    DB_PATH = BASE_DIR / "prismatic.db"
-
-    SQLITE_URL = f"sqlite:///{DB_PATH}"
-    RDS_URL = (
-        f"postgresql+psycopg2://{settings.DB_USER}:{settings.DB_PASSWORD}"
+    """Return the RDS database URL."""
+    return (
+        f"postgresql://{settings.DB_USER}:{settings.DB_PASSWORD}"
         f"@{settings.RDS_ENDPOINT}:{settings.DB_PORT}/{settings.DB_NAME}"
     )
-
-    return RDS_URL if settings.APP_ENV.lower() in {"prod", "production"} else SQLITE_URL
 
 
 def run_migrations_offline() -> None:
@@ -43,7 +34,6 @@ def run_migrations_offline() -> None:
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
-        render_as_batch=True,
     )
 
     with context.begin_transaction():
@@ -64,7 +54,6 @@ def run_migrations_online() -> None:
         context.configure(
             connection=connection,
             target_metadata=target_metadata,
-            render_as_batch=True,
         )
 
         with context.begin_transaction():
