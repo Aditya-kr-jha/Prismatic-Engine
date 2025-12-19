@@ -3,10 +3,10 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
-# Ensure this import matches your actual project structure
-from app.api.ingestion import router as ingestion_router
-from app.db.session import create_db_and_tables
-from app.services.clients import HTTPClientManager
+# Use the new module paths
+from app.api.ingestion_routes import router as ingestion_router
+from app.db.db_session import create_db_and_tables
+from app.infra.http import HTTPClientManager
 
 
 @asynccontextmanager
