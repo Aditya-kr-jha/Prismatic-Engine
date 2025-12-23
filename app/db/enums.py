@@ -224,3 +224,33 @@ class SystemPhase(str, Enum):
     PRODUCTION = "PRODUCTION"
     DELIVERY = "DELIVERY"
     LEARNING = "LEARNING"
+
+
+# ============================================================================
+# Pre-Ingestion Enums (Evergreen Content Reservoir)
+# ============================================================================
+
+
+class EvergreenSourceType(str, Enum):
+    BOOK = "BOOK"
+    BLOG = "BLOG"
+    PODCAST = "PODCAST"
+
+
+class FileType(str, Enum):
+    PDF = "PDF"
+    EPUB = "EPUB"
+
+
+class EvergreenSourceStatus(str, Enum):
+    PENDING = "PENDING"
+    PROCESSING = "PROCESSING"
+    COMPLETED = "COMPLETED"
+    FAILED = "FAILED"
+
+
+class ReservoirStatus(str, Enum):
+    AVAILABLE = "AVAILABLE"
+    QUEUED = "QUEUED"
+    USED = "USED"
+    COOLDOWN = "COOLDOWN"

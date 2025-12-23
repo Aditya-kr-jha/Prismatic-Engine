@@ -17,10 +17,13 @@
 # )
 
 from app.db.db_models.ingestion import RawIngest, RejectedContent
+from app.db.db_models.pre_ingestion import EvergreenSource, ContentReservoir
 
 __all__ = [
     "RawIngest",
     "RejectedContent",
+    "EvergreenSource",
+    "ContentReservoir",
     # "ContentAtom",
     # "AngleMatrix",
     # "ContentSchedule",
