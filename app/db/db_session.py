@@ -6,9 +6,9 @@ from sqlmodel import SQLModel, Session
 
 from app.config import settings
 
-# Construct the PostgreSQL URL directly
+# Force SQLAlchemy to use psycopg v3 (avoids missing libpq dylib issues on macOS)
 DATABASE_URL = (
-    f"postgresql://{settings.DB_USER}:{settings.DB_PASSWORD}"
+    f"postgresql+psycopg://{settings.DB_USER}:{settings.DB_PASSWORD}"
     f"@{settings.RDS_ENDPOINT}:{settings.DB_PORT}/{settings.DB_NAME}"
 )
 

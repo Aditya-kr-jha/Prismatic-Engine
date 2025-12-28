@@ -1,0 +1,19 @@
+# Book Configuration for Seeder
+# Each book entry specifies the source for content extraction
+
+books:
+  - title: "Deep Work"
+    author: "Cal Newport"
+    file: "deep-work.pdf"
+  - title: "The-Courage-to-be-Disliked"
+    author: "Ichiro Kishimi and Fumitake Koga"
+    file: "the-courage-to-be-disliked.pdf"
+
+  # Add more books here:
+  # - title: "Atomic Habits"
+  #   author: "James Clear"
+  #   file: "atomic_habits.pdf"
+  #
+  # - title: "Thinking, Fast and Slow"
+  #   author: "Daniel Kahneman"
+  #   file: "thinking_fast_slow.pdf"

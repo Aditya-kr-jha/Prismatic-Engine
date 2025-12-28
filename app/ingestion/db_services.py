@@ -252,3 +252,199 @@ def count_ingest_by_status(
     """
     statement = select(RawIngest).where(RawIngest.status == status)
     return len(session.exec(statement).all())
+
+
+# ============================================================================
+# Evergreen Content Reservoir DB Services
+# ============================================================================
+
+from app.db.db_models.pre_ingestion import EvergreenSource, ContentReservoir
+from app.db.enums import (
+    EvergreenSourceType,
+    EvergreenSourceStatus,
+    ReservoirStatus,
+    FileType,
+)
+
+
+def get_evergreen_source_by_title(
+    session: Session,
+    title: str,
+    author: str,
+) -> Optional[EvergreenSource]:
+    """
+    Get an evergreen source by title and author.
+
+    Args:
+        session: SQLModel session
+        title: Book title
+        author: Book author
+
+    Returns:
+        EvergreenSource if found, None otherwise
+    """
+    statement = select(EvergreenSource).where(
+        EvergreenSource.title == title,
+        EvergreenSource.author == author,
+    )
+    return session.exec(statement).first()
+
+
+def get_or_create_evergreen_source(
+    session: Session,
+    source_type: EvergreenSourceType,
+    title: str,
+    author: str,
+    file_path: Optional[str] = None,
+    file_type: Optional[FileType] = None,
+) -> tuple[EvergreenSource, bool]:
+    """
+    Get or create an evergreen source entry.
+
+    Args:
+        session: SQLModel session
+        source_type: Type of source (BOOK, BLOG, PODCAST)
+        title: Source title
+        author: Source author
+        file_path: Optional file path
+        file_type: Optional file type (PDF, EPUB)
+
+    Returns:
+        Tuple of (EvergreenSource, created) where created is True if new
+    """
+    existing = get_evergreen_source_by_title(session, title, author)
+    if existing:
+        return existing, False
+
+    source = EvergreenSource(
+        source_type=source_type,
+        title=title,
+        author=author,
+        file_path=file_path,
+        file_type=file_type,
+        status=EvergreenSourceStatus.PENDING,
+    )
+    session.add(source)
+    session.flush()
+    return source, True
+
+
+def update_evergreen_source_status(
+    session: Session,
+    source_id: uuid.UUID,
+    status: EvergreenSourceStatus,
+    chunks_extracted: Optional[int] = None,
+    error_message: Optional[str] = None,
+) -> bool:
+    """
+    Update evergreen source status and metadata.
+
+    Args:
+        session: SQLModel session
+        source_id: ID of the evergreen source
+        status: New status
+        chunks_extracted: Number of chunks extracted (if completing)
+        error_message: Error message (if failing)
+
+    Returns:
+        True if update succeeded, False if record not found
+    """
+    source = session.get(EvergreenSource, source_id)
+    if not source:
+        return False
+
+    source.status = status
+
+    if chunks_extracted is not None:
+        source.chunks_extracted = chunks_extracted
+
+    if error_message is not None:
+        source.error_message = error_message
+
+    if status == EvergreenSourceStatus.COMPLETED:
+        source.processed_at = datetime.now(timezone.utc)
+
+    session.add(source)
+    return True
+
+
+def insert_elite_chunks(
+    session: Session,
+    source_id: uuid.UUID,
+    chunks: list,
+    source_type: str,
+    source_name: str,
+    source_author: str,
+) -> int:
+    """
+    Insert elite chunks from PDF extraction into content reservoir.
+
+    Args:
+        session: SQLModel session
+        source_id: ID of the evergreen source
+        chunks: List of ScoredChunk objects from elimination gate
+        source_type: Type string for denormalization
+        source_name: Source name for denormalization
+        source_author: Source author for denormalization
+
+    Returns:
+        Number of chunks inserted
+    """
+    inserted = 0
+
+    for scored_chunk in chunks:
+        chunk = scored_chunk.chunk
+        
+        reservoir_entry = ContentReservoir(
+            source_id=source_id,
+            raw_text=chunk.text,
+            raw_title=None,
+            chunk_index=chunk.index,
+            source_type=source_type,
+            source_name=source_name,
+            source_author=source_author,
+            status=ReservoirStatus.AVAILABLE,
+            times_used=0,
+        )
+        session.add(reservoir_entry)
+        inserted += 1
+
+    session.flush()
+    logger.info(f"Inserted {inserted} chunks into content_reservoir for source {source_id}")
+    return inserted
+
+
+def get_pending_evergreen_sources(
+    session: Session,
+) -> List[EvergreenSource]:
+    """
+    Get all pending evergreen sources for processing.
+
+    Returns:
+        List of EvergreenSource with PENDING status
+    """
+    statement = select(EvergreenSource).where(
+        EvergreenSource.status == EvergreenSourceStatus.PENDING
+    )
+    return list(session.exec(statement).all())
+
+
+def count_reservoir_chunks_by_source(
+    session: Session,
+    source_id: uuid.UUID,
+) -> int:
+    """
+    Count content reservoir chunks for a specific source.
+
+    Args:
+        session: SQLModel session
+        source_id: ID of the evergreen source
+
+    Returns:
+        Count of chunks for this source
+    """
+    statement = select(ContentReservoir).where(
+        ContentReservoir.source_id == source_id
+    )
+    return len(session.exec(statement).all())
+

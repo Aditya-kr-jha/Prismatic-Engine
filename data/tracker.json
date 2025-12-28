@@ -1,0 +1,42 @@
+{
+  "urls": {
+    "82fcb45b88bc7a07": {
+      "title": "Five Step Creative Process",
+      "author": "James Clear",
+      "date": "2025-12-28T20:29:20.104925+00:00"
+    },
+    "8c22296562d5d662": {
+      "title": "Domino Effect",
+      "author": "James Clear",
+      "date": "2025-12-28T20:48:21.164317+00:00"
+    },
+    "b4dd0fdf583d3920": {
+      "title": "Master One Thing",
+      "author": "James Clear",
+      "date": "2025-12-28T20:49:47.899138+00:00"
+    },
+    "7016fb652d801581": {
+      "title": "Question",
+      "author": "Mark Manson",
+      "date": "2025-12-28T21:07:08.912423+00:00"
+    },
+    "38b9188cf6c05073": {
+      "title": "Ken Wilber",
+      "author": "Mark Manson",
+      "date": "2025-12-28T22:17:35.211899+00:00"
+    },
+    "75724dae5507ae26": {
+      "title": "Against Against Boomers",
+      "author": "Scott Alexander",
+      "date": "2025-12-28T22:21:11.360351+00:00"
+    }
+  },
+  "stats": {
+    "total": 6,
+    "by_author": {
+      "10": 3,
+      "20": 2,
+      "02": 1
+    }
+  }
+}

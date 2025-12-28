@@ -7,7 +7,7 @@ and the content reservoir for weekly feeding into raw_ingest.
 
 import uuid
 from datetime import datetime, timezone
-from typing import Optional, List
+from typing import Optional, List, TYPE_CHECKING
 
 from sqlalchemy import (
     Column,
@@ -26,14 +26,18 @@ from app.db.enums import (
     ReservoirStatus,
 )
 
+if TYPE_CHECKING:
+    from app.db.db_models.blog_scrape_tracker import ScrapedURL, AuthorScrapeState
+
 
 class EvergreenSource(SQLModel, table=True):
     """
     Evergreen content sources like books, blogs, and podcasts.
-    
+
     These are high-quality sources that are processed once and
     provide chunks for the content reservoir.
     """
+
     __tablename__ = "evergreen_sources"
 
     __table_args__ = (
@@ -96,10 +100,11 @@ class EvergreenSource(SQLModel, table=True):
 class ContentReservoir(SQLModel, table=True):
     """
     Content reservoir for storing extracted chunks from evergreen sources.
-    
+
     These chunks are queued weekly for feeding into raw_ingest.
     Lifecycle: AVAILABLE -> QUEUED -> USED -> COOLDOWN -> AVAILABLE
     """
+
     __tablename__ = "content_reservoir"
 
     __table_args__ = (

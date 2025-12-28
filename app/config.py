@@ -60,6 +60,38 @@ class Settings(BaseSettings):
         default="",
         description="ElevenLabs API key for TTS",
     )
+    FIRECRAWL_API_KEY: str = Field(
+        default="hurghrugrugjryfghurfrufgurfuruhfurh",
+        description="Firecrawl API key for web scraping",
+    )
+
+    # Scraping Settings
+    SCRAPE_BATCH_SIZE: int = Field(
+        default=50,
+        description="Number of URLs to process per scraping batch",
+    )
+    MONTHLY_PAGE_LIMIT: int = Field(
+        default=500,
+        description="Maximum pages to scrape per month",
+    )
+    REQUEST_TIMEOUT: int = Field(
+        default=15,
+        description="Timeout for scraping requests (seconds)",
+    )
+    REQUEST_DELAY: float = Field(
+        default=1.0,
+        description="Delay between scraping requests (seconds)",
+    )
+
+    # Content Settings
+    MIN_ARTICLE_WORDS: int = Field(
+        default=200,
+        description="Minimum word count for valid articles",
+    )
+    MAX_CHUNK_WORDS: int = Field(
+        default=2000,
+        description="Maximum word count per content chunk",
+    )
 
     class Config:
         env_file = os.path.join(_CONFIG_DIR, ".env")

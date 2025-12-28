@@ -9,6 +9,7 @@ Main Components:
 - TextCleaner: Clean and normalize extracted text  
 - ParagraphChunker: Split text into paragraph-based chunks
 - HardFilter: Rule-based filtering of chunks
+- EliteFilter: 4-stage elimination gate for Instagram-viral content
 """
 
 # Schemas (Pydantic models)
@@ -40,6 +41,11 @@ from app.ingestion.reservoir.chunker import ParagraphChunker
 # Filtering
 from app.ingestion.reservoir.filter import HardFilter
 
+# Elimination Gate
+from app.ingestion.reservoir.elimination import EliteFilter
+from app.ingestion.reservoir.elimination.ranking import ScoredChunk, EliminationResult
+from app.ingestion.reservoir.elimination.scoring import AxisScores
+
 __all__ = [
     # Schemas
     "CleaningConfig",
@@ -51,9 +57,15 @@ __all__ = [
     "FilterDecision",
     "DropReason",
     "FilterResult",
+    # Elimination
+    "AxisScores",
+    "ScoredChunk",
+    "EliminationResult",
     # Classes
     "PDFExtractor",
     "TextCleaner",
     "ParagraphChunker",
     "HardFilter",
+    "EliteFilter",
 ]
+

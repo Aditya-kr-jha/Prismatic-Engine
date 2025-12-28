@@ -1,0 +1,77 @@
+URL: https://www.astralcodexten.com/p/against-against-boomers
+TITLE: Against Against Boomers
+AUTHOR_ID: 02
+ARCHIVED: 2025-12-28T22:21:04.250463+00:00
+
+---
+
+---
+
+Hating Boomers is the new cool thing. Amazon offerings include A Generation Of Sociopaths: How The Baby Boomers Betrayed America, the two apparently unrelated books How The Boomers Took Their Children’s Future and How The Boomers Stole Millennials’ Future, and Boomers: The Men And Women Who Promised Freedom But Delivered Disaster. “You don’t hate Boomers enough” has become a popular Twitter catchphrase. Richard Hanania, who has tried hating every group once, has decided that hating Boomers is his favorite.
+
+Some people might say we just experienced a historic upwelling of identity politics, that it was pretty terrible for everyone involved, and that perhaps we need a new us-vs-them conflict like we need a punch to the face. This, the Boomer-haters will tell you, would be a mistaken generalization. This time, we have finally discovered a form of identity politics which carves reality at its joints, truly separating the good and bad people.
+
+I think these arguments fall short. Even if they didn’t, the usual bias against identity politics should make us think twice about pursuing them too zealously.
+
+II.
+
+Why, exactly, are Boomers so bad?
+
+Zooming out, it seems sort of like Boomers have delivered the greatest period of peace and prosperity in history: global, American, take your pick. The window of Boomer dominance, c. 1980 - 2010, saw the fall of Communism, steadily rising incomes, steadily growing life expectancy, and no foreign wars bigger than Iraq (total American death toll: 4,500).
+
+The Boomers could reasonably blame their Greatest Generation fathers for sending them to die in Vietnam. Those Greatest Generation fathers could reasonably blame their fathers for plunging the country into a Great Depression. In comparison, we’re mad about - what, exactly? Higher housing prices? Hardly seems World-War-level bad.
+
+Earlier this month, we investigated the Vibecession: the economists’ claim that, despite everyone thinking the economy is bad, actually, the economy is good. We reached no firm conclusion, but in the process, we dug up this chart:
+
+…which shows that Millennials and Generation Z have more money (adjusted for inflation ie cost-of-living, and compared at the same age) than their Boomer parents, to about the same degree that the Boomers exceeded their own parents. This is good and how it should be. The Boomers have successfully passed on a better life to their children.
+
+The liberals make fun of Schrodinger’s Immigrant, who is both a lazy welfare parasite and also stealing your job. But equally sinister is Schrodinger’s Boomer, who destroyed America through being simultaneously too far right and too far left. Progressives accuse Boomers of instituting market-worshipping neoliberalism, failing the challenge of climate change, and resisting the arc of history on issues like trans rights and Palestine. But conservatives accuse the same Boomers of overregulating everything in the name of “the environment”, shutting down the nuclear plants, and starting the trend towards “gay race communism” with their hippy-dippy 60s values.
+
+In reality, the difference between generations on any of these things is barely noticeable.
+
+Sources: 1, 2, 3
+It’s not even clear that Boomers are that much more likely to be NIMBYs. From Pew:
+
+Source: selected the most interesting questions from here. If you’re worried that this is too theoretical and want to see numbers for a live proposal, here’s what people think of a particular San Francisco upzoning plan:
+And this is all focusing on the anti-Boomer-ists’ chosen topics. You can find others where the Boomers look downright saintly compared to their kids:
+
+Source: 1, 2, 3
+I don’t think the Boomer-Millennial difference in most political opinions is big enough to matter much either way.
+
+III.
+
+There’s a more developed theory of Boomer-hating. The more developed theory goes: Boomers are plundering the young. We know this, because their share of resources is high and keeps increasing. They use their large population share and good voter turnout to vote themselves ever-higher pensions at the expense of working taxpayers.
+
+How might we investigate this theory? We can’t use total social security spending, because the number of elderly has gone up. Can we use social security spending per elderly person? No; the amount of social security paid out depends on the amount paid in. If each year’s retirees earned more during their career than the previous year’s did (this is true), then each year’s will get a higher SSI payment, even if the system’s “generosity” stays the same.
+
+We might start by looking at change in social security payment divided by change in median income. Over the past fifty years, average Social Security payment in inflation-adjusted dollars increased 60%. If we expect these payments to reflect earnings twenty years before disbursement, we can look at real median personal income from 1953 to 2003; this also also increased 60%. There is no increase in generosity.
+
+Or we can just look at the history. The Social Security Administration’s own website says that its generosity peaked in 1972, when the program primarily served the Greatest Generation; since then, it’s been one contraction after another. In 1983, the government increased the full retirement age from 65 to 67; in 1993, they made Social Security more taxable. Since then, most of the changes have been cost-of-living increases, which are indexed to inflation and not the result of active lobbying on old people’s behalf.
+
+Why do so many believe that old people have discovered a vote-themselves-infinite-benefits hack? Since old people represent an increasing fraction of the population, are living longer, and face a secular trend of rising healthcare costs, even when their benefits per capita per year are stable or declining the government will spend more money on them as a group. This spending is indeed rapidly becoming unsustainable, the elderly will need to accept big benefit cuts to make it sustainable again, and they are resisting those cuts.
+
+So have we finally discovered the fabled Boomer selfishness? Call it what you want. But remember that the Boomers did pay money into Social Security to support their own parents, believing that they would be supported in turn. Learning that yours is the generation where the pyramid collapses is a hard pill to swallow. Maybe they should suck it up and take the sacrifice. You’d do this, right? Voluntarily give up money which is yours by right, in order to help other generations? Oh, sorry, you didn’t hear the question, you were too busy writing your 500th “You don’t hate Boomers enough, why won’t they hurry up and die, we need to declare intergenerational warfare and seize our rightful inheritance” post.
+
+IV.
+
+Maybe I’m wrong about all of this. There are different ways to analyze the data. For example, Medicare Part D is a genuine expansion of healthcare to the old - albeit one passed at a time when it benefited Silent Generationers instead of Boomers. I counted it under “healthcare is getting more expensive so we need more healthcare programs”, but maybe I shouldn’t have. Maybe it’s greed. And what about Europe? I hear the pension situation is even worse there, maybe the Boomers there are greedy, and I’m missing it due to my Americocentrism.
+
+If that’s so, my question becomes: do we really want to do this again?
+
+Consider the campaign against property taxes, another purported example of Boomer malevolence (I couldn’t find polling on this, so I didn’t include it above). If the polls come in, and they prove that it’s disproportionately supported by Boomers, does this prove their greed and selfishness? After all, Boomers own most of the property, so shifting the tax burden elsewhere directly benefits them.
+
+I’ll answer this question with a question: suppose that the polls show that support is concentrated among white people. This is very likely true; white people are usually the biggest tax cut proponents. And we know white people on average own more property than black people, and therefore stand to benefit more. Does this make the tax cuts a form of race warfare? A perpetuation of white supremacy? An example of greedy white people trying to keep minorities down for their own selfish gain? You sure can find one billion people talking about how tax cuts are racially biased or opposed to equity or something (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, etc)
+
+It’s no devastating rebuttal to declare oneself tired of something. Still, I’m tired of this. After a decade of this discussion, I think many people are ready to stop thinking of every policy in terms of who-whom, and ready to discuss other facets like whether it overall increases or decreases net welfare, or how it manages the tradeoff between individual freedom and the public good. I think the decade we spent turning everything into identity politics resulted in worse policy than we got back when we were more reluctant to do that. Everyone knows that some groups are richer than others, that the rich groups are more likely to oppose redistribution, and that the poor groups more often support it. You can reframe this as a story of whites vs. blacks, or Boomers vs. Millennials, or the educated elite vs. the working class, or the abled vs. the disabled, or Jews vs. Gentiles, or any of a thousand other dichotomies that all correlate with wealth and with one another. Is this valuable? Does it dry a single human tear? I haven’t noticed.
+
+But it gets worse. Consider the way that “capitalism” gets used in socialist spaces. Although there are still a few classical Marxists with a clear conception of what capitalism is and why they hate it, most lefties just use “capitalism” to mean *gestures around expansively at everything*, with no concern about whether it involves market processes at all. Israel bombing Palestine? That’s capitalism. Trump arresting immigrants? Somehow that’s capitalism too. It’s true that our society is very capitalist, and that capitalism touches in some way upon almost everything. But that gets laundered into an excuse to believe you’re being a good communist by hating everything about everything.
+
+In the same way, 60% of Americans are white. The white fraction of the most powerful Americans, and among the forebears who got us into this position, is even higher. Say that you hate everything, and you sound like a nihilist who is hard to take seriously. But say that you hate “white people”, or “white culture”, or “whiteness”, and this is broad enough to give you an excuse to hate every specific thing, without having to admit you are doing this.
+
+This is my true objection to the term “Boomer”. By this point, every institution in the world is either run by Boomers, used to be run by Boomers, or was shaped by Boomers in some way. It’s a cheap way of hating everything.
+
+One might argue that at least anti-Boomerism has a time limit; at some point they’ll be gone and people will have to blame something else. Still, this is a double-edged sword. You shouldn’t be racist or sexist. But if you have to be one or the other, be racist. You can be racist purely and honestly, but if you’re hetero, then sexism will inevitably make you miserable: it can’t help but be a love-hate relationship. Yet ageism is even worse: you are doomed to one day become what you hate. You may never be a Boomer. But you will be in the position, vis-a-vis the younger generation, that the Boomers are in now. Hopelessly uncool, increasingly distant from the engines of memetogenesis, sitting upon assets that you are not at this moment using for market labor or family formation and which could easily be redistributed to others. Is it too hard to believe that the decisions you make now about stereotypes and identities and the level of respect due to elders will stick around a few decades?
+
+What will our children think of Millennials and Zoomers? Might they get mad about wokeness and the pillaging of the American education system for temporary political cred? What about Trump, DOGE, and the decline of federal state capacity? Any of these seems worse than whatever happened in the Boomers’ heyday. The US has a way of bouncing back; maybe it’ll happen again. Still, the Boomers can boast that they passed on a better life to their children. How sure are you that you’ll be able to say the same?
+
+I think a fair analysis by some sort of unbiased far-future historian might well conclude that Boomers were a perfectly normal American generation, maybe a little too fond of cringe Minion memes but otherwise decent enough; on the other hand, Millennials and Zoomers were some sort of mutant nightmare people. I hope my grandkids, if I have them, will love me anyway. Nobody ever controls that; nobody can ever know for sure. But I think respecting Boomers would be a good start.

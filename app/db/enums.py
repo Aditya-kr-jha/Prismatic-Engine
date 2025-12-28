@@ -254,3 +254,28 @@ class ReservoirStatus(str, Enum):
     QUEUED = "QUEUED"
     USED = "USED"
     COOLDOWN = "COOLDOWN"
+
+
+# ============================================================================
+# Blog Scrape Tracker Enums
+# ============================================================================
+
+
+class ScrapeStatus(str, Enum):
+    SUCCESS = "SUCCESS"
+    FAILED = "FAILED"
+    SKIPPED = "SKIPPED"
+
+
+class BlogPlatform(str, Enum):
+    WORDPRESS = "WORDPRESS"
+    SUBSTACK = "SUBSTACK"
+    GHOST = "GHOST"
+    CUSTOM = "CUSTOM"
+
+
+class DiscoveryMethod(str, Enum):
+    SITEMAP = "SITEMAP"
+    RSS = "RSS"
+    CRAWL = "CRAWL"
+    ARCHIVE = "ARCHIVE"
