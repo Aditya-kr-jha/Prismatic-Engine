@@ -28,7 +28,7 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
-# Add project root to path
+# i have moved on bitch
 project_root = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(project_root))
 
@@ -74,9 +74,7 @@ def parse_batch_file() -> list[dict]:
             continue
 
         # Extract URL - handle "URL:", "url:", "url :", etc.
-        url_match = re.search(
-            r"^URL\s*:\s*(.+)$", block, re.MULTILINE | re.IGNORECASE
-        )
+        url_match = re.search(r"^URL\s*:\s*(.+)$", block, re.MULTILINE | re.IGNORECASE)
         if not url_match:
             continue
 
@@ -183,11 +181,11 @@ def main() -> None:
         # Use fresh session for each article to isolate errors
         session_gen = get_session()
         session = next(session_gen)
-        
+
         try:
             # Archive first - always backup regardless of DB status
             archive_article(author["id"], title, url, content)
-            
+
             # Save to database
             source = get_or_create_source(session, author)
             chunks, chunk_ids = save_to_database(session, source, title, content, url)
@@ -208,7 +206,7 @@ def main() -> None:
                         tracker["stats"]["by_author"].get(author["id"], 0) + 1
                     )
                     print(f"   📊 Synced to tracker (was DB duplicate)")
-                
+
                 skipped += 1
                 # Close session cleanly
                 try:
@@ -235,7 +233,7 @@ def main() -> None:
                 f"({word_count} words, {chunks} chunks)"
             )
             print(f"   📦 IDs: {', '.join(chunk_ids)}")
-            
+
             # Close session cleanly
             try:
                 next(session_gen)
