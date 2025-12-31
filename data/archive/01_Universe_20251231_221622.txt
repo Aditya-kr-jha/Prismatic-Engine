@@ -1,0 +1,57 @@
+URL: https://waitbutwhy.com/2020/09/universe.html
+TITLE: Universe
+AUTHOR_ID: 01
+ARCHIVED: 2025-12-31T16:46:22.610698+00:00
+
+---
+
+The Big and the Small
+ September 22, 2020 By Tim Urban
+
+I have a surprise for you.
+
+I’ll tell you about it in a minute. First, let’s have a little fun. Come with me.
+
+I haven’t told anyone this before, but I actually live in the fun room. I just gave you a tour of my house, where I spend a large portion of my life thinking about the size of things.
+
+I have visitors in the fun room from time to time, but after a few minutes, they’re usually pretty funned out and leave me to my crises. But one day, something unexpected happened.
+
+It was 2013. Wait But Why was a few months old. And I got an email from someone named Philipp Dettmer. I was slightly unsettled by the pp and tt, but I decided to read what he had to say.
+
+He explained that he lives in Germany where he makes animated educational videos about a lot of different things, kind of like Wait But Why but a different medium. I took a look at his YouTube page. It was named a random string of letters:
+
+kurzgesagt
+
+Apparently it means “In a Nutshell” in German, but I didn’t know that at the time and was very close to being done with Philipp Dettmer for good when I decided to watch one of the videos.
+
+It was delightful.
+
+I watched another. And another. And then it hit me.
+
+Philipp—this random man in Germany—also lives in the fun room.
+
+The next day, we were on the phone. There was a lot to talk about. We decided we had to do something together, and we settled on adapting one of my early posts into a kurzgesagt video.1
+
+In the seven years since then, Philipp and I have become great friends, and I have not missed a kurzgesagt video since. Whenever Philipp and I get dinner, we head straight to the fun room to talk about the universe. And a few months ago, we decided to collaborate again. It was time to go public with the fun room.
+
+At some point in our pasts, we had both become enamored with two fun room icons, Cary and Michael Huang, known on the internet as the Huang Twins. The twins do a lot of cool things, but it was their Scale of the Universe toy that we loved most.
+
+Inspired by their work, we decided to go for it. We wanted to make the best size explorer we could imagine. We called it Universe in a Nutshell.
+
+Of course, it took roughly 18 times longer than we thought it would. We brainstormed the interface for quite some time, and then Philipp, along with the incredible kurzgesagt team, dug into working on illustrations and animations, while I worked with the team on the written explainers.
+
+Thousands of human hours later, the app is done. 250 objects, 30,000+ words of explanations and fun facts, just the right mood music, and what we think is a pretty great interface.
+
+Here’s how it works:
+
+The app is a giant wall. The wall is impossibly large—large enough to fit full-sized galaxies on it. The wall is also impossibly high-resolution—hi-res enough to contain sharp images of subatomic particles.
+
+I know it seems weird that I’m talking about it as if it’s a real object, but I have a good reason: to get the full mind-blow effect, you have to realize what you’re looking at. You’re not moving forward and backward through a tunnel of objects—it just seems that way because your brain will refuse to accept the insanity of the actual sizes you’re seeing. By reminding yourself again and again that all of these objects are “painted” on the same 2D wall, you’ll hopefully experience some fun mind-bending moments.
+
+The app looks like this:
+
+And this:
+
+And this:
+
+And there are three ways to zoom:
