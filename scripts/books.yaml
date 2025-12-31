@@ -8,6 +8,9 @@ books:
   - title: "The-Courage-to-be-Disliked"
     author: "Ichiro Kishimi and Fumitake Koga"
     file: "the-courage-to-be-disliked.pdf"
+  - title: "The mind"
+    author: "palak singh"
+    file: "the brain.pdf"
 
   # Add more books here:
   # - title: "Atomic Habits"
