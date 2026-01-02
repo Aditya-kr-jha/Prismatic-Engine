@@ -1,0 +1,302 @@
+URL: https://waitbutwhy.com/2021/04/mailbag-2.html
+TITLE: Mailbag 2
+AUTHOR_ID: 01
+ARCHIVED: 2025-12-31T16:46:18.139247+00:00
+
+---
+
+Mailbag #2
+ April 14, 2021 By Tim Urban
+
+Last month, I emailed readers announcing an upcoming mailbag post—the WBW post version of an AMA. 1,500 questions poured in—remarkably interesting, creative questions on a wide range of topics. I picked some for this round, and we’re keeping the rest in a database that I’ll go back to for future mailbags (mailbag@waitbutwhy.com is always open, so send questions anytime and we’ll add them to the list).
+
+There’s a lot to cover, so let’s get going.
+
+Question from my 7-year-old: How many germs would you have to put together to actually be able to see them? What would it look like? – Kirsten, Zachary’s mum (Sydney, Australia)
+
+You’re my kind of guy, Zachary. Let’s discuss.
+
+There are a lot of germs out there. A smaller germ, like the virus that causes covid, is 120nm across. The smallest object we can see is about 0.1mm—about the width of a human hair. You’d have to line up about 800 coronaviruses to get to 0.1mm—but that would be a one-dimensional line way too thin to see. To actually see something, you’d have to give it some area and turn the 800-virus line into an 800 x 800 square. That clump of 640,000 viruses would be just big enough to see as a tiny speck.1 As for what it would look like, your guess is as good as mine Zachary.
+
+I’m never good at stopping once I start on an exploration of size, and doing this answer got me googling all kinds of things.
+
+Like how big all the bacteria in the human body would be if you clumped it all together. I had always heard the famous stat that there are 10 times as many bacteria in your body as human cells. It turns out that that’s been debunked. The real ratio is closer to 1:1, with both kinds of cells in the ballpark of 40 trillion in an adult human body.2
+
+Anyway, the NIH estimates that all that bacteria adds up to only 0.3% of a human’s body mass. Zachary is 7, so let’s estimate his mass at 25 kg. That means the bacteria in his body adds up to 75 grams—about the weight of a plum. Assuming the density of Zachary’s bacteria is similar to the density of his body, that would make the bacteria ball about the size of a plum too.
+
+This led me to the obvious next question: how big would all the bacteria on Earth be if you bunched them all together?3
+
+Thankfully, University of Georgia microbiologist William Whitman has done the hard work of coming up with an estimate for the number of bacteria on Earth: 5 nonillion.
+
+That’s 5,000,000,000,000,000,000,000,000,000,000.
+
+To couple that estimate with a wild estimate of our own, we can use the volume of an E. coli bacteria (.7µm3) and assume that’s somewhere around the average size of Earth bacteria. 5 nonillion x .7µm3 comes out to a cube with a base of about 15km (~9.5mi).
+
+This massive cube of bacteria covers a large part of Los Angeles and rises higher than the cruising altitude of commercial airplanes. If you were on the ground, it would take a full day to walk around the cube, and it would be a bad experience because the whole day you’d be right next to a vile bacteria cube.
+
+If we took a huge butter knife and smeared the cube out evenly on the Earth’s surface, it would cover the entire Earth with a layer of pure bacteria 7mm (1/4 inch) thick, and everything would be gross.
+
+K let’s move on.
+
+What do you think of scientists putting mini human brains in mice? Where do you think this kind of science could lead in the future? – Leah N. (Quincy, IL)
+
+I have no idea what’s going on with this question but it’s now all I care about. I’m picturing a world with tiny field mice with human intelligence. They’d form tiny societies run by tiny iron-fisted mouse tyrants. They could have little academies and do research on mice-related things. They might organize a mouse Olympics that we could televise and bet on. Some people would befriend mice and some might even choose to get married to mice. I hope this is what you’re talking about Leah, and I refuse to look it up because I’m sure whatever you’re actually talking about will be a huge letdown.
+
+Drugs: do you do them? What do you think of them? – Tom C. (Nottingham, UK)
+
+Kind of what I think of cars. Cars can be incredibly useful, fun, and life-changing if you understand how cars work and know how to drive safely. If you don’t know anything about driving or you tend to drive recklessly, you’re probably not ready to use cars.
+
+Why do we prefer to watch a film we haven’t watched before but we want to listen to songs that we have heard hundreds of times? – Anastasia S. (Athens, Greece)
+
+Many films are the most fun the first time because a part of our brains loses itself in the plot and actually experiences what the characters are experiencing, to an extent. Part of why that’s so fun is the uncertainty, which makes it like a real-life adventure. Once we know what’s going to happen, the experience is less exciting for the same reason an adventure would be less exciting if you already knew how everything was gonna play out.
+
+A song works the opposite way. Not knowing where the song is going can be intellectually interesting, but what our brain really wants to do is mentally dance with the song, and it can’t do that if it doesn’t know the “steps.” That’s why a catchy song is only okay the first time but it can quickly become orgasmic after we hear it a few times and our brains get the hang of it. Once our brain memorizes a song, the song has a special pathway carved in our heads and it feels great to light that pathway up by hearing the song (and if we don’t give our brain the chance, it might just start lighting up the pathway itself, and the song gets “stuck in your head”).4
+
+Back to films, the thing is, a film isn’t just a plot. It can also be a piece of art, which is why in some cases, we do like to watch films (or TV shows) repeatedly (I’ve seen The Shawshank Redemption, Back to the Future, Shutter Island, and The Office (UK) like 9 times each).
+
+What age range do you currently think you’re most likely to die (disregarding cryonics)?
+
+Multiple choice:
+
+70–100
+100–125
+125–150
+150–250
+250+
+– Sean M. (New Orleans, LA)
+
+The pessimistic part of my brain says: A) 70–100. My grandparents lived to 84, 87, 91, and good old Nana is still going strong at 95.5 My lifestyle is not a big enough step above theirs, healthwise, to imagine that I’ll beat them out by very much. And sure, medicine is improving dramatically, but then I look at charts like this one (click for bigger view):1
+
+As promising as that data is, we don’t seem to be getting too far with the 100+ thing. Even the most freak outliers don’t crack 120. The human body seems programmed to shut itself down somewhere around the century mark, if it hasn’t already. Clearly something other than the current type of healthcare advances will be needed to crack through the natural human lifespan ceiling—it’ll take some deeper recoding of the human genome.
+
+But then the optimistic part of my brain imagines what it would be like to show George Washington around 2021 and watch him die of shock at how magical everything was, and it thinks about how the accelerating returns on progress mean that the world of 70- to 100-year-old me might be equally shocking to people today, and so it answers D) 150–250.
+
+The pessimistic part of my brain, looking at reality, makes a sad face and pats the optimistic part of my brain on the head.
+
+The optimistic part of my brain, remembering how bad humans are at intuitively understanding exponential growth, pats the pessimistic part of my brain on the head.
+
+How do you fall asleep? – Anastasia S. (Athens, Greece)
+
+When I can’t fall asleep, it’s either because my mind is caught in an anxious loop of some kind or my phone is keeping me up. The surefire fix to the anxious loop issue is to distract my mind with something else.
+
+But what that something else is is important. If I start texting or scrolling around social media or brainstorming / researching for work or playing an addictive iPhone game, that’ll just make me even less likely to sleep. Other activities, for whatever reason, seem to have the opposite effect and put me right to sleep. For me, what’s effective is reading in the dark on a Kindle on dark mode, listening to a podcast or audiobook,6 doing a crossword puzzle on my phone, or as a last resort, YouTube videos, which work for the same reason it’s so easy to fall asleep in front of the TV.
+
+The problem with this is that most of these involve my phone, which also has all of those things that are great at keeping me up. Worse, when I wake up next to my phone, I inevitably start my day by getting sucked into inane phone stuff. This isn’t just a time-waster—the grown-up-ness with which I start my day usually sets the tone for the whole day. And the morning is often when some of the best insights pop up for me—if they have space to pop up. The phone kills that space.
+
+So I came up with a little scheme. Which brings me to:
+
+What is the best permanent lifestyle change you made in your life? – Elmar S. (Munich, Germany)
+
+I dug an old iPhone 6 out of my drawer (I had tried to trade it in but I botched something with the “activation lock” whatever the hell that is and Apple sent it back to me) and this became my bed phone. No SIM card, not signed into iCloud, no apps except Kindle, iBooks, Downcast (podcasts), NYT Crosswords, YouTube, and some practical ones (alarm, calendar, notes and voice recorder for those morning insights). Then I leave my real phone in a different room, as far away and inconveniently located as possible. This has been pretty groundbreaking for me. I find that I actually look forward to saying bye to my normal phone and transitioning to the bed phone stage of the night. Bed phone still has worlds of fun in it—just the healthy-for-night/morning kinds of fun.7
+
+Do you have an inner monologue? – Malaika D. (Groningen, The Netherlands)
+
+I actually wanna talk about this. I kind of think I don’t have an inner monologue. I have certain moments when I’m actually talking to myself in my head, but I find that 90% of the time my head is up in the clouds (which is most of the time) I have a lot of thoughts going on but no specific words in my head. I can’t tell if that’s what everyone is like or if I’m weird. The reason I wonder about it is that when people explain why you should meditate, they say something like, “it’s important to quiet the constant ‘chatter’ in your head.” And I always wonder whether “chatter” is just the word they’re using for the constant stream of thoughts or if there is actually a voice to those thoughts in most people’s head but not mine. Someone tell me what’s up.
+
+Anyway I get your bigger point, Malaika, and I’m with you, but I don’t have a good answer beyond something obvious like “try meditation!” So hopefully a commenter can tell us both how to fix ourselves.
+
+What really makes you angry? – Ingrid M.
+
+When I’m late and a person in front of me is going really slowly at the cashier
+When I’m late in an Uber and the driver makes a wrong turn
+When I’m late at the airport with no margin for error and TSA decides it’s the perfect time to search my bag and there are two other bags that need to be searched in front of mine and no one is searching any of the bags because the woman who searches bags is doing something else
+When I go to a Broadway show and look at the little slip of paper in the Playbill and the main character is replaced by an understudy
+When anyone needs me to do something that involves printing something
+Bluetooth connectivity difficulties
+When I get a new bottle of liquid soap and I can’t get the nozzle to pop up and instead it just spins around infuriatingly
+Any other kind of packaging that’s hard to open
+When my packages get stolen from my shit-ass building lobby
+When I’m sleeping somewhere either with no A/C or bad A/C and it’s like 78º all night and I sleep 2 hours
+When some gem of a photo op presents itself with my dog or something on the street and my phone camera freezes on the blurred screen
+When I finally select the flight I want on Kayak and I’m relieved I got a good price and I go to buy it and it takes me to the airline site where I fill everything out and click “purchase” and it comes back with a message that says “the flight you’ve selected is not available.”
+When people disagree with me about politics and think they’re right
+When I bought a tin of fancy salt and the fucking lid was impossible to get off and I finally got it to snap off and the salt went everywhere
+When I go to a site and select a menu item and the site finishes loading and the page jumps up just as I click and I select the wrong item and then I press back and select again and the same thing happens
+Obscure name clues in crossword puzzles
+When my opponent opens up a huge spot in Words With Friends and my letters are awful
+When I’m at a breakfast restaurant and ask for Tabasco Sauce and the waiter remembers to bring it 0 out of 100 times
+When I’m watching something riveting on an airplane TV and the captain makes a long, drawn-out announcement
+When my tortoise shits on the floor while I’m not in the room and then tramps through it and gets shit on every square inch of the apartment floor and 3 inches up every wall
+How long it takes an iPhone to turn back on when you plug it back in after it dies
+When I’m watching a movie with someone and I’ve seen it and they haven’t and they talk or look at their phone during an important moment
+Sandwiches or burgers with hard, thick bread
+When I’m in the car with my sisters and they think it’s an okay thing to blast their inane songs
+When an apartment building puts a sign up that says “Please keep noise down between 10pm and 7am” because no one cares about late-night people (early riser privilege!)
+The 99-year-old technology at my mom’s house
+Websites that won’t let you go back – you just keep hitting the “back” button and it keeps refreshing the current page
+When I get delivery food that includes fries and instead of a little container of ketchup, they give me a bunch of tiny packets
+When I ask someone for the address where I’m going and they tell me directions instead of just giving me the address to put in my phone
+When I go on vacation with people who want to wake up early and fill the day with icky activities
+Jeans with button flies
+Are we bigger than we are small, or smaller than we are big? – Jarhead (Toronto, Canada)
+
+Biologically, we’re definitely bigger than we are small. A typical blue whale is about 15 times the length of a human and around 2,500 times the mass. A human compared to microbes is many orders of magnitude larger. We’re less big amongst mammals, but even there we’re bigger than we are small. A human is about 35 times the length of the smallest mammal—the adorable bumblebee bat—and 40,000 times more massive.
+
+Moving beyond the realm of biology—if we consider ourselves in relation to well-understood objects, we might make our endpoints a proton (10-16m) and the sun (108m), in which case we’re much closer to the size of the sun than the size of a proton. Big again. But if we use the Milky Way (1020m) as our upper endpoint, then we become smaller than we are big.
+
+Then there’s the whole range of size. According to my Universe in a Nutshell app (plug!), the smallest known unit of space, the Planck length (maybe our universe’s pixel size), is about 10-35m. The largest space we can see is the observable universe, which is around 1026m range. If those are our endpoints, the midpoint between them would be a bit smaller than the width of a human hair—making us bigger than we are small.
+
+But the observable universe is probably only a tiny piece of the full universe, and then there’s the multiverse if that’s a thing. So the real upper endpoint is probably high enough, if it exists at all, to make us much smaller than we are big.
+
+My takeaway here is that we’re extremely middling when it comes to size, which I guess isn’t the worst thing to be.
+
+How do I get over a breakup if I’m still in love? – Anon
+
+There’s no way to make an excruciating loss not excruciating except time, and I’m sorry to hear about the excruciatingness you’re going through.
+
+Maybe it’ll help to remember that everyone you know, everyone you see on the street, everyone who’s ever lived in every place and time, has probably been there too or will be there in the future—because excruciating loss is an unfortunate staple of the human experience.
+
+It might also help to remember that the part of you that feels like this wound will never heal is almost definitely wrong, and being wrong about that is also a staple of the human experience. Make that part of you write a letter to yourself, expressing how it feels. It’ll be fun to read that letter later, when you’re totally in love with someone new.
+
+When parking, if both options are available, do you pull into the spot or back in? – Brighid D. (Manchester, NH)
+
+Pulling in forward is Present You living their best life and treating Future You like their assistant. Backing in is Present You acting like Future You’s assistant. Pulling forward out of a spot you previously backed into is a highly luxurious experience, but as a procrastinator type whose jam it is to fuck over Future Tim, a rare one for me.
+
+What is the coolest magic tricMailbag #2
+ April 14, 2021 By Tim Urban
+
+Last month, I emailed readers announcing an upcoming mailbag post—the WBW post version of an AMA. 1,500 questions poured in—remarkably interesting, creative questions on a wide range of topics. I picked some for this round, and we’re keeping the rest in a database that I’ll go back to for future mailbags (mailbag@waitbutwhy.com is always open, so send questions anytime and we’ll add them to the list).
+
+There’s a lot to cover, so let’s get going.
+
+Question from my 7-year-old: How many germs would you have to put together to actually be able to see them? What would it look like? – Kirsten, Zachary’s mum (Sydney, Australia)
+
+You’re my kind of guy, Zachary. Let’s discuss.
+
+There are a lot of germs out there. A smaller germ, like the virus that causes covid, is 120nm across. The smallest object we can see is about 0.1mm—about the width of a human hair. You’d have to line up about 800 coronaviruses to get to 0.1mm—but that would be a one-dimensional line way too thin to see. To actually see something, you’d have to give it some area and turn the 800-virus line into an 800 x 800 square. That clump of 640,000 viruses would be just big enough to see as a tiny speck.1 As for what it would look like, your guess is as good as mine Zachary.
+
+I’m never good at stopping once I start on an exploration of size, and doing this answer got me googling all kinds of things.
+
+Like how big all the bacteria in the human body would be if you clumped it all together. I had always heard the famous stat that there are 10 times as many bacteria in your body as human cells. It turns out that that’s been debunked. The real ratio is closer to 1:1, with both kinds of cells in the ballpark of 40 trillion in an adult human body.2
+
+Anyway, the NIH estimates that all that bacteria adds up to only 0.3% of a human’s body mass. Zachary is 7, so let’s estimate his mass at 25 kg. That means the bacteria in his body adds up to 75 grams—about the weight of a plum. Assuming the density of Zachary’s bacteria is similar to the density of his body, that would make the bacteria ball about the size of a plum too.
+
+This led me to the obvious next question: how big would all the bacteria on Earth be if you bunched them all together?3
+
+Thankfully, University of Georgia microbiologist William Whitman has done the hard work of coming up with an estimate for the number of bacteria on Earth: 5 nonillion.
+
+That’s 5,000,000,000,000,000,000,000,000,000,000.
+
+To couple that estimate with a wild estimate of our own, we can use the volume of an E. coli bacteria (.7µm3) and assume that’s somewhere around the average size of Earth bacteria. 5 nonillion x .7µm3 comes out to a cube with a base of about 15km (~9.5mi).
+
+This massive cube of bacteria covers a large part of Los Angeles and rises higher than the cruising altitude of commercial airplanes. If you were on the ground, it would take a full day to walk around the cube, and it would be a bad experience because the whole day you’d be right next to a vile bacteria cube.
+
+If we took a huge butter knife and smeared the cube out evenly on the Earth’s surface, it would cover the entire Earth with a layer of pure bacteria 7mm (1/4 inch) thick, and everything would be gross.
+
+K let’s move on.
+
+What do you think of scientists putting mini human brains in mice? Where do you think this kind of science could lead in the future? – Leah N. (Quincy, IL)
+
+I have no idea what’s going on with this question but it’s now all I care about. I’m picturing a world with tiny field mice with human intelligence. They’d form tiny societies run by tiny iron-fisted mouse tyrants. They could have little academies and do research on mice-related things. They might organize a mouse Olympics that we could televise and bet on. Some people would befriend mice and some might even choose to get married to mice. I hope this is what you’re talking about Leah, and I refuse to look it up because I’m sure whatever you’re actually talking about will be a huge letdown.
+
+Drugs: do you do them? What do you think of them? – Tom C. (Nottingham, UK)
+
+Kind of what I think of cars. Cars can be incredibly useful, fun, and life-changing if you understand how cars work and know how to drive safely. If you don’t know anything about driving or you tend to drive recklessly, you’re probably not ready to use cars.
+
+Why do we prefer to watch a film we haven’t watched before but we want to listen to songs that we have heard hundreds of times? – Anastasia S. (Athens, Greece)
+
+Many films are the most fun the first time because a part of our brains loses itself in the plot and actually experiences what the characters are experiencing, to an extent. Part of why that’s so fun is the uncertainty, which makes it like a real-life adventure. Once we know what’s going to happen, the experience is less exciting for the same reason an adventure would be less exciting if you already knew how everything was gonna play out.
+
+A song works the opposite way. Not knowing where the song is going can be intellectually interesting, but what our brain really wants to do is mentally dance with the song, and it can’t do that if it doesn’t know the “steps.” That’s why a catchy song is only okay the first time but it can quickly become orgasmic after we hear it a few times and our brains get the hang of it. Once our brain memorizes a song, the song has a special pathway carved in our heads and it feels great to light that pathway up by hearing the song (and if we don’t give our brain the chance, it might just start lighting up the pathway itself, and the song gets “stuck in your head”).4
+
+Back to films, the thing is, a film isn’t just a plot. It can also be a piece of art, which is why in some cases, we do like to watch films (or TV shows) repeatedly (I’ve seen The Shawshank Redemption, Back to the Future, Shutter Island, and The Office (UK) like 9 times each).
+
+What age range do you currently think you’re most likely to die (disregarding cryonics)?
+
+Multiple choice:
+
+70–100
+100–125
+125–150
+150–250
+250+
+– Sean M. (New Orleans, LA)
+
+The pessimistic part of my brain says: A) 70–100. My grandparents lived to 84, 87, 91, and good old Nana is still going strong at 95.5 My lifestyle is not a big enough step above theirs, healthwise, to imagine that I’ll beat them out by very much. And sure, medicine is improving dramatically, but then I look at charts like this one (click for bigger view):1
+
+As promising as that data is, we don’t seem to be getting too far with the 100+ thing. Even the most freak outliers don’t crack 120. The human body seems programmed to shut itself down somewhere around the century mark, if it hasn’t already. Clearly something other than the current type of healthcare advances will be needed to crack through the natural human lifespan ceiling—it’ll take some deeper recoding of the human genome.
+
+But then the optimistic part of my brain imagines what it would be like to show George Washington around 2021 and watch him die of shock at how magical everything was, and it thinks about how the accelerating returns on progress mean that the world of 70- to 100-year-old me might be equally shocking to people today, and so it answers D) 150–250.
+
+The pessimistic part of my brain, looking at reality, makes a sad face and pats the optimistic part of my brain on the head.
+
+The optimistic part of my brain, remembering how bad humans are at intuitively understanding exponential growth, pats the pessimistic part of my brain on the head.
+
+How do you fall asleep? – Anastasia S. (Athens, Greece)
+
+When I can’t fall asleep, it’s either because my mind is caught in an anxious loop of some kind or my phone is keeping me up. The surefire fix to the anxious loop issue is to distract my mind with something else.
+
+But what that something else is is important. If I start texting or scrolling around social media or brainstorming / researching for work or playing an addictive iPhone game, that’ll just make me even less likely to sleep. Other activities, for whatever reason, seem to have the opposite effect and put me right to sleep. For me, what’s effective is reading in the dark on a Kindle on dark mode, listening to a podcast or audiobook,6 doing a crossword puzzle on my phone, or as a last resort, YouTube videos, which work for the same reason it’s so easy to fall asleep in front of the TV.
+
+The problem with this is that most of these involve my phone, which also has all of those things that are great at keeping me up. Worse, when I wake up next to my phone, I inevitably start my day by getting sucked into inane phone stuff. This isn’t just a time-waster—the grown-up-ness with which I start my day usually sets the tone for the whole day. And the morning is often when some of the best insights pop up for me—if they have space to pop up. The phone kills that space.
+
+So I came up with a little scheme. Which brings me to:
+
+What is the best permanent lifestyle change you made in your life? – Elmar S. (Munich, Germany)
+
+I dug an old iPhone 6 out of my drawer (I had tried to trade it in but I botched something with the “activation lock” whatever the hell that is and Apple sent it back to me) and this became my bed phone. No SIM card, not signed into iCloud, no apps except Kindle, iBooks, Downcast (podcasts), NYT Crosswords, YouTube, and some practical ones (alarm, calendar, notes and voice recorder for those morning insights). Then I leave my real phone in a different room, as far away and inconveniently located as possible. This has been pretty groundbreaking for me. I find that I actually look forward to saying bye to my normal phone and transitioning to the bed phone stage of the night. Bed phone still has worlds of fun in it—just the healthy-for-night/morning kinds of fun.7
+
+Do you have an inner monologue? – Malaika D. (Groningen, The Netherlands)
+
+I actually wanna talk about this. I kind of think I don’t have an inner monologue. I have certain moments when I’m actually talking to myself in my head, but I find that 90% of the time my head is up in the clouds (which is most of the time) I have a lot of thoughts going on but no specific words in my head. I can’t tell if that’s what everyone is like or if I’m weird. The reason I wonder about it is that when people explain why you should meditate, they say something like, “it’s important to quiet the constant ‘chatter’ in your head.” And I always wonder whether “chatter” is just the word they’re using for the constant stream of thoughts or if there is actually a voice to those thoughts in most people’s head but not mine. Someone tell me what’s up.
+
+Anyway I get your bigger point, Malaika, and I’m with you, but I don’t have a good answer beyond something obvious like “try meditation!” So hopefully a commenter can tell us both how to fix ourselves.
+
+What really makes you angry? – Ingrid M.
+
+When I’m late and a person in front of me is going really slowly at the cashier
+When I’m late in an Uber and the driver makes a wrong turn
+When I’m late at the airport with no margin for error and TSA decides it’s the perfect time to search my bag and there are two other bags that need to be searched in front of mine and no one is searching any of the bags because the woman who searches bags is doing something else
+When I go to a Broadway show and look at the little slip of paper in the Playbill and the main character is replaced by an understudy
+When anyone needs me to do something that involves printing something
+Bluetooth connectivity difficulties
+When I get a new bottle of liquid soap and I can’t get the nozzle to pop up and instead it just spins around infuriatingly
+Any other kind of packaging that’s hard to open
+When my packages get stolen from my shit-ass building lobby
+When I’m sleeping somewhere either with no A/C or bad A/C and it’s like 78º all night and I sleep 2 hours
+When some gem of a photo op presents itself with my dog or something on the street and my phone camera freezes on the blurred screen
+When I finally select the flight I want on Kayak and I’m relieved I got a good price and I go to buy it and it takes me to the airline site where I fill everything out and click “purchase” and it comes back with a message that says “the flight you’ve selected is not available.”
+When people disagree with me about politics and think they’re right
+When I bought a tin of fancy salt and the fucking lid was impossible to get off and I finally got it to snap off and the salt went everywhere
+When I go to a site and select a menu item and the site finishes loading and the page jumps up just as I click and I select the wrong item and then I press back and select again and the same thing happens
+Obscure name clues in crossword puzzles
+When my opponent opens up a huge spot in Words With Friends and my letters are awful
+When I’m at a breakfast restaurant and ask for Tabasco Sauce and the waiter remembers to bring it 0 out of 100 times
+When I’m watching something riveting on an airplane TV and the captain makes a long, drawn-out announcement
+When my tortoise shits on the floor while I’m not in the room and then tramps through it and gets shit on every square inch of the apartment floor and 3 inches up every wall
+How long it takes an iPhone to turn back on when you plug it back in after it dies
+When I’m watching a movie with someone and I’ve seen it and they haven’t and they talk or look at their phone during an important moment
+Sandwiches or burgers with hard, thick bread
+When I’m in the car with my sisters and they think it’s an okay thing to blast their inane songs
+When an apartment building puts a sign up that says “Please keep noise down between 10pm and 7am” because no one cares about late-night people (early riser privilege!)
+The 99-year-old technology at my mom’s house
+Websites that won’t let you go back – you just keep hitting the “back” button and it keeps refreshing the current page
+When I get delivery food that includes fries and instead of a little container of ketchup, they give me a bunch of tiny packets
+When I ask someone for the address where I’m going and they tell me directions instead of just giving me the address to put in my phone
+When I go on vacation with people who want to wake up early and fill the day with icky activities
+Jeans with button flies
+Are we bigger than we are small, or smaller than we are big? – Jarhead (Toronto, Canada)
+
+Biologically, we’re definitely bigger than we are small. A typical blue whale is about 15 times the length of a human and around 2,500 times the mass. A human compared to microbes is many orders of magnitude larger. We’re less big amongst mammals, but even there we’re bigger than we are small. A human is about 35 times the length of the smallest mammal—the adorable bumblebee bat—and 40,000 times more massive.
+
+Moving beyond the realm of biology—if we consider ourselves in relation to well-understood objects, we might make our endpoints a proton (10-16m) and the sun (108m), in which case we’re much closer to the size of the sun than the size of a proton. Big again. But if we use the Milky Way (1020m) as our upper endpoint, then we become smaller than we are big.
+
+Then there’s the whole range of size. According to my Universe in a Nutshell app (plug!), the smallest known unit of space, the Planck length (maybe our universe’s pixel size), is about 10-35m. The largest space we can see is the observable universe, which is around 1026m range. If those are our endpoints, the midpoint between them would be a bit smaller than the width of a human hair—making us bigger than we are small.
+
+But the observable universe is probably only a tiny piece of the full universe, and then there’s the multiverse if that’s a thing. So the real upper endpoint is probably high enough, if it exists at all, to make us much smaller than we are big.
+
+My takeaway here is that we’re extremely middling when it comes to size, which I guess isn’t the worst thing to be.
+
+How do I get over a breakup if I’m still in love? – Anon
+
+There’s no way to make an excruciating loss not excruciating except time, and I’m sorry to hear about the excruciatingness you’re going through.
+
+Maybe it’ll help to remember that everyone you know, everyone you see on the street, everyone who’s ever lived in every place and time, has probably been there too or will be there in the future—because excruciating loss is an unfortunate staple of the human experience.
+
+It might also help to remember that the part of you that feels like this wound will never heal is almost definitely wrong, and being wrong about that is also a staple of the human experience. Make that part of you write a letter to yourself, expressing how it feels. It’ll be fun to read that letter later, when you’re totally in love with someone new.
+
+When parking, if both options are available, do you pull into the spot or back in? – Brighid D. (Manchester, NH)
+
+Pulling in forward is Present You living their best life and treating Future You like their assistant. Backing in is Present You acting like Future You’s assistant. Pulling forward out of a spot you previously backed into is a highly luxurious experience, but as a procrastinator type whose jam it is to fuck over Future Tim, a rare one for me.
+
+What is the coolest magic tricK,
