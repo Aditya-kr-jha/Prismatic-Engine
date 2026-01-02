@@ -1,0 +1,69 @@
+URL: https://www.gurwinder.blog/p/why-you-cant-trust-fact-checks
+TITLE: Why You Cant Trust Fact Checks
+AUTHOR_ID: 05
+ARCHIVED: 2026-01-02T14:15:34.792503+00:00
+
+---
+
+Fact-Checking the Fact-Checkers
+The fact-checking industry is driven less by truth than by power
+Gurwinder
+May 27, 2022
+In uncertain times, there will always be those quick to offer certainty.
+
+Long ago, when people dwelled in the ignorance of wild nature, they turned to priests, astrologers, and witch doctors to bring order to the chaos. In our current age, where uncertainty is caused not by too little information but too much, a new class of human has arisen to offer us the solace of Truth: the fact-checker.
+
+The fact-checking industry has exploded in recent years, driven by an increasing public demand for answers in a world that’s becoming ever more complex and confusing. In 2014, there were 44 fact-checking organizations in the United States. Now there are 356.
+
+The demand for truth has given fact-checkers immense power over society. Research has shown that fact-checks can directly sway public opinion, but they’re also used by tech platforms to determine what content is made visible online. Fact-checkers therefore affect not just what people believe, but what they can believe.
+
+This presents a serious danger, because fact-checkers, like the priests of old, are only pretending to have divine access to truth. In reality, they’re just as perplexed as the rest of us, and their verdicts are based less on what’s true than on what they’d prefer us to believe. As such, fact-checking should be understood not as the pursuit of truth, but the pursuit of power.
+
+The current surge in fact-checking began in 2015, as Donald Trump was lying his way to the presidency. In the mythology of the mainstream media, The Donald was depicted as an evil demigod who’d destroyed truth, creating a post-factual world. In order to reconstruct truth and save democracy, a new class of experts would have to be anointed, a digital priesthood to decree what was real.
+
+To this end, the champions of the established order—Silicon Valley executives, mainstream media mavens, NGOs like the Bill and Melinda Gates Foundation, and the US government—began to fund politically liberal counter-disinformation efforts across the US. Much of their funding was directed at the Poynter Institute, a Florida-based journalism school, where a burgeoning fact-checking movement was growing.
+
+Poynter is responsible for the fact-checking website PolitiFact, and it also creates data resources that are used by other fact-checking websites like Snopes. In response to Trump’s mythological slaying of truth in 2015, it created the International Fact-checking Network (IFCN), an organization tasked with promoting, standardizing, and regulating the practice of fact-checking across the web. The IFCN's certification is now used to accredit fact-checkers for the powerful liberal institutions that fund it, including Google, Facebook, CNN, and the Washington Post.
+
+What this means is that the fact-checkers for many of the West’s main conduits of knowledge are interchangeable. They all operate according to the same rulebook, and presumably they all share the same orthodox liberal beliefs as the organizations that fund them. Liberalism may be a valuable worldview but when an industry tasked with finding truth is composed of nothing but orthodox liberals, it creates ideological blindspots that risk undermining the entire system.
+
+The IFCN’s system of rules, guidelines and tests ensures that all its fact-checkers have a basic grasp of media literacy, but it doesn’t educate them to their own biases, and it’s this unawareness that makes today’s fact-checkers bad at checking facts.
+
+Bias affects fact-checking in two ways: what is fact-checked and how it's fact-checked. What is fact-checked is important because if only one side of the argument is ever being interrogated, it allows the other side to get away with any number of lies. And it appears the vast majority of claims that are disputed by fact-checkers are politically conservative in nature.
+
+A 2019 Pew survey found that Democrats tend to believe fact-checkers are objective while Republicans believe they favor Democrats. Research seems to support the Republican position; for instance, the University of Minnesota School of Public Affairs analyzed all of PolitiFact's fact-checks over the course of a year and found that of 98 statements rated false, 74 of them were by Republicans. Now, this could simply mean that Republicans utter more falsehoods than Democrats, but this seems unlikely when you consider the case of the 2019 Poynter's fake news database, which became little more than a list of conservative news websites. Poynter had recommended that advertisers blacklist the websites, but it was forced to retract the list and apologize after it emerged that there was a "weakness in the methodology" and that the list had been compiled by an activist for the fiercely partisan Southern Poverty Law Center.
+
+Further, when one considers not just what is fact-checked, but how it’s fact-checked, it becomes clear that this isn't a simple issue of Democrats being more truthful than Republicans. "Weakness in the methodology" of fact-checking can manifest in many ways, but let’s consider three of the most common: selective perception, Gibson's law, and the principle of charity.
+
+Selective perception is the tendency for people to see the same information and reach completely different conclusions based on their existing beliefs. Research suggests that when people are shown a video of a protest, they see either a peaceful demonstration or an unruly riot, depending on their political views. This phenomenon has also been cataloged in the real world: one poll found that 68% of Republicans considered 2020's Black Lives Matter protests to be riots, versus 30% of Democrats.
+
+Another way fact-checks can deceive is through Gibson’s law, which states: “for every PhD there is an equal and opposite PhD.” In other words, anyone can find an expert who supports their view (see: the ongoing Johnny Depp trial). Thus, when a fact-checker consults experts to lend credence to their fact-check, they’ll naturally choose their side’s experts, who will simply say what the fact-checker believes but with more authority. And these experts often get it wrong; for example, when Trump claimed a covid vaccine would become available by the end of 2020, NBC fact-checkers consulted their experts, who concluded it would take a miracle for Trump to be right. The vaccine became available in December of that year.
+
+In December 2000, experts said the web may just be a fad. Fact-check: false.
+The most common way in which bias manifests in fact-checking is through selective use of the principle of charity. This is the idea that one should interpret an argument in its most rational possible form (a practice known as "steel-manning"). Like all humans, fact-checkers steel-man arguments they support, but when fact-checking claims made by opponents, they tend to do the opposite: interpreting the argument in its least rational possible form (“straw-manning”). As an illustration, consider the work of a high-profile fact-checker, Glenn Kessler.
+
+Kessler is the Pulitzer prize-winning writer of the Washington Post’s “Fact Checker” feature and a member of the board of the International Fact-Checking Network. But even he is guilty of misrepresenting the claims he’s attempting to debunk. For instance, recently a Republican congresswoman, Kat Cammack, accused the Biden administration of sending pallets of baby formula to undocumented migrants at the southern border while US nationals suffered a shortage. She then lambasted the administration’s “out-of-touch priorities.” Kessler rated Cammack’s claim “four Pinocchios,” meaning it was completely devoid of any truth whatsoever. His justification? Biden was indeed sending baby formula to migrants on the southern border, but he was just following the law, so the claim about Biden’s “priorities” was not true. The trick Kessler pulled here should be obvious: he took a small implication of Cammack’s claim—that Biden was following his priorities—and used its falsehood (as interpreted by him) to justify rating the whole statement as false.
+
+In fairness to Kessler, he’s one of the more objective fact-checkers. He doesn’t just misrepresent right-wing claims but also left-wing ones. In 2019, after Bernie Sanders had claimed that “millions of Americans were working two or three jobs just to survive,” Kessler rated the statement as misleading on the basis that, although eight million Americans do indeed work more than one job, most of those extra jobs are part-time, and they comprise only 5% of the US population. Clearly, Kessler was reading into Sanders’ statement things that were not actually said.
+
+If slanted fact-checks like these were restricted to opinion articles (like the one you’re reading now), they wouldn’t be a problem; just another day in journalism. But they’re much more than that; they’re consulted by the tech giants to establish what information people should be allowed to see.
+
+We all know how the tech giants tried to suppress the lab leak hypothesis due to fact-checkers regarding it as a conspiracy theory, only to reverse their decision after it turned out they were wrong. We also know how social media platforms suppressed the Hunter Biden laptop story, only to reverse their decision after their actions were revealed to be unjustified. But countless other, less well-known instances of fact-check-based censorship have occurred.
+
+In November 2021, Facebook began blocking access to an article in the British Medical Journal that questioned the accuracy of the data in covid vaccine trials. According to Facebook, fact-checkers had determined that it was misinformation because it was “missing context.” When the author asked for details, the fact-checkers admitted they could find no errors in his article, but that it was problematic because he did not “express unreserved support for covid vaccines.” It eventually turned out that the fact-checkers had blocked the article not so much for its content but because it had been shared by a couple of prominent anti-vax figures. Guilt by association.
+
+Episodes likes this, in which fact-checkers label content they simply don’t like “misinformation,” are becoming more common, and the cumulative effect of these countless micro-manipulations is to reinforce the stagnant mainstream consensus and to marginalize the new.
+
+So what’s the solution? There are measures that can be taken to improve fact-checking. For a start, fact-checkers would be more careful if they weren't anonymous; having reputational skin in the game, like lawyers and journalists, would incentivize them not to cheat (or at least not cheat openly). Secondly, instead of echo-chambers of fact-checkers who get all their opinions from the Washington Post and New York Times, one could implement a system of adversarial fact-checking in which people of different opinions work together on establishing the facts. This could help diminish the ideological blindspots of the current system.
+
+Unfortunately, such ideas will likely not be implemented, because there’s no appetite among liberal elites to improve the objectivity of fact-checking. Why would there be, given that the current system benefits them?
+
+The legacy media, having lost their monopoly on news, found in fact-checking a way to reassert their authority in the digital age. But instead of using this authority to uphold the truth, they’re using it to control the narrative, aided by tech giants who must do their bidding or receive bad press and become targets of moral panics about misinformation.
+
+The bias in fact-checking may have begun as a bug but it’s now a feature. Media polemicists, who once sought to convince you of their side of the argument in a section clearly labeled "opinion," have sneakily reinvented themselves as those who determine what’s true. The prosecution is trying to win the case by masquerading as the judge. Fact-checking, far from the scientific pursuit of truth, has become a Trojan horse by which liberal elites can serve us all propaganda by disguising it as education.
+
+A move to reduce the bias in fact-checking would require the institutions that fund fact-checkers to relinquish their newfound power, which they won’t do. So we have no choice but to become our own fact-checkers.
+
+Discerning truth is never easy, and we’ll get things wrong, but we can avoid the main pitfall of fact-checking by following just one simple rule: the amount of proof that you need to be convinced of something is based on how much you want to be convinced of it, so always subtract your desire to believe from the available evidence.
+
+If you can consistently do that, you’ll be a better fact-checker than the Glenn Kesslers of the world. Because in the end, it doesn't matter if you studied at Harvard or Yale, or if you write for the Washington Post or New York Times, or if you've won a Peabody or Pulitzer, or if you sit on the board of the International Fact-Checking Network. You still share 99% of your DNA with chimpanzees. So if you're going to fact-check others, it's worth nothing unless you also fact-check yourself.
