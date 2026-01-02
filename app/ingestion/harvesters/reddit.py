@@ -88,7 +88,7 @@ class HarvesterConfig(BaseModel):
     """Configuration for the Reddit harvester."""
 
     posts_per_subreddit: int = 2
-    lookback_days: int = 1
+    lookback_days: int = 2
     request_delay_seconds: float = 2.0
     min_score: int = 10
     min_content_length: int = 300

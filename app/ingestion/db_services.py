@@ -254,6 +254,27 @@ def count_ingest_by_status(
     return len(session.exec(statement).all())
 
 
+def get_raw_ingest_by_ids(
+    session: Session,
+    ingest_ids: List[uuid.UUID],
+) -> List[RawIngest]:
+    """
+    Fetch RawIngest records by a list of IDs.
+
+    Args:
+        session: SQLModel session
+        ingest_ids: List of RawIngest UUIDs to fetch
+
+    Returns:
+        List of RawIngest records matching the provided IDs
+    """
+    if not ingest_ids:
+        return []
+
+    statement = select(RawIngest).where(RawIngest.id.in_(ingest_ids))
+    return list(session.exec(statement).all())
+
+
 # ============================================================================
 # Evergreen Content Reservoir DB Services
 # ============================================================================

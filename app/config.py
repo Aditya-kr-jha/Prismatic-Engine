@@ -56,6 +56,14 @@ class Settings(BaseSettings):
         default="",
         description="Anthropic API key for Claude LLM",
     )
+    OPENAI_API_KEY: str = Field(
+        default="fjhfgryf765jhgryfrjnfjrghurgringr8u84urgjrgur784thr",
+        description="OpenAI API key for GPT models",
+    )
+    LLM_MODEL: str = Field(
+        default="gpt-5-mini",
+        description="OpenAI LLM model name",
+    )
     ELEVENLABS_API_KEY: str = Field(
         default="",
         description="ElevenLabs API key for TTS",

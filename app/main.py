@@ -5,6 +5,7 @@ from starlette.middleware.cors import CORSMiddleware
 
 # Use the new module paths
 from app.api.ingestion_routes import router as ingestion_router
+from app.api.classification_routes import router as classification_router
 from app.db.db_session import create_db_and_tables
 from app.infra.http import HTTPClientManager
 
@@ -55,6 +56,7 @@ app.add_middleware(
 
 # Register API routers
 app.include_router(ingestion_router, prefix="/api/v1")
+app.include_router(classification_router, prefix="/api/v1")
 
 
 @app.get("/")

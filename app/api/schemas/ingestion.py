@@ -43,6 +43,27 @@ class RawIngestItem(BaseModel):
         from_attributes = True
 
 
+class RawIngestBatchRequest(BaseModel):
+    """Request schema for fetching multiple RawIngest records by ID."""
+
+    ids: List[uuid.UUID] = Field(
+        description="List of RawIngest UUIDs to fetch",
+        min_length=1,
+        max_length=100,
+    )
+
+
+class RawIngestBatchResponse(BaseModel):
+    """Response schema for batch RawIngest retrieval."""
+
+    request_id: str = Field(description="Unique request identifier for tracing")
+    total_requested: int = Field(ge=0, description="Number of IDs requested")
+    total_found: int = Field(ge=0, description="Number of records found")
+    records: List[RawIngestItem] = Field(
+        default_factory=list, description="List of found RawIngest records"
+    )
+
+
 class PendingIngestResponse(BaseModel):
     """API response for pending/processing ingest records."""
 
