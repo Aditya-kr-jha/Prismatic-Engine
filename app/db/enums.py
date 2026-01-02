@@ -98,6 +98,29 @@ class VerificationStatus(str, Enum):
     RETRACTED = "RETRACTED"
 
 
+class ProofType(str, Enum):
+    """Type of proof/evidence used in content."""
+
+    ANECDOTE = "ANECDOTE"
+    RESEARCH = "RESEARCH"
+    STATISTIC = "STATISTIC"
+    METAPHOR = "METAPHOR"
+    QUOTE = "QUOTE"
+    PERSONAL = "PERSONAL"
+    SCIENTIFIC = "SCIENTIFIC"
+
+
+class HookMechanism(str, Enum):
+    """Type of hook used to capture attention."""
+
+    CONTRARIAN = "CONTRARIAN"
+    QUESTION = "QUESTION"
+    STATISTIC = "STATISTIC"
+    STORY = "STORY"
+    CHALLENGE = "CHALLENGE"
+    REVELATION = "REVELATION"
+
+
 class DayOfWeek(str, Enum):
     MONDAY = "MONDAY"
     TUESDAY = "TUESDAY"

@@ -22,6 +22,8 @@ from sqlmodel import Session
 from app.api.schemas.ingestion import (
     HarvestResponse,
     PendingIngestResponse,
+    RawIngestBatchRequest,
+    RawIngestBatchResponse,
     RawIngestItem,
     ReservoirHarvestResponse,
 )
@@ -232,6 +234,72 @@ async def get_pending_ingest_records() -> PendingIngestResponse:
             detail={
                 "error": "database_error",
                 "message": "Error fetching pending ingest records.",
+                "request_id": request_id,
+            },
+        )
+
+
+@router.post("/raw-ingest/batch", response_model=RawIngestBatchResponse)
+async def get_raw_ingest_by_ids(
+    request_body: RawIngestBatchRequest,
+) -> RawIngestBatchResponse:
+    """
+    Get RawIngest records by a list of IDs.
+
+    Accepts a list of RawIngest UUIDs and returns the corresponding records.
+    Useful for batch retrieval of specific ingest items.
+
+    Args:
+        request_body: Request containing list of UUIDs to fetch
+    """
+    request_id = _generate_request_id()
+    start_time = time.time()
+
+    logger.info(
+        "[API] raw_ingest_batch_start request_id=%s ids_count=%s",
+        request_id,
+        len(request_body.ids),
+    )
+
+    try:
+        session_gen = get_session()
+        session = cast(Session, next(session_gen))
+
+        # Use db_services for database access
+        results = db_services.get_raw_ingest_by_ids(session, request_body.ids)
+        records = [RawIngestItem.model_validate(r) for r in results]
+
+        # Consume generator to trigger commit/close
+        next(session_gen, None)
+
+        duration = time.time() - start_time
+        logger.info(
+            "[API] raw_ingest_batch_done request_id=%s duration=%.2fs requested=%s found=%s",
+            request_id,
+            duration,
+            len(request_body.ids),
+            len(records),
+        )
+
+        return RawIngestBatchResponse(
+            request_id=request_id,
+            total_requested=len(request_body.ids),
+            total_found=len(records),
+            records=records,
+        )
+
+    except Exception as e:
+        logger.exception(
+            "[API] raw_ingest_batch_failed request_id=%s error_type=%s error=%s",
+            request_id,
+            type(e).__name__,
+            e,
+        )
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail={
+                "error": "database_error",
+                "message": "Error fetching ingest records by IDs.",
                 "request_id": request_id,
             },
         )

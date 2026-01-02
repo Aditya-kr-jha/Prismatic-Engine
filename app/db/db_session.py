@@ -1,6 +1,7 @@
+# app/db/db_session.py
 from typing import Generator, Any
 
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 from sqlmodel import SQLModel, Session
 
@@ -27,7 +28,14 @@ SessionLocal = sessionmaker(
 )
 
 
+def init_db_extensions() -> None:
+    # Enables the VECTOR type used by pgvector
+    with engine.begin() as conn:
+        conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector"))
+
+
 def create_db_and_tables() -> None:
+    init_db_extensions()
     SQLModel.metadata.create_all(bind=engine)
 
 

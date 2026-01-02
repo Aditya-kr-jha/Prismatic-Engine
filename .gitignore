@@ -13,3 +13,6 @@ ENV/
 aws_credentials.json
 .aws/app/.env
 app/.env
+# Python bytecode / caches
+__pycache__/
+*.py[cod]

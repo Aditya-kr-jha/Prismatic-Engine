@@ -122,7 +122,7 @@ class RawIngest(SQLModel, table=True):
         back_populates="raw_ingest"
     )
 
-    # content_atoms: List["ContentAtom"] = Relationship(back_populates="raw_ingest")
+    content_atoms: List["ContentAtom"] = Relationship(back_populates="raw_ingest")
 
 
 class RejectedContent(SQLModel, table=True):
