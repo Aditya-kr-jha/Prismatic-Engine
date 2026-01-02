@@ -94,3 +94,24 @@ class HarvestResponse(BaseModel):
             duration_seconds=round(duration_seconds, 2),
             status=status,
         )
+
+
+class ReservoirHarvestResponse(BaseModel):
+    """API response for reservoir harvest operations."""
+
+    batch_id: str = Field(description="Unique identifier for this harvest batch")
+    items_fetched: int = Field(ge=0, description="Total items retrieved from reservoir")
+    items_queued: int = Field(ge=0, description="Items marked as queued for processing")
+    items_transferred: int = Field(
+        ge=0, description="Items successfully transferred to RawIngest"
+    )
+    items_skipped: int = Field(ge=0, description="Items skipped (duplicates)")
+    by_source_type: Dict[str, int] = Field(
+        default_factory=dict, description="Count of items by source type"
+    )
+    duration_seconds: float = Field(ge=0, description="Total operation time in seconds")
+    dry_run: bool = Field(default=False, description="Whether this was a preview run")
+    status: Literal["success", "partial", "failed"] = Field(
+        description="Overall operation status"
+    )
+    error: Optional[str] = Field(default=None, description="Error message if failed")

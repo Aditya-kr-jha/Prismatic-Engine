@@ -448,3 +448,158 @@ def count_reservoir_chunks_by_source(
     )
     return len(session.exec(statement).all())
 
+
+# ============================================================================
+# Reservoir Harvesting DB Services
+# ============================================================================
+
+
+def fetch_available_reservoir_content(
+    session: Session,
+    source_type: Optional[EvergreenSourceType] = None,
+    limit: int = 24,
+) -> List[ContentReservoir]:
+    """
+    Fetch available content from ContentReservoir.
+    
+    Uses random ordering for fair distribution.
+    
+    Args:
+        session: SQLModel session
+        source_type: Optional filter by source type (BOOK, BLOG)
+        limit: Maximum records to return
+        
+    Returns:
+        List of ContentReservoir records with AVAILABLE status
+    """
+    from sqlalchemy import func
+    
+    statement = select(ContentReservoir).where(
+        ContentReservoir.status == ReservoirStatus.AVAILABLE
+    )
+    
+    if source_type:
+        statement = statement.where(
+            ContentReservoir.source_type == source_type.value
+        )
+    
+    statement = statement.order_by(func.random()).limit(limit)
+    
+    return list(session.exec(statement).all())
+
+
+def mark_reservoir_content_as_queued(
+    session: Session,
+    content_ids: List[uuid.UUID],
+) -> int:
+    """
+    Mark ContentReservoir records as QUEUED.
+    
+    Also sets the last_used_at timestamp.
+    
+    Args:
+        session: SQLModel session
+        content_ids: List of ContentReservoir IDs to mark
+        
+    Returns:
+        Number of records updated
+    """
+    updated = 0
+    now = datetime.now(timezone.utc)
+    
+    for content_id in content_ids:
+        record = session.get(ContentReservoir, content_id)
+        if record and record.status == ReservoirStatus.AVAILABLE:
+            record.status = ReservoirStatus.QUEUED
+            record.last_used_at = now
+            session.add(record)
+            updated += 1
+    
+    logger.info(
+        f"Marked {updated}/{len(content_ids)} reservoir items as QUEUED"
+    )
+    return updated
+
+
+def transfer_reservoir_to_raw_ingest(
+    session: Session,
+    content_ids: List[uuid.UUID],
+    batch_id: uuid.UUID,
+) -> tuple[int, int]:
+    """
+    Transfer ContentReservoir records to RawIngest.
+    
+    Maps:
+    - raw_text → raw_content
+    - source_type BOOK/BLOG → SourceType.BOOK/BLOG
+    
+    Uses INSERT ... ON CONFLICT DO NOTHING for duplicates.
+    
+    Args:
+        session: SQLModel session
+        content_ids: List of ContentReservoir IDs to transfer
+        batch_id: Batch identifier for this transfer
+        
+    Returns:
+        Tuple of (inserted_count, skipped_count)
+    """
+    inserted = 0
+    skipped = 0
+    
+    for content_id in content_ids:
+        reservoir_item = session.get(ContentReservoir, content_id)
+        if not reservoir_item:
+            skipped += 1
+            continue
+        
+        # Map EvergreenSourceType to SourceType
+        if reservoir_item.source_type == EvergreenSourceType.BOOK.value:
+            source_type = SourceType.BOOK
+        elif reservoir_item.source_type == EvergreenSourceType.BLOG.value:
+            source_type = SourceType.BLOG
+        else:
+            logger.warning(
+                f"Unknown source_type {reservoir_item.source_type} for {content_id}"
+            )
+            skipped += 1
+            continue
+        
+        # Build source identifier
+        source_identifier = f"reservoir:{reservoir_item.source_id}:{reservoir_item.chunk_index}"
+        
+        # Build metadata
+        metadata = {
+            "reservoir_id": str(reservoir_item.id),
+            "source_name": reservoir_item.source_name,
+            "source_author": reservoir_item.source_author,
+            "chunk_index": reservoir_item.chunk_index,
+        }
+        
+        # Create RawIngest record with conflict handling
+        record = {
+            "source_type": source_type,
+            "source_identifier": source_identifier,
+            "raw_content": reservoir_item.raw_text,
+            "raw_title": reservoir_item.raw_title,
+            "raw_metadata": metadata,
+            "status": IngestStatus.PENDING,
+            "batch_id": batch_id,
+            "ingested_at": datetime.now(timezone.utc),
+        }
+        
+        stmt = insert(RawIngest).values(**record).on_conflict_do_nothing()
+        result = session.exec(stmt)
+        
+        if result.rowcount and result.rowcount > 0:
+            inserted += 1
+            # Mark as USED after successful transfer
+            reservoir_item.status = ReservoirStatus.USED
+            reservoir_item.times_used = (reservoir_item.times_used or 0) + 1
+            session.add(reservoir_item)
+        else:
+            skipped += 1
+    
+    logger.info(
+        f"Transferred {inserted} items to raw_ingest, {skipped} skipped (batch {batch_id})"
+    )
+    return inserted, skipped

@@ -17,7 +17,7 @@ import time
 import uuid
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
-from typing import Optional, List, cast
+from typing import Optional, List, Dict, cast
 
 from sqlmodel import Session
 
@@ -275,3 +275,168 @@ class IngestionService:
         )
 
         return stored, skipped
+
+    # ========================================================================
+    # Reservoir Harvesting Methods
+    # ========================================================================
+
+    def harvest_from_reservoir(
+        self,
+        total_content: Optional[int] = None,
+        dry_run: bool = False,
+    ) -> "ReservoirHarvestResult":
+        """
+        Harvest content from ContentReservoir to RawIngest.
+        
+        Orchestrates the full flow:
+        1. Fetch available content based on quotas
+        2. Mark as QUEUED (if not dry_run)
+        3. Transfer to RawIngest (if not dry_run)
+        
+        Args:
+            total_content: Override total items to harvest (uses config default)
+            dry_run: If True, preview changes without DB modifications
+            
+        Returns:
+            ReservoirHarvestResult with statistics
+        """
+        from app.ingestion.harvesters.reservoir import ReservoirHarvester
+        from app.ingestion.harvesters.reservoir_config import ReservoirHarvesterConfig
+        
+        start = time.time()
+        result = ReservoirHarvestResult(batch_id=self.batch_id, dry_run=dry_run)
+        
+        logger.info(
+            "[RESERVOIR_HARVEST] start batch_id=%s trace_id=%s dry_run=%s",
+            self.batch_id,
+            self.trace_id,
+            dry_run,
+        )
+        
+        # Build config with optional override
+        config = ReservoirHarvesterConfig()
+        if total_content:
+            # Create custom pillar quotas scaled to total_content
+            scale = total_content / config.total_content
+            config = ReservoirHarvesterConfig(
+                pillar_quotas={
+                    pillar: max(1, int(quota * scale))
+                    for pillar, quota in config.pillar_quotas.items()
+                }
+            )
+        
+        # Get session
+        session_gen = get_session()
+        session = cast(Session, next(session_gen))
+        
+        try:
+            # Step 1: Fetch using harvester
+            harvester = ReservoirHarvester(
+                session=session,
+                config=config,
+                batch_id=self.batch_id,
+            )
+            fetch_result = harvester.fetch_by_config(dry_run=dry_run)
+            
+            result.items_fetched = fetch_result.total_fetched
+            result.by_source_type = fetch_result.by_source_type
+            
+            if dry_run:
+                logger.info(
+                    "[RESERVOIR_HARVEST] dry_run complete, would fetch %s items",
+                    result.items_fetched,
+                )
+                result.duration_seconds = time.time() - start
+                return result
+            
+            if not fetch_result.items:
+                logger.info("[RESERVOIR_HARVEST] no items to transfer")
+                result.duration_seconds = time.time() - start
+                return result
+            
+            # Step 2: Mark as QUEUED
+            content_ids = [item.id for item in fetch_result.items]
+            queued = db_services.mark_reservoir_content_as_queued(session, content_ids)
+            result.items_queued = queued
+            
+            # Step 3: Transfer to RawIngest
+            inserted, skipped = db_services.transfer_reservoir_to_raw_ingest(
+                session=session,
+                content_ids=content_ids,
+                batch_id=self.batch_id,
+            )
+            result.items_transferred = inserted
+            result.items_skipped = skipped
+            
+            # Commit transaction
+            next(session_gen, None)
+            
+            result.duration_seconds = time.time() - start
+            logger.info(
+                "[RESERVOIR_HARVEST] done batch_id=%s duration=%.2fs fetched=%s queued=%s transferred=%s skipped=%s",
+                self.batch_id,
+                result.duration_seconds,
+                result.items_fetched,
+                result.items_queued,
+                result.items_transferred,
+                result.items_skipped,
+            )
+            
+        except Exception as e:
+            logger.exception("[RESERVOIR_HARVEST] failed batch_id=%s", self.batch_id)
+            result.error = str(e)
+            raise
+            
+        finally:
+            try:
+                next(session_gen, None)
+            except Exception:
+                pass
+        
+        return result
+
+    def get_reservoir_statistics(self) -> Dict[str, Dict[str, int]]:
+        """
+        Get statistics about available reservoir content.
+        
+        Returns:
+            Dict with 'by_source_type' and 'by_status' counts
+        """
+        from app.ingestion.harvesters.reservoir import ReservoirHarvester
+        
+        session_gen = get_session()
+        session = cast(Session, next(session_gen))
+        
+        try:
+            harvester = ReservoirHarvester(session=session)
+            stats = harvester.get_statistics()
+        finally:
+            try:
+                next(session_gen, None)
+            except Exception:
+                pass
+        
+        return stats
+
+
+@dataclass
+class ReservoirHarvestResult:
+    """Result from a reservoir harvest operation."""
+    
+    batch_id: uuid.UUID
+    items_fetched: int = 0
+    items_queued: int = 0
+    items_transferred: int = 0
+    items_skipped: int = 0
+    by_source_type: Dict[str, int] = field(default_factory=dict)
+    duration_seconds: float = 0.0
+    dry_run: bool = False
+    error: Optional[str] = None
+    
+    def __str__(self) -> str:
+        return (
+            f"ReservoirHarvestResult(batch_id={self.batch_id}, "
+            f"fetched={self.items_fetched}, queued={self.items_queued}, "
+            f"transferred={self.items_transferred}, skipped={self.items_skipped}, "
+            f"dry_run={self.dry_run}, duration={self.duration_seconds:.2f}s)"
+        )

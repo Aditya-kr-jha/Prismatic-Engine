@@ -23,6 +23,7 @@ from app.api.schemas.ingestion import (
     HarvestResponse,
     PendingIngestResponse,
     RawIngestItem,
+    ReservoirHarvestResponse,
 )
 from app.db.db_session import get_session
 from app.db.enums import ContentPillar
@@ -231,6 +232,93 @@ async def get_pending_ingest_records() -> PendingIngestResponse:
             detail={
                 "error": "database_error",
                 "message": "Error fetching pending ingest records.",
+                "request_id": request_id,
+            },
+        )
+
+
+@router.post("/reservoir/harvest", response_model=ReservoirHarvestResponse)
+async def harvest_from_reservoir(
+    total_content: Optional[int] = None,
+    dry_run: bool = False,
+) -> ReservoirHarvestResponse:
+    """
+    Harvest content from ContentReservoir to RawIngest.
+
+    Transfers high-quality content from the reservoir based on configured
+    pillar quotas and source type distribution.
+
+    Args:
+        total_content: Override total items to harvest (uses config default if not provided)
+        dry_run: If True, preview changes without database modifications
+    """
+    request_id = _generate_request_id()
+    start_time = time.time()
+
+    logger.info(
+        "[API] reservoir_harvest_start request_id=%s dry_run=%s total_content=%s",
+        request_id,
+        dry_run,
+        total_content,
+    )
+
+    try:
+        # Use the ingestion service for orchestration (no HTTP client needed)
+        service = IngestionService(http_client=None)  # type: ignore
+        result = service.harvest_from_reservoir(
+            total_content=total_content,
+            dry_run=dry_run,
+        )
+
+        duration = time.time() - start_time
+        batch_id = str(result.batch_id)
+
+        # Determine status based on results
+        if result.error:
+            status_val = "failed"
+        elif result.items_skipped > 0 and result.items_transferred > 0:
+            status_val = "partial"
+        else:
+            status_val = "success"
+
+        logger.info(
+            "[API] reservoir_harvest_done request_id=%s batch_id=%s duration=%.2fs "
+            "fetched=%s queued=%s transferred=%s skipped=%s dry_run=%s",
+            request_id,
+            batch_id,
+            duration,
+            result.items_fetched,
+            result.items_queued,
+            result.items_transferred,
+            result.items_skipped,
+            dry_run,
+        )
+
+        return ReservoirHarvestResponse(
+            batch_id=batch_id,
+            items_fetched=result.items_fetched,
+            items_queued=result.items_queued,
+            items_transferred=result.items_transferred,
+            items_skipped=result.items_skipped,
+            by_source_type=result.by_source_type,
+            duration_seconds=round(result.duration_seconds, 2),
+            dry_run=result.dry_run,
+            status=status_val,
+            error=result.error,
+        )
+
+    except Exception as e:
+        logger.exception(
+            "[API] reservoir_harvest_failed request_id=%s error_type=%s error=%s",
+            request_id,
+            type(e).__name__,
+            e,
+        )
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail={
+                "error": "internal_error",
+                "message": "Reservoir harvest failed.",
                 "request_id": request_id,
             },
         )

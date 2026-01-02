@@ -7,7 +7,7 @@ and the content reservoir for weekly feeding into raw_ingest.
 
 import uuid
 from datetime import datetime, timezone
-from typing import Optional, List, TYPE_CHECKING
+from typing import Optional, List
 
 from sqlalchemy import (
     Column,
@@ -25,9 +25,6 @@ from app.db.enums import (
     EvergreenSourceStatus,
     ReservoirStatus,
 )
-
-if TYPE_CHECKING:
-    from app.db.db_models.blog_scrape_tracker import ScrapedURL, AuthorScrapeState
 
 
 class EvergreenSource(SQLModel, table=True):
