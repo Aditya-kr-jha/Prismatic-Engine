@@ -1,0 +1,134 @@
+URL: https://www.gurwinder.blog/p/30-useful-principles-autumn-2023
+TITLE: 30 Useful Principles Autumn 2023
+AUTHOR_ID: 05
+ARCHIVED: 2026-01-02T14:15:02.181741+00:00
+
+---
+
+Several people told me my seasonal lists of 40 useful concepts are too long, and the email limits seem to agree, so I’ve decided to cut them down to 30, which will allow me to be more selective and trade quantity for quality.
+
+So here’s a list of 30 enlightening concepts, painstakingly summarized. 20 were posted earlier on Twitter, but the last 10 are just for you. As always, these ideas are not rules for life but food for thought. Click each title to learn more.
+
+1. Goodhart’s Law:
+When a measure becomes a goal, it ceases to be a good measure.
+
+Since schools started to use test-scores as targets, they’ve gradually stopped teaching kids how to live fulfilling lives, and now mainly teach them how to pass school tests (See also: Campbell’s Law).
+
+2. Hotelling's Law:
+Rival products (burgers, pop songs, political parties) tend to grow more alike over time, because creators copy more successful rivals to replicate their success and steal their customers/audiences.
+
+Paradoxically, this increases the value of being different.
+
+3. Herostratic Fame:
+Many people would rather be hated than unknown. In Ancient Greece, Herostratus burned down the Temple of Artemis purely so he’d be remembered. Now we have “nuisance influencers” who stream themselves committing crimes and harassing people purely for clout.
+
+4. Segal’s Law:
+“A man with a watch knows what time it is. A man with 2 watches is never sure.”
+
+Ancient societies followed a single narrative. Modern societies are cacophonies of competing narratives. Without trust, more data doesn’t make us more informed but more confused.
+
+5. The Reading Recession:
+There is more text than ever, yet people are reading ever less and outsourcing writing to chatbots. This is dangerous because language is the basis of thought, and if you can’t read or write well, you won’t think well.
+
+6. Beginner's Bubble Effect:
+"You cannot learn what you think you already know."
+
+—Epictetus
+
+The most ignorant people are not those who know nothing, but those who know a little, because a little knowledge grants the illusion of understanding, which kills curiosity and closes the mind.
+
+7. Parkinson's Law:
+Work expands to fill the time allotted for it. No matter the size of the task, it will often take precisely the amount of time you set aside to do it, because more time means more deliberation & procrastination.
+
+The underlying principle, known as induced demand, applies to many other resources: Software expands to fill memory (Wirth’s law), patients expand to fill hospital beds (Roemer's law), energy consumption expands to meet supply (Jevon’s paradox), road congestion expands to fill roads (Braess’ paradox).
+
+8. Benford's Law of Controversy:
+We tend to fill gaps in information with emotion. We fear what we don’t understand, love what we naively romanticize, etc. As such, the things that fire people up most are usually the things they understand least.
+
+9. Pareidolia:
+We see whatever we look for.
+
+For aeons, survival favored the paranoid—those able to discern a predator from the vaguest outline. From these survivors we inherited hyperactive pattern-detection, which once saved us from the lions, but now curses us to see them even in the skies.
+
+10. Safetyism:
+After US schools banned peanuts because some kids had allergies, more kids developed peanut allergies from lack of exposure. We’re increasingly protecting kids from life, which only makes them more vulnerable to it. Too much safety is dangerous.
+
+11. Thaasophobia:
+Wilson et al. (2014) found that people with nothing to do except think or give themselves an electric shock would often choose the shock. Many of us are so eager to avoid ourselves that we’d rather do something harmful than do nothing at all.
+
+12. Serial-Position Effect:
+We tend to recall the beginnings (Primacy effect) and endings (Recency effect) of things better than the middles. So if you create anything with a beginning & ending, focus more effort there.
+
+(Curiously, this bias also affects LLMs, and no one yet knows why.)
+
+13. Licensing Effect:
+Believing you’re good can make you behave bad. Those who consider themselves virtuous worry less about their own behavior, making them more susceptible to ethical lapses. A big cause of immorality is self-righteous morality.
+
+14. Preference Falsification:
+If people are afraid to say what they really think, they will instead lie. Therefore, punishing speech—whether by taking offence or by threatening censorship—is ultimately a request to be deceived.
+
+15. Nutpicking:
+Online political debate mainly involves cherry-picking the most outlandish members of the enemy side and presenting them as indicative in order to make the entire side look crazy.
+
+The culture war is essentially just each side sneering at the other side's lunatics.
+
+16. Moral Pollution:
+We act like bad reputations are contagious, and mere proximity to something labelled immoral is itself immoral. Brands cut ties with people deemed unethical not because they value ethics, but because they fear contamination. Cancellation is moral quarantine.
+
+17. KISS Principle:
+The design of everything is gradually being stripped down, because simple is easy & safe; the less there is, the less there is to offend or justify. But such rampant minimalism comes at a cost; our cultures are losing their uniqueness and identity.
+
+18. Cosmic Schmuck Principle:
+There are two kinds of people in this world: those who sometimes worry that they’re a moron, and actual morons.
+
+In other words, the best way to be less of an idiot is to treat yourself like one.
+
+19. Cynical Genius Illusion:
+Cynical people are widely seen as smarter, but sizable research suggests they actually tend to be dumber. Cynicism is not a sign of intelligence but a substitute for it, a way to shield oneself from betrayal & disappointment without having to do or think.
+
+20. Boxer’s Child Paradox:
+Each generation tries to make life better for the next, but this deprives future generations of the ordeals needed to build character. In our relentless quest for ever more convenience, are we dooming posterity to weakness?
+
+21. Substitution Hypothesis:
+We’re wired for faith, so as we kill the old gods, we create new ones to replace them. New Atheism gave rise to Atheism+, a quasi-religion dedicated to “social justice”. In the spiritual void left by receding religion, many now worship "wokeness", with a new Original Sin (whiteness) and Holy Trinity (Diversity, Equity, Inclusion).
+
+22. Ambiguity Aversion:
+People tend to find uncertain outcomes less tolerable than bad outcomes. De Berker et al (2016) found that test participants who were told they had a small chance of receiving an electric shock exhibited much higher stress levels than those who knew they’d certainly receive an electric shock.
+
+23. Semantic Stopsign:
+One way people end discussions is by disguising descriptions as explanations. For instance, the word "evil" is used to explain behavior but really only describes it. It resolves the question not by creating understanding but by killing curiosity.
+
+24. Toothbrush Problem:
+Psychologists treat theories like toothbrushes; no self-respecting person wants to use another’s. Theorists are incentivized by ego and professional pressures to overly rely on their own theories, so they often ignore the best models in favor of their own, applying them ever more widely, contorting them till they’re warped.
+
+25. Ferguson Effect:
+Black Lives Matter’s demonization of police led police to roll back activities in black communities, which caused murder rates to spike, and a net loss of thousands of black lives. BLM activists insist this effect is a myth, but multiple recent studies, such as Cheng & Long (2022) and Campbell (2023), suggest it’s real.
+
+26. Shiny Object Syndrome:
+We’re drawn to whatever’s new, because in our evolutionary history new info tended to matter. But now it doesn’t, because 99% of new info is clickbait, mass-produced and rushed-out to exploit our attraction to novelty. So stop chasing the new and seek info that’s stood the test of time.
+
+27. Agenda-Setting Theory:
+Most of the time, what’s happening in the news isn’t actually important, it only appears important because it’s in the news. The public conversation is based on whatever's reported by the press, giving the impression that this news matters most, when really it's just what was chosen by a few editors and thoughtlessly amplified by the masses.
+
+28. Compassion Fade:
+“One death is a tragedy, a million is a statistic.”
+
+When presented with two appeals for charity—one based on famine statistics and one based on a single starving girl—people tend to donate much more to the girl.
+
+Our minds can’t grasp big numbers, so we navigate the world through stories, not statistics. We’re moved by drama, not data.
+
+29. Yes-Damn Effect:
+You enthusiastically say yes to plans in the future, but when the time actually comes, you often regret it.
+
+The future seems like a different world, distant and infinite in capacity, so you stuff it with plans and forget about it, passing the buck to your future self.
+
+Trouble is, your future self tends to be a lot like you. So if you wouldn't want to do something today, don't agree to do it next month.
+
+30. Generation Effect:
+If you really want to understand a topic, don’t read about it, write about it. The act of explaining something helps connect the dots and commit them to memory far better than the passive act of reading.
+
+It’s a big reason I make these lists!
+
+And that’s it for now. I’ll have a post for paying subscribers out soon. Take care.
+
+G.

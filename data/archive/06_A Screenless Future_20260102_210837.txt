@@ -1,0 +1,44 @@
+URL: https://collabfund.com/blog/a-screenless-future/
+TITLE: A Screenless Future
+AUTHOR_ID: 06
+ARCHIVED: 2026-01-02T15:38:37.217479+00:00
+
+---
+
+by Sophie Bakalar
+@sophiebakalar
+Recently, I had lunch with Emmett Shine, co-founder of Gin Lane and a thoughtful voice in the conversation around AI and design.
+
+Among other things, we talked about the future of user interfaces and experiences in an AI-driven world. He said something that really stuck with me: “humans existed without screens for hundreds of thousands of years. They will exist without screens for hundreds of thousands more.”
+
+Increasingly, I envision a world without phones or tablets or computers. A world defined by a more immersive, primarily hands-free technological experience. A future where our children will view screens the way most of us view cigarettes. “You used to look at a screen all day?” they’ll say. “Do you know how bad that is for you?”
+
+Meta and OpenAI clearly envision this reality, too.
+
+Meta has invested hundreds of billions of dollars into AR/VR headsets, Ray-Ban smart glasses, a neural interface wristband, and even holographic wearables.
+
+OpenAI announced a $6.5 billion deal with Jony Ive to create an AI device that can unseat the smartphone.
+
+Though screens remain ubiquitous, they’re already beginning to feel outdated. It’s a clunky, poor user experience for accessing the power of AI.
+
+What does a screenless future mean for tech? To reach a truly screenless future, we’ll likely need three things: new hardware, more natural voice dictation, and a step change in motion detection. (Or, possibly, mind reading…but let’s not get ahead of ourselves. We’ll leave that to Elon.)
+
+In the past few months, we’ve seen a flurry of startups in all three categories.
+
+Stealth Hardware: The dream of a magical AI-powered pin still lives on, if only in concept for now. In addition to Meta and OpenAI, a number of startups have begun to explore devices that feel as natural as jewelry or clothing, and less like a mini smartphone strapped to your chest.
+
+Genuine Voice: The days of “Sorry, I didn’t catch that” are numbered. Berlin’s Synthflow just raised $20 million to power AI agents that hold real-time conversations with sub-400 millisecond response times. Wispr Flow just announced a $30M round for their AI-dictation app (it works like a dream). During WWDC, Apple focused on their new Apple Intelligence features and highlighted improvements in voice. And, YC put out an RFP for voice technologies ahead of their Spring 2025 batch. It might seem like the die has already been cast, but there is still plenty of space for winners who focus on nuance like intonation, turn-taking, and empathy. Because the moment you think “voice is solved,” a better product will win.
+
+Human-Level Motion Detection: Motion sensing has matured past rudimentary gesture controls. Ambient.ai has raised north of $50 million to deliver near-human perception in physical spaces. Imagine a watch that can sense gestures, like a wave, to lock your front door.
+
+Together, these innovations form the skeleton of a screenless UX. Design is what will flesh out that vision.
+
+What does a screenless future mean for design? Take the screen away and what’s left is tone: cadence, empathy, restraint. Personality becomes the new product. In a market where models and APIs commoditize by the quarter, trust still compounds the old-fashioned way: one human reaction at a time. Brand DNA becomes a moat not because it looks pretty, but because it behaves: saying sorry before it’s asked, cracking the joke that defuses anxiety, staying silent when silence feels like respect.
+
+What does a screenless future mean for you? Our collective sci-fi vision of the future often features a sea of blinking lights and fluorescent screens in classics from Blade Runner to The Jetsons.
+
+But there’s a peaceful quality to technology fading into the background. Counterintuitively, even if technology becomes ubiquitous, if it is also virtually invisible, it gives us space to get back to a life that is a little more, well, human.
+
+Mark Weiser once wrote, “The most profound technologies are those that disappear. They weave themselves into the fabric of everyday life until they are indistinguishable from it.”
+
+As AI makes that reality possible, the most powerful technology won’t demand our attention. It will give it back to us.

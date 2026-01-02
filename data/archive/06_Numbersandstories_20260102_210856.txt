@@ -1,0 +1,62 @@
+URL: https://collabfund.com/blog/numbersandstories/
+TITLE: Numbersandstories
+AUTHOR_ID: 06
+ARCHIVED: 2026-01-02T15:38:56.065501+00:00
+
+---
+
+very forecast takes a number from today and multiplies it by a story about tomorrow.
+
+Investment valuations, economic outlooks, political forecasts – they all follow that formula. Something we know multiplied by a story we like.
+
+The trick when forecasting is realizing that’s what you’re doing.
+
+A few weeks before he died a reporter asked Franklin Roosevelt if the Yalta Conference negotiations near the end of World War II set the stage for permanent peace in Europe.
+
+“I can answer that question if you can tell me who your descendants will be in the year 2057,” Roosevelt said. “We can look as far ahead as humanity believes in this sort of thing.”
+
+The deals hammered out in Yalta were the things we knew. How long they’d hold, how much they’d be adhered to, and what else could get in their way is just a story people told and believed in varying degrees.
+
+Anything that tries to forecast what people will do next work like that.
+
+The hard thing is that while the number we know today can be something real and verified, the story we multiply it by is driven by what you want to believe will happen or what makes the most sense. Forecasters get into trouble when the number we know from today gives an impression that you’re being objective and data-driven when the story about tomorrow is so subject to opinion.
+
+When valuing a company, revenue/cash flow/profits is the number we know. The earnings multiple you attach to that figure is just a story about future growth.
+
+Same with economic trends. We have lots of data, but none of it means much until you attach a story to it about what you think it means and what you think people will do with it next.
+
+That seems obvious to me. But ask forecasters if they think the majority of what they do is storytelling and you’ll get blank stares. At best. It never seems like storytelling when you’re basing a forecast in data.
+
+And while data-driven storytelling doesn’t mean guessing, it doesn’t mean prophecy.
+
+We can use historical data to assume a trend will continue, but that’s just a story we want to believe in a world where things change all the time.
+
+We can use data to assume a crazy event will revert to the norm, but that’s also just a story in a world where unsustainable trends last longer than people think.
+
+Few things escape that reality. B.H. Liddell Hart writes in the book Why Don’t We Learn From History?:
+
+[History] cannot be interpreted without the aid of imagination and intuition. The sheer quantity of evidence is so overwhelming that selection is inevitable. Where there is selection there is art. Those who read history tend to look for what proves them right and confirms their personal opinions. They defend loyalties. They read with a purpose to affirm or to attack. They resist inconvenient truth since everyone wants to be on the side of the angels.
+
+In finance this point is made with the quip that more fiction has been written in Excel than in Word.
+
+None of this is bad. I think it’s just realistic, and it means all of us should keep a few things in mind.
+
+1. A fact multiplied by a story always equals something less than a fact. So almost all predictions have less than a 100% chance of coming true. That’s not a bold statement, but if you embrace it it always pushes you towards room for error and the ability to endure surprise.
+
+2. The most persuasive stories are what you want to believe are true or are an extension of what you’ve experienced firsthand, which is what makes forecasting so hard.
+
+3. If you’re trying to figure out where something is going next, you have to understand more than its technical possibilities. You have to understand the stories everyone tells themselves about those possibilities, because it’s such a big part of the forecasting equation.
+
+4. When interest rates are low, the story side of the equation becomes more powerful. When short-term results aren’t competing for attention with interest rates, most of a company’s valuation comes from what it might be able to achieve in the future. That, of course, is just a story. And people can come up with some wild stories.
+
+SHARE
+
+Subscribe on Substack
+More from the blog…
+My New Book: The Art of Spending Money
+by Morgan Housel — Sep 3, 2025
+My new book, The Art of Spending Money, comes out Oct 7th.
+
+Little Rules About Big Things
+by Morgan Housel — Aug 13, 2025
+A few things I

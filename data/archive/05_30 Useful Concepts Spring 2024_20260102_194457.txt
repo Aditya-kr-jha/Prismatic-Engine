@@ -1,0 +1,210 @@
+URL: https://www.gurwinder.blog/p/30-useful-concepts-spring-2024
+TITLE: 30 Useful Concepts Spring 2024
+AUTHOR_ID: 05
+ARCHIVED: 2026-01-02T14:14:57.463403+00:00
+
+---
+
+30 Useful Concepts (Spring 2024)
+Ideas to help you make sense of the world
+Gurwinder
+May 05, 2024
+It’s that time again; a summary of interesting and useful concepts to spur your curiosity. Click the titles for more information.
+
+1. Dopamine Culture
+
+“Every kind of organized distraction tends to become progressively more and more imbecile.” — Aldous Huxley
+
+The delay between desire & gratification is shrinking. Pleasure is increasingly more instant & effortless. Everything is becoming a drug. What will it do to us?
+
+2. False Consensus Effect
+
+“Everyone driving slower than you is an idiot and everyone driving faster than you is a maniac.” — George Carlin
+
+Our model of the world assumes people are like us. We don’t just do whatever we consider normal, we also consider normal whatever we do.
+
+3. Fredkin's Paradox
+
+The more similar two choices seem, the less the decision should matter, yet the harder it is to choose between them. As a result, we often spend the most time on the decisions that matter least.
+
+To avoid being paralyzed by meaningless choices, use decision-making heuristics.
+
+4. Package-Deal Ethics
+
+“If I can predict all of your beliefs from one of your beliefs, you’re not a serious thinker.” — Chris Williamson
+
+Being pro-choice and being pro-gun-control don’t necessarily follow from each other, yet those who believe one usually also believe the other. This is because most people don’t choose beliefs individually but 
+
+5. Ovsiankina Effect (aka Hemingway Effect)
+
+We have an intrinsic need to finish what we’ve started. Exploit this by taking your breaks mid-task; the incompleteness will gnaw at you, increasing your motivation to return to work. (When writing, I end each day mid-sentence because it
+
+6. Naxalt Fallacy
+
+Smart people tend to use qualifiers like “generally” and “most”, and dumb people tend to ignore them.
+
+“Most people who are pro-choice are also pro-gun-control.”
+
+“Wrong! I’m not!”
+
+“Men are generally taller than women.”
+
+“False! My wife is 7 feet tall!”
+
+7. Fiction Lag (aka Experience-Taking)
+
+When people are captivated by a work of fiction, they unconsciously adopt the traits of their favorite characters. We develop our identities by copying others, and perhaps one reason we enjoy fiction is that it gives us ideas on who to be.
+
+8. Premortem
+
+"Hindsight is 20/20."
+
+Instead of waiting for something to go wrong and then conducting a post-mortem, conduct a “pre-mortem” by imagining it went wrong then using the power of hindsight to deduce the likeliest reason it went wrong.
+
+Imagine you wake up in a hospital. What could have been the most likely reason? Is there anything you can do today to prevent that?
+
+Imagine your partner breaks up with you. What could have been the most likely reason? Is there anything you can do today to prevent that?
+
+Imagine you lose your job. What could have been the most likely reason? Is there anything you can do today to prevent that?
+
+—Luca Dellanna
+
+9. Gambler’s Conceit
+
+People hooked on a risky behavior (e.g. gambling, smoking) reassure themselves they’ll be able to quit while ahead (before bankruptcy, lung cancer). However, their future-self tends to act a lot like them, so if they can't quit now, they likely won't quit later when they’re even deeper in.
+
+10. Youngest-Kid-in-Class Syndrome
+
+A study of 300,000 children found that the youngest kids in class were more likely to be diagnosed with ADHD. This suggests that immaturity is sometimes being mistaken for disorders.
+
+Steve Stewart-Williams discusses this further in his incisive piece (paywalled)
+
+11. Noble Cause Corruption
+
+The greatest evils come not from people seeking to do evil, but people seeking to do good and believing the ends justify the means. Everyone who was on the wrong side of history believed they were on the right side.
+
+Grey Rock Method
+
+Reacting emotionally to narcissists and other toxic people only gives them what they want — your time & energy — which encourages further abuse. If you want to stop receiving provocations, stop being provoked. When the narcissist realizes they can’t manipulate your emotions, they’ll stop trying.
+
+13. Woozle Effect
+
+When a source makes an unproven claim, is then cited as proof by another, which is cited by another, and so on, until the chain of citations looks like evidence. Common because, while many writers check their sources, few check their sources’ sources.
+
+A recent example: evidence that puberty blockers are safe and effective was overestimated because institutions were circularly citing each other:
+
+14. Postjournalism
+
+The press lost its monopoly on news when the internet democratized info. To save its business model, it pivoted from journalism into tribalism. The new role of the press is not to inform its readers but to confirm what they already believe.
+
+15. Adams’ 25% rule (aka Skill-Stacking)
+
+Instead of trying to be the best at one thing, try to be "merely" great at two things and then learn to combine them. Not only is this easier, but it will make your skillset more unique, cutting out the competition.
+
+16. Backwards Law
+
+The more you pursue happiness, the less likely you are to obtain it, because the focus on acquiring it only reinforces the fact that you don’t have it. Ironically, happiness comes easiest to those who don’t worry about it.
+
+“Happiness is like a butterfly, the more you chase it, the more it will evade you, but if you notice the other things around you, it will gently come and sit on your shoulder.”
+
+― J. Richard Lessor
+
+17. Balaji's Transformer
+
+Have a written idea? Draw it. Have a visual idea? Write it. Reformatting an idea lets you see it from a new perspective. Walt Disney turned a dull business plan into a diagram, revealing new connections and opening new pathways of thought.
+
+18. Longevity Escape Velocity
+
+Technology is gradually improving our lifespans, so if you try to live as long as possible, you may live to see technology that'll allow you to live even longer. Time is the most valuable currency of all, and longevity yields compound interest.
+
+19. Roseto Effect
+
+Many long-term studies, including the 50 year Roseto study and the 85 year Harvard Study of Adult Development, found that having close-knit relationships is as important for longevity as diet, sleep, and exercise, yet it’s often neglected by fitness gurus. If you want to live, love.
+
+Hitchens' Razor
+
+“What can be asserted without evidence can be dismissed without evidence.”
+
+― Christopher Hitchens
+
+If you make a claim, it's up to you to prove it, not to me to disprove it.
+
+The Liking Gap
+
+Multiple studies have found that people consistently underestimate how much a conversation partner likes them and enjoys their company. So don't be shy, you're probably cooler than you think.
+
+Boomerang Effect
+
+Deny someone something, and they'll want it even more, out of defiance. If you want your child to eat broccoli, tell them they’re not big enough to eat broccoli.
+
+Helps explain why censorship often backfires (the Streisand Effect).
+
+Anchored-to-your-own-history bias
+
+“Your personal experiences make up maybe 0.00000001% of what’s happened in the world but maybe 80% of how you think the world works.” — Morgan Housel
+
+Boomers & Generation X had wildly different experiences of how the economy works, and this gave them different dispositions, worldviews, and political preferences.
+
+Mismatch Theory
+
+Moths evolved to navigate by the moon, a good strategy until the invention of electric lamps, which now lead them astray. Equally, humans evolved to be tribal, a good strategy until the digital age, where it now leads us to act like polarized goons online.
+
+Common Knowledge Effect
+
+Groups are meant to be better decision-makers than individuals, because they combine many perspectives. But in practice, a group doesn't base its decisions on the info specific to each member, but only on the info common to them all. This casts doubt on the idea that “two heads are better than one”, and helps explain why, despite popular wisdom, diversity generally does not make teams better.
+
+Champion Bias
+
+We assume winners have the best advice, but those who win rarely examine why they won, while those who lose often regretfully dwell on their mistakes. So you’ll often obtain the best advice on winning not from winners but from losers.
+
+Gibson’s Law
+
+“For every PhD there is an equal and opposite PhD.”
+
+Both sides in a court case or policy debate will have support from experts, no matter how crazy the position, because education doesn’t make someone right, it often just makes them more skilled at being wrong.
+
+Prospect Theory
+
+People don’t weigh gains and losses evenly. We hate losing money about twice as much as we like gaining it. So, for instance, we’d need to gain $20 to assuage the pain of losing $10. This bias toward loss aversion is one of the foundations of economic behavior.
+
+Cached Thoughts
+
+Most of your beliefs were formed earlier in your life, when you were naiver. You continue to believe them only because you’ve never reconsidered them. When you’re about to offer an opinion, consider when you formed it, and ask: is it really your belief, or your younger self’s?
+
+Finality Principle
+
+One day you’ll do something for the last time and never know it. So, whether you’re watching a sunset or arguing with a friend, ask yourself: “What if this was the last time I experience this?” A sense of finality can turn even nuisances into miracles.
+
+“Death is always on the way, but the fact that you don't know when it will arrive seems to take away from the finiteness of life. It's that terrible precision that we hate so much. But because we don't know, we get to think of life as an inexhaustible well. Yet everything happens a certain number of times, and a very small number, really. How many more times will you remember a certain afternoon of your childhood, some afternoon that's so deeply a part of your being that you can't even conceive of your life without it? Perhaps four or five times more. Perhaps not even. How many more times will you watch the full moon rise? Perhaps twenty. And yet it all seems limitless.”
+
+― Paul Bowles, The Sheltering Sky
+
+And that’s 30 concepts. As usual, don’t mistake these rules of thumb for laws of nature, as that would be a fallacy called Secundum Quid.
+
+I’m going to start scheduling video-calls with paid subscribers again soon; will give more details in my next post. Until then, peace.
+
+Type your email...
+Subscribe
+
+1,588 Likes
+∙
+302 Restacks
+Discussion about this post
+Write a comment...
+Tom G
+May 5, 2024
+
+Best Sunday read I've seen in a long while, kudos
+
+Like (30)
+Reply
+Share
+uncivilizedengineer
+May 5, 2024
+
+#5 made me laugh so hard I
+
+Like (19)
+Reply
+Share
+68 more comments...
