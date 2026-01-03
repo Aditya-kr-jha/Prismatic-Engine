@@ -13,3 +13,5 @@ ENV/
 aws_credentials.json
 .aws/app/.env
 app/.env
+__pycache__/
+*.py[cod]
