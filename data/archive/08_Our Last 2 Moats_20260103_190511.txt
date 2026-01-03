@@ -1,0 +1,86 @@
+URL: https://moretothat.com/our-last-2-moats/
+TITLE: Our Last 2 Moats
+AUTHOR_ID: 08
+ARCHIVED: 2026-01-03T13:35:11.449829+00:00
+
+---
+
+Our Last 2 Moats
+By Lawrence Yeo
+As someone who thinks a lot about creativity and what it means for humanity, AI is both a source of awe and worry.
+
+You’ve likely felt a combination of both too, and it’s the resulting blend that can make our relationship with AI a bit confusing. Is it going to unlock our creative potential in ways we can’t imagine? Or is it going to make a mockery of our potential by showing us how limited we are? Which of the two poles are we headed toward?
+
+To start my response, I’d like to lay out a quick primer on how we tend to respond to technological revolutions of any sort.
+
+When Copernicus revealed that the Earth orbited the Sun (and not the other way around), this idea was met with a ton of resistance because it showed that we weren’t the center of the universe. And if we weren’t the center of the universe, that meant that God had bigger things to care about than us. The Church wasn’t too happy with that idea, so they spent a bulk of their energy trying to suppress it.
+
+But in the end, the idea prevailed.
+
+Similarly, when Darwin revealed that human beings were a byproduct of evolution, this idea was met with a ton of resistance because it showed that we were just smarter apes. And if we were simply smarter apes, then there didn’t seem to be anything especially divine or supernatural about us. This theory was detested by many people (and still is), but in the end, the idea prevailed.
+
+You can see this pattern of insight -> denial -> resistance -> acceptance throughout almost all great scientific revolutions. And we are seeing it play out with AI.
+
+What AI is revealing is that the supposed last moat of humanity—intelligence—may not be all that special either. This was met with deep denial at first, but as LLMs and reasoning models have improved over the years, it’s becoming harder to deny that deep intelligence can indeed be embodied in cold silicon.
+
+So what, then, remains?
+
+The tempting answer would be to say “creativity,” but even that seems like it can fall under the domain of AI. For example, I’ve already heard AI-generated music that sounds just as good as the beats I’m listening to right now. The key here is to get a bit more specific here.
+
+Ultimately, I think we have two remaining moats: (1) context and (2) personality.
+
+Let’s start with context.
+
+The thing about AI is that it’s completely dependent upon context, as it doesn’t have any of its own. It needs to first be prompted in order to make use of the limitless expanse of information it can draw upon. In other words, without knowing where to go, it’s functionally useless.
+
+In fact, all of technology falls under this rule. The coolest car in the world will just sit there if there’s no human being that needs to go somewhere. An elaborate oil drill will be a useless hunk of metal if there’s no human being that desires what lives beneath the soil. Technology is only as good as the function we assign it.
+
+AI has no lived experience of its own, so it needs to borrow ours to know what to do next. It lacks the richness of experience to determine its own desires, its own pursuits, and its own curiosities. So it outsources that agency to us because it’s reliant upon that human curiosity for its very existence. The mere fact that we have the rich context of life (in the form of memories, emotions, and sensations) is what differentiates us in the long-run.
+
+The second is about personality.
+
+I wrote about this here already, but there’s a reason why people continue to care about Magnus Carlsen despite knowing that an AI can beat him at any time. That’s because there’s no soul in watching two AI’s play chess against each other. We crave a person’s journey through a game, sport, craft, etc. because it connects to the shared context of human experience, and that’s what we love following.
+
+Personalities matter because they cultivate trust. This is why the domain of relationships still seem impervious to the encroachment of AI. I doubt that having an AI priest at the pulpit will do any wonders for a church’s membership, nor will having your therapist replaced by a ChatGPT prompt make you jump for joy because of the money you’ll save. We place a high premium on trust, and that is built when you connect to the personality of the person you’re interacting with.
+
+Knowing this, it’s important to lean further into your personality as the AI revolution continues. Creativity will become less about what works, and more about what makes you unique. That’s because the moment a trend develops, AI will make it easier for everyone to detect it, jump on it, and attempt to capitalize on it (which will then make the whole trend die). But what helps you cultivate trust is when you stick to the rhythm of your own pace and allow the integrity of that cadence to resonate with others. That is a magnetizing force that can stay with you for a lifetime.
+
+With those 2 moats in mind, I want to share some practical tips that will help you navigate the waves of AI. These will be specific to those who want to share their ideas through writing or storytelling, but the principles will apply to many domains.
+
+(1) Use more personal stories in your work.
+
+Using personal anecdotes in your stories build an immediate connection with your audience. When you discuss something you’ve experienced yourself, that act of vulnerability acts as a magnet of courage that attracts people to your work.
+
+This ability to lean into your personal life will become even more relevant now.
+
+Given that AI has no personal experiences of its own, the fact that you have a treasure trove of them is your distinct advantage. So use these anecdotes often, as no language model will be able to communicate them with the nuance and richness that you can. That life context is uniquely yours, and your ability to recall it at the right moment is something that only you can do.
+
+This is why memoirs and personal essays will be one of the last bastions of writing to be disrupted by AI. I’m not saying that you have to exclusively write about your own life now, but rather to draw from the well of personal experience whenever you can.
+
+(2) Build simple frameworks and diagrams around your ideas.
+
+One of the reasons why I encourage people to include simple diagrams in their stories (2-axis graphs, spectrums, etc.) is because it humanizes your work. Even something simple as drawing a graph by hand, taking a picture of it, and uploading the resulting image in your post makes it a clear indication that you took the time to create it.
+
+There is an interesting paradox about AI in that the simplest things are the hardest for it to do. For example, once my 4-year-old daughter sees a toy ball, she will always recognize that ball regardless of what angle it’s viewed from or the lighting that falls on it. AI still has trouble doing that, as it needs continuous training to recognize the various ways the same ball can be viewed.
+
+I’ve found that to be the case even with creativity. While AI does a good job creating elaborate images, it often has a hard time creating very simple diagrams and images. More often than not, it overcomplicates it. For example, this is what it generated after I asked it to create an illustration in my style:
+
+And this is a 2-axis graph I asked it to make in my style:
+
+Both look nothing like my work, and I’ve found this to the case every single time I prompt it. That will also be the case for you.
+
+Also, there is a level of human abstraction involved when you convey emotions as spectrums or problems as graphs. It represents a simple understanding of a complex phenomenon, and this kind of abstraction is hard for AI to do. By building and drawing these frameworks out, you put yourself in a position where your creative spirit can still be differentiated.
+
+(3) Spend time on ideation with AI.
+
+I am not an AI doomsayer. I think that in the end, AI will augment our creative capabilities and help us in that regard. But in order to do this, you have to learn how to use it and spend time understanding it in the context of your creative life.
+
+The mistake people make is to associate AI with replacing creative work in its entirety. That it’ll write better posts, novels, screenplays, and scripts than any human ever can. I think this is false. While it may be able to write the next Marvel movie, I don’t think it can write, for example, a script for an episode of Severance (the best show on TV right now!).
+
+AI lacks the human experience required to make an emotionally rich piece of work, but it can act as a creative partner for you as you create it. It can sort through your highlights, find the ones that may act as great ideas for your story, and help you think through a solid theme for your work.
+
+I’ve been spending a few hours each week using AI and experimenting with it when it comes to ideation. Prompting it to learn more about a specific problem, asking it to summarize some prominent thinkers in that field, and including what I find in my Idea Playground (or where I store my ideas and notes). It’s quite incredible to have a creative partner like this helping me sort through the potential ideas of a story.
+
+With that said, when it comes to the writing and storytelling itself, that’s where your creativity takes center stage. Don’t take an AI’s output and simply publish the result, as that will just fall under the “AI slop” category. Rather, find ways to connect it to a personal story, build a small world, or try out any of the other tools in the Thinking In Stories toolkit or The Examined Writer framework to create something that’s uniquely yours. This process of making something is where the real growth happens, and that’s reserved for the human being that is you.
+
+In the end, AI is there to assist your creative potential, not to replace it. Learn how to tell great stories and lean into the skills that emphasize your unique identity, as that’s where the best parts of your creative spirit will shine.
