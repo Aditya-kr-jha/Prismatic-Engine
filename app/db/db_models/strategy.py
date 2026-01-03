@@ -1,127 +1,110 @@
-# import uuid
-# from datetime import datetime, timezone, date, time
-# from typing import Optional, Any, Dict, List
-#
-# from sqlalchemy import (
-#     Column,
-#     TIMESTAMP,
-#     Index,
-#     CheckConstraint,
-#     Text,
-#     func,
-#     text,
-#     UniqueConstraint,
-# )
-# from sqlalchemy.dialects.postgresql import JSONB, ARRAY
-# from sqlmodel import SQLModel, Field, Relationship
-#
-# from app.db.enums import (
-#     ContentPillar,
-#     Format,
-#     ScheduleStatus,
-#     EventType,
-#     RemixType,
-#     QueueStatus,
-# )
-#
-#
-# class AngleMatrix(SQLModel, table=True):
-#     __tablename__ = "angle_matrix"
-#
-#     __table_args__ = (
-#         CheckConstraint(
-#             "virality_multiplier >= 0",
-#             name="ck_angle_matrix_virality_multiplier",
-#         ),
-#         Index(
-#             "ix_angle_matrix_active",
-#             "is_active",
-#             postgresql_where=text("is_active = true"),
-#         ),
-#         Index(
-#             "ix_angle_matrix_pillars_gin",
-#             "best_for_pillars",
-#             postgresql_using="gin",
-#         ),
-#         Index(
-#             "ix_angle_matrix_formats_gin",
-#             "best_for_formats",
-#             postgresql_using="gin",
-#         ),
-#     )
-#
-#     # ---------- PRIMARY ----------
-#     id: str = Field(primary_key=True)  # e.g. "contrarian"
-#
-#     # ---------- META ----------
-#     name: str = Field(nullable=False)
-#     template: str = Field(nullable=False)
-#     description: Optional[str] = Field(default=None)
-#
-#     # ---------- COMPATIBILITY ----------
-#     best_for_pillars: List[str] = Field(
-#         default_factory=list,
-#         sa_column=Column(ARRAY(Text), nullable=False, server_default=text("'{}'")),
-#     )
-#
-#     avoid_for_pillars: List[str] = Field(
-#         default_factory=list,
-#         sa_column=Column(ARRAY(Text), nullable=False, server_default=text("'{}'")),
-#     )
-#
-#     best_for_formats: List[str] = Field(
-#         default_factory=list,
-#         sa_column=Column(ARRAY(Text), nullable=False, server_default=text("'{}'")),
-#     )
-#
-#     avoid_for_formats: List[str] = Field(
-#         default_factory=list,
-#         sa_column=Column(ARRAY(Text), nullable=False, server_default=text("'{}'")),
-#     )
-#
-#     constraints: Dict[str, Any] = Field(
-#         default_factory=dict,
-#         sa_column=Column(JSONB, nullable=False, server_default=text("'{}'::jsonb")),
-#     )
-#
-#     # ---------- PERFORMANCE ----------
-#     virality_multiplier: float = Field(default=1.0)
-#     performance_data: Dict[str, Any] = Field(
-#         default_factory=dict,
-#         sa_column=Column(JSONB, nullable=False, server_default=text("'{}'::jsonb")),
-#     )
-#
-#     # ---------- STATUS ----------
-#     is_active: bool = Field(default=True)
-#
-#     # ---------- DOCS ----------
-#     example_content: Optional[str] = Field(default=None)
-#     internal_notes: Optional[str] = Field(default=None)
-#
-#     # ---------- TIMESTAMPS ----------
-#     created_at: datetime = Field(
-#         default_factory=lambda: datetime.now(timezone.utc),
-#         sa_column=Column(TIMESTAMP(timezone=True), server_default=func.now()),
-#     )
-#
-#     updated_at: datetime = Field(
-#         default_factory=lambda: datetime.now(timezone.utc),
-#         sa_column=Column(
-#             TIMESTAMP(timezone=True),
-#             server_default=func.now(),
-#             onupdate=func.now(),
-#         ),
-#     )
-#
-#     # ---------- RELATIONSHIPS ----------
-#     schedules: List["ContentSchedule"] = Relationship(back_populates="angle")
-#
-#     queue_items: List["FutureContentQueue"] = Relationship(
-#         back_populates="suggested_angle"
-#     )
-#     performances: Optional["AnglePerformance"] = Relationship(back_populates="angle")
-#
-#     usage_histories: List["UsageHistory"] = Relationship(back_populates="angle")
+from datetime import datetime, timezone
+from typing import Optional, Any, Dict, List
+
+from sqlalchemy import (
+    Column,
+    TIMESTAMP,
+    Index,
+    CheckConstraint,
+    Text,
+    func,
+    text,
+)
+from sqlalchemy.dialects.postgresql import JSONB, ARRAY
+from sqlmodel import SQLModel, Field
+
+
+class AngleMatrix(SQLModel, table=True):
+    __tablename__ = "angle_matrix"
+
+    __table_args__ = (
+        CheckConstraint(
+            "virality_multiplier >= 0",
+            name="ck_angle_matrix_virality_multiplier",
+        ),
+        Index(
+            "ix_angle_matrix_active",
+            "is_active",
+            postgresql_where=text("is_active = true"),
+        ),
+        Index(
+            "ix_angle_matrix_pillars_gin",
+            "best_for_pillars",
+            postgresql_using="gin",
+        ),
+        Index(
+            "ix_angle_matrix_formats_gin",
+            "best_for_formats",
+            postgresql_using="gin",
+        ),
+    )
+
+    # ---------- PRIMARY ----------
+    id: str = Field(primary_key=True)  # e.g. "contrarian"
+
+    # ---------- META ----------
+    name: str = Field(nullable=False)
+    template: str = Field(nullable=False)
+    description: Optional[str] = Field(default=None)
+
+    # ---------- COMPATIBILITY ----------
+    best_for_pillars: List[str] = Field(
+        default_factory=list,
+        sa_column=Column(ARRAY(Text), nullable=False, server_default=text("'{}'")),
+    )
+
+    avoid_for_pillars: List[str] = Field(
+        default_factory=list,
+        sa_column=Column(ARRAY(Text), nullable=False, server_default=text("'{}'")),
+    )
+
+    best_for_formats: List[str] = Field(
+        default_factory=list,
+        sa_column=Column(ARRAY(Text), nullable=False, server_default=text("'{}'")),
+    )
+
+    avoid_for_formats: List[str] = Field(
+        default_factory=list,
+        sa_column=Column(ARRAY(Text), nullable=False, server_default=text("'{}'")),
+    )
+
+    constraints: Dict[str, Any] = Field(
+        default_factory=dict,
+        sa_column=Column(JSONB, nullable=False, server_default=text("'{}'::jsonb")),
+    )
+
+    # ---------- PERFORMANCE ----------
+    virality_multiplier: float = Field(default=1.0)
+    performance_data: Dict[str, Any] = Field(
+        default_factory=dict,
+        sa_column=Column(JSONB, nullable=False, server_default=text("'{}'::jsonb")),
+    )
+
+    # ---------- STATUS ----------
+    is_active: bool = Field(default=True)
+
+    # ---------- DOCS ----------
+    example_content: Optional[str] = Field(default=None)
+    internal_notes: Optional[str] = Field(default=None)
+
+    # ---------- TIMESTAMPS ----------
+    created_at: datetime = Field(
+        default_factory=lambda: datetime.now(timezone.utc),
+        sa_column=Column(TIMESTAMP(timezone=True), server_default=func.now()),
+    )
+
+    updated_at: datetime = Field(
+        default_factory=lambda: datetime.now(timezone.utc),
+        sa_column=Column(
+            TIMESTAMP(timezone=True),
+            server_default=func.now(),
+            onupdate=func.now(),
+        ),
+    )
+
+
+# NOTE: Relationships to ContentSchedule, FutureContentQueue, AnglePerformance,
+# and UsageHistory are commented out until those models are implemented.
 #
 #
 # class ContentSchedule(SQLModel, table=True):
