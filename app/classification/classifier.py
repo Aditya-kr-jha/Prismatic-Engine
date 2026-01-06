@@ -26,7 +26,7 @@ class ContentClassifier:
 
     def __init__(
         self,
-        model: str = "gpt-4o",
+        model: str = settings.LLM_MODEL,
         temperature: float = 0,
     ):
         """
@@ -76,12 +76,14 @@ class ContentClassifier:
             len(content),
         )
 
-        result = await self.chain.ainvoke({
-            "content": content,
-            "source_type": source_type,
-            "title": title or "Untitled",
-            "source_url": source_url or "N/A",
-        })
+        result = await self.chain.ainvoke(
+            {
+                "content": content,
+                "source_type": source_type,
+                "title": title or "Untitled",
+                "source_url": source_url or "N/A",
+            }
+        )
 
         logger.debug(
             "Classification complete: pillar=%s, virality=%.1f, confidence=%.2f",

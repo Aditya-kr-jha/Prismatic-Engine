@@ -1,5 +1,6 @@
-from datetime import datetime, timezone
-from typing import Optional, Any, Dict, List
+import uuid
+from datetime import datetime, timezone, date, time
+from typing import Optional, Any, Dict, List, TYPE_CHECKING
 
 from sqlalchemy import (
     Column,
@@ -9,9 +10,23 @@ from sqlalchemy import (
     Text,
     func,
     text,
+    UniqueConstraint,
+    Date,
+    Time,
+    String,
 )
 from sqlalchemy.dialects.postgresql import JSONB, ARRAY
-from sqlmodel import SQLModel, Field
+from sqlmodel import SQLModel, Field, Relationship
+
+from app.db.enums import ContentPillar, Format, ScheduleStatus, PostingStatus
+
+if TYPE_CHECKING:
+    from app.db.db_models.classification import ContentAtom
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# ANGLE MATRIX
+# ═══════════════════════════════════════════════════════════════════════════════
 
 
 class AngleMatrix(SQLModel, table=True):
@@ -102,251 +117,252 @@ class AngleMatrix(SQLModel, table=True):
         ),
     )
 
+    # ---------- RELATIONSHIPS ----------
+    schedules: List["ContentSchedule"] = Relationship(back_populates="angle")
+    usage_histories: List["UsageHistory"] = Relationship(back_populates="angle")
 
-# NOTE: Relationships to ContentSchedule, FutureContentQueue, AnglePerformance,
-# and UsageHistory are commented out until those models are implemented.
-#
-#
-# class ContentSchedule(SQLModel, table=True):
-#     __tablename__ = "content_schedule"
-#
-#     __table_args__ = (
-#         CheckConstraint(
-#             "week_number BETWEEN 1 AND 53",
-#             name="ck_schedule_week_number",
-#         ),
-#         CheckConstraint(
-#             "slot_number BETWEEN 1 AND 21",
-#             name="ck_schedule_slot_number",
-#         ),
-#         UniqueConstraint(
-#             "week_year",
-#             "week_number",
-#             "slot_number",
-#             name="uq_schedule_slot",
-#         ),
-#         Index("ix_schedule_week", "week_year", "week_number"),
-#         Index("ix_schedule_date", "scheduled_date"),
-#         Index(
-#             "ix_schedule_status_active",
-#             "status",
-#             postgresql_where=text("status NOT IN ('published', 'skipped')"),
-#         ),
-#         Index("ix_schedule_trace", "trace_id"),
-#         Index(
-#             "ix_schedule_atom",
-#             "atom_id",
-#             postgresql_where=text("atom_id IS NOT NULL"),
-#         ),
-#     )
-#
-#     # ---------- PRIMARY ----------
-#     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-#     trace_id: uuid.UUID = Field(default_factory=uuid.uuid4, nullable=False)
-#
-#     # ---------- SLOT ----------
-#     week_year: int = Field(nullable=False)
-#     week_number: int = Field(nullable=False)
-#     slot_number: int = Field(nullable=False)
-#
-#     scheduled_date: date = Field(nullable=False)
-#     scheduled_time: Optional[time] = Field(default=None)
-#     day_of_week: str = Field(nullable=False)
-#
-#     # ---------- ASSIGNMENT ----------
-#     atom_id: Optional[uuid.UUID] = Field(
-#         default=None,
-#         foreign_key="content_atoms.id",
-#         ondelete="SET NULL",
-#     )
-#
-#     angle_id: Optional[str] = Field(
-#         default=None,
-#         foreign_key="angle_matrix.id",
-#         ondelete="SET NULL",
-#     )
-#
-#     # ---------- REQUIREMENTS ----------
-#     required_pillar: ContentPillar = Field(nullable=False)
-#     required_format: Format = Field(nullable=False)
-#
-#     # ---------- BRIEF ----------
-#     brief: Dict[str, Any] = Field(
-#         default_factory=dict,
-#         sa_column=Column(JSONB, nullable=False),
-#     )
-#
-#     # ---------- STATE ----------
-#     status: ScheduleStatus = Field(default=ScheduleStatus.SCHEDULED)
-#
-#     # ---------- TIMESTAMPS ----------
-#     created_at: datetime = Field(
-#         default_factory=lambda: datetime.now(timezone.utc),
-#         sa_column=Column(TIMESTAMP(timezone=True), server_default=func.now()),
-#     )
-#
-#     updated_at: datetime = Field(
-#         default_factory=lambda: datetime.now(timezone.utc),
-#         sa_column=Column(
-#             TIMESTAMP(timezone=True),
-#             server_default=func.now(),
-#             onupdate=func.now(),
-#         ),
-#     )
-#
-#     # ---------- RELATIONSHIPS ----------
-#     atom: Optional["ContentAtom"] = Relationship(back_populates="content_schedules")
-#
-#     angle: Optional["AngleMatrix"] = Relationship(back_populates="schedules")
-#
-#     future_queue_items: List["FutureContentQueue"] = Relationship(
-#         back_populates="source_schedule"
-#     )
-#
-#     drafts: List["ContentDraft"] = Relationship(back_populates="schedule")
-#
-#     production_assets: List["ProductionAsset"] = Relationship(back_populates="schedule")
-#
-#     usage_histories: List["UsageHistory"] = Relationship(back_populates="schedule")
-#
-#     emergency_content: List["EmergencyContent"] = Relationship(
-#         back_populates="used_for_schedule"
-#     )
-#
-#
-# class ContentCalendar(SQLModel, table=True):
-#     __tablename__ = "content_calendar"
-#
-#     __table_args__ = (
-#         CheckConstraint(
-#             "priority BETWEEN 1 AND 5",
-#             name="ck_calendar_priority",
-#         ),
-#         Index("ix_calendar_date", "event_date"),
-#         Index("ix_calendar_range", "event_date", "event_end_date"),
-#         Index("ix_calendar_priority", "priority", "event_date"),
-#         Index(
-#             "ix_calendar_pillars_gin",
-#             "relevant_pillars",
-#             postgresql_using="gin",
-#         ),
-#     )
-#
-#     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-#
-#     event_name: str = Field(nullable=False)
-#     event_date: date = Field(nullable=False)
-#     event_end_date: Optional[date] = Field(default=None)
-#
-#     event_type: EventType = Field(nullable=False)
-#     priority: int = Field(default=3)
-#
-#     relevant_pillars: List[str] = Field(
-#         default_factory=list,
-#         sa_column=Column(ARRAY(Text), nullable=False, server_default=text("'{}'")),
-#     )
-#
-#     suggested_angles: List[str] = Field(
-#         default_factory=list,
-#         sa_column=Column(ARRAY(Text), nullable=False, server_default=text("'{}'")),
-#     )
-#
-#     content_guidance: Dict[str, Any] = Field(
-#         default_factory=dict,
-#         sa_column=Column(JSONB, nullable=False, server_default=text("'{}'::jsonb")),
-#     )
-#
-#     is_recurring: bool = Field(default=False)
-#     recurrence_rule: Optional[str] = Field(default=None)
-#
-#     is_active: bool = Field(default=True)
-#
-#     created_at: datetime = Field(
-#         default_factory=lambda: datetime.now(timezone.utc),
-#         sa_column=Column(TIMESTAMP(timezone=True), server_default=func.now()),
-#     )
-#
-#
-# class FutureContentQueue(SQLModel, table=True):
-#     __tablename__ = "future_content_queue"
-#
-#     __table_args__ = (
-#         CheckConstraint(
-#             "priority_score BETWEEN 0.0 AND 10.0",
-#             name="ck_future_queue_priority_score",
-#         ),
-#         Index(
-#             "ix_future_queue_status_priority",
-#             "status",
-#             text("priority_score DESC"),
-#             postgresql_where=text("status = 'queued'"),
-#         ),
-#         Index(
-#             "ix_future_queue_date",
-#             "suggested_date",
-#             postgresql_where=text("status = 'queued'"),
-#         ),
-#         Index("ix_future_queue_atom", "atom_id"),
-#     )
-#
-#     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-#
-#     # ---------- LINKS ----------
-#     atom_id: Optional[uuid.UUID] = Field(
-#         default=None,
-#         foreign_key="content_atoms.id",
-#         ondelete="CASCADE",
-#     )
-#
-#     suggested_angle_id: Optional[str] = Field(
-#         default=None,
-#         foreign_key="angle_matrix.id",
-#         ondelete="SET NULL",
-#     )
-#
-#     source_schedule_id: Optional[uuid.UUID] = Field(
-#         default=None,
-#         foreign_key="content_schedule.id",
-#         ondelete="SET NULL",
-#     )
-#
-#     # ---------- TARGET ----------
-#     target_pillar: ContentPillar = Field(nullable=False)
-#     target_format: Format = Field(nullable=False)
-#
-#     suggested_date: Optional[date] = Field(default=None)
-#     earliest_date: Optional[date] = Field(default=None)
-#
-#     # ---------- REMIX ----------
-#     remix_type: RemixType = Field(nullable=False)
-#     remix_reasoning: Optional[str] = Field(default=None)
-#
-#     # ---------- PRIORITY ----------
-#     priority_score: float = Field(default=5.0)
-#
-#     # ---------- STATUS ----------
-#     status: QueueStatus = Field(default=QueueStatus.QUEUED)
-#
-#     # ---------- META ----------
-#     created_at: datetime = Field(
-#         default_factory=lambda: datetime.now(timezone.utc),
-#         sa_column=Column(TIMESTAMP(timezone=True), server_default=func.now()),
-#     )
-#
-#     expires_at: Optional[datetime] = Field(
-#         default=None,
-#         sa_column=Column(TIMESTAMP(timezone=True)),
-#     )
-#
-#     notes: Optional[str] = Field(default=None)
-#
-#     # ---------- RELATIONSHIPS ----------
-#     atom: Optional["ContentAtom"] = Relationship(back_populates="future_queue_items")
-#
-#     suggested_angle: Optional["AngleMatrix"] = Relationship(
-#         back_populates="queue_items"
-#     )
-#
-#     source_schedule: Optional["ContentSchedule"] = Relationship(
-#         back_populates="future_queue_items"
-#     )
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# CONTENT SCHEDULE
+# ═══════════════════════════════════════════════════════════════════════════════
+
+
+class ContentSchedule(SQLModel, table=True):
+    __tablename__ = "content_schedule"
+
+    __table_args__ = (
+        # ---------- CONSTRAINTS ----------
+        CheckConstraint(
+            "week_number BETWEEN 1 AND 53",
+            name="ck_schedule_week_number",
+        ),
+        CheckConstraint(
+            "slot_number BETWEEN 1 AND 21",
+            name="ck_schedule_slot_number",
+        ),
+        UniqueConstraint(
+            "week_year",
+            "week_number",
+            "slot_number",
+            name="uq_schedule_slot",
+        ),
+        # ---------- INDEXES ----------
+        Index("ix_schedule_week", "week_year", "week_number"),
+        Index("ix_schedule_date", "scheduled_date"),
+        Index(
+            "ix_schedule_status_active",
+            "status",
+            postgresql_where=text("status NOT IN ('PUBLISHED', 'SKIPPED')"),
+        ),
+        Index("ix_schedule_trace", "trace_id"),
+        Index(
+            "ix_schedule_atom",
+            "atom_id",
+            postgresql_where=text("atom_id IS NOT NULL"),
+        ),
+    )
+
+    # ---------- PRIMARY ----------
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    trace_id: uuid.UUID = Field(default_factory=uuid.uuid4, nullable=False)
+
+    # ---------- SLOT (21 posts/week grid) ----------
+    week_year: int = Field(nullable=False)
+    week_number: int = Field(nullable=False)
+    slot_number: int = Field(nullable=False)
+
+    scheduled_date: date = Field(
+        sa_column=Column(Date, nullable=False),
+    )
+    scheduled_time: Optional[time] = Field(
+        default=None,
+        sa_column=Column(Time),
+    )
+    day_of_week: str = Field(nullable=False)
+
+    # ---------- ASSIGNMENT (Phase 3 models) ----------
+    atom_id: Optional[uuid.UUID] = Field(
+        default=None,
+        foreign_key="content_atoms.id",
+        ondelete="SET NULL",
+    )
+
+    angle_id: Optional[str] = Field(
+        default=None,
+        foreign_key="angle_matrix.id",
+        ondelete="SET NULL",
+    )
+
+    # ---------- REQUIREMENTS ----------
+    required_pillar: ContentPillar = Field(nullable=False)
+    required_format: Format = Field(nullable=False)
+
+    # ---------- BRIEF ----------
+    brief: Dict[str, Any] = Field(
+        default_factory=dict,
+        sa_column=Column(JSONB, nullable=False, server_default=text("'{}'::jsonb")),
+    )
+
+    # ---------- STATE ----------
+    status: ScheduleStatus = Field(default=ScheduleStatus.SCHEDULED)
+
+    # ---------- TIMESTAMPS ----------
+    created_at: datetime = Field(
+        default_factory=lambda: datetime.now(timezone.utc),
+        sa_column=Column(TIMESTAMP(timezone=True), server_default=func.now()),
+    )
+
+    updated_at: datetime = Field(
+        default_factory=lambda: datetime.now(timezone.utc),
+        sa_column=Column(
+            TIMESTAMP(timezone=True),
+            server_default=func.now(),
+            onupdate=func.now(),
+        ),
+    )
+
+    # ---------- RELATIONSHIPS (Phase 3 only) ----------
+    atom: Optional["ContentAtom"] = Relationship(back_populates="content_schedules")
+    angle: Optional["AngleMatrix"] = Relationship(back_populates="schedules")
+    usage_histories: List["UsageHistory"] = Relationship(back_populates="schedule")
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# USAGE HISTORY (Phase 4 Version)
+# Tracks what content was scheduled/used and its performance
+# ═══════════════════════════════════════════════════════════════════════════════
+
+
+class UsageHistory(SQLModel, table=True):
+    __tablename__ = "usage_history"
+
+    __table_args__ = (
+        # ---------- INDEXES ----------
+        # Lineage tracking
+        Index("ix_usage_trace", "trace_id"),
+        # Anti-repetition queries (Phase 4 critical)
+        Index("ix_usage_atom_date", "atom_id", text("scheduled_date DESC")),
+        Index("ix_usage_atom_angle", "atom_id", "angle_id"),
+        # Schedule lookup
+        Index("ix_usage_scheduled_date", text("scheduled_date DESC")),
+        Index("ix_usage_week", "week_year", "week_number"),
+        # Status filtering
+        Index("ix_usage_status", "posting_status"),
+        # Analytics queries
+        Index("ix_usage_pillar_format", "pillar", "format"),
+        Index(
+            "ix_usage_posted_at",
+            text("actual_posted_at DESC"),
+            postgresql_where=text("actual_posted_at IS NOT NULL"),
+        ),
+        # Performance analysis (for learning loop)
+        Index(
+            "ix_usage_metrics",
+            "metrics",
+            postgresql_using="gin",
+        ),
+        # Partial index for engagement analysis
+        Index(
+            "ix_usage_performance",
+            "pillar",
+            "format",
+            postgresql_where=text(
+                "posting_status = 'POSTED' AND metrics->>'engagement_rate' IS NOT NULL"
+            ),
+        ),
+    )
+
+    # ---------- PRIMARY ----------
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    trace_id: uuid.UUID = Field(nullable=False)  # Full lineage back to raw_ingest
+
+    # ---------- CONTENT REFERENCES (Phase 4 scope) ----------
+    schedule_id: Optional[uuid.UUID] = Field(
+        default=None,
+        foreign_key="content_schedule.id",
+        ondelete="SET NULL",
+    )
+
+    atom_id: Optional[uuid.UUID] = Field(
+        default=None,
+        foreign_key="content_atoms.id",
+        ondelete="SET NULL",
+    )
+
+    angle_id: Optional[str] = Field(
+        default=None,
+        foreign_key="angle_matrix.id",
+        ondelete="SET NULL",
+    )
+
+    # Future Phase references (no FK constraint yet)
+    draft_id: Optional[uuid.UUID] = Field(default=None)  # Phase 5: content_drafts
+    asset_id: Optional[uuid.UUID] = Field(default=None)  # Phase 7: production_assets
+
+    # ---------- CONTENT CLASSIFICATION (Denormalized for fast analytics) ----------
+    pillar: str = Field(nullable=False)  # e.g., 'PRODUCTIVITY'
+    format: str = Field(nullable=False)  # e.g., 'REEL'
+
+    # ---------- SCHEDULE INFO (Denormalized from content_schedule) ----------
+    scheduled_date: date = Field(
+        sa_column=Column(Date, nullable=False),
+    )
+    scheduled_time: Optional[time] = Field(
+        default=None,
+        sa_column=Column(Time),
+    )
+    day_of_week: Optional[str] = Field(default=None)
+    week_year: int = Field(nullable=False)
+    week_number: int = Field(nullable=False)
+
+    # ---------- POSTING STATUS ----------
+    posting_status: PostingStatus = Field(default=PostingStatus.GENERATED)
+
+    # ---------- INSTAGRAM DATA (Populated after posting) ----------
+    instagram_post_id: Optional[str] = Field(default=None)
+    instagram_post_url: Optional[str] = Field(default=None)
+    actual_posted_at: Optional[datetime] = Field(
+        default=None,
+        sa_column=Column(TIMESTAMP(timezone=True)),
+    )
+
+    # ---------- CONTENT SNAPSHOT (What was actually posted) ----------
+    content_snapshot: Dict[str, Any] = Field(
+        default_factory=dict,
+        sa_column=Column(JSONB, nullable=False, server_default=text("'{}'::jsonb")),
+    )
+
+    # ---------- PERFORMANCE METRICS (Updated by learning loop) ----------
+    metrics: Dict[str, Any] = Field(
+        default_factory=dict,
+        sa_column=Column(JSONB, nullable=False, server_default=text("'{}'::jsonb")),
+    )
+
+    # ---------- SENTIMENT ANALYSIS (Future enhancement) ----------
+    sentiment_data: Dict[str, Any] = Field(
+        default_factory=dict,
+        sa_column=Column(JSONB, nullable=False, server_default=text("'{}'::jsonb")),
+    )
+
+    # ---------- CONTENT FINGERPRINT (For similarity/anti-repetition) ----------
+    content_fingerprint: Optional[str] = Field(default=None)
+
+    # ---------- TIMESTAMPS ----------
+    created_at: datetime = Field(
+        default_factory=lambda: datetime.now(timezone.utc),
+        sa_column=Column(TIMESTAMP(timezone=True), server_default=func.now()),
+    )
+
+    updated_at: datetime = Field(
+        default_factory=lambda: datetime.now(timezone.utc),
+        sa_column=Column(
+            TIMESTAMP(timezone=True),
+            server_default=func.now(),
+            onupdate=func.now(),
+        ),
+    )
+
+    # ---------- RELATIONSHIPS (Phase 3/4 only) ----------
+    schedule: Optional["ContentSchedule"] = Relationship(back_populates="usage_histories")
+    atom: Optional["ContentAtom"] = Relationship(back_populates="usage_histories")
+    angle: Optional["AngleMatrix"] = Relationship(back_populates="usage_histories")

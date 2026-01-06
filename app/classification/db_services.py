@@ -49,6 +49,115 @@ def get_pending_raw_ingest(
     return list(session.exec(statement).all())
 
 
+def get_pending_raw_ingest_by_source_ratio(
+    session: Session,
+    source_ratios: Dict[str, float],
+    limit: int = 100,
+) -> List[RawIngest]:
+    """
+    Fetch pending raw_ingest records with distribution across source types.
+    
+    Ensures balanced classification by fetching records according to the
+    specified ratio for each source type.
+    
+    Args:
+        session: SQLModel session
+        source_ratios: Dict mapping SourceType value to ratio (0.0-1.0)
+                       Example: {"REDDIT": 0.4, "BOOK": 0.3, "BLOG": 0.3}
+        limit: Total maximum records to return
+        
+    Returns:
+        List of RawIngest records with balanced source type distribution
+    """
+    from app.db.enums import SourceType
+    
+    results: List[RawIngest] = []
+    
+    # Normalize ratios to ensure they sum to 1.0
+    total_ratio = sum(source_ratios.values())
+    if total_ratio <= 0:
+        logger.warning("Invalid source_ratios, falling back to default fetch")
+        return get_pending_raw_ingest(session, limit)
+    
+    normalized_ratios = {k: v / total_ratio for k, v in source_ratios.items()}
+    
+    # Calculate count for each source type
+    source_counts: Dict[str, int] = {}
+    allocated = 0
+    
+    for source_type, ratio in normalized_ratios.items():
+        count = int(limit * ratio)
+        source_counts[source_type] = count
+        allocated += count
+    
+    # Distribute remainder to source types with highest ratios
+    remainder = limit - allocated
+    if remainder > 0:
+        sorted_sources = sorted(normalized_ratios.items(), key=lambda x: x[1], reverse=True)
+        for i in range(remainder):
+            source_type = sorted_sources[i % len(sorted_sources)][0]
+            source_counts[source_type] += 1
+    
+    logger.debug("Source distribution: %s (total=%d)", source_counts, limit)
+    
+    # Fetch records for each source type
+    for source_type_str, count in source_counts.items():
+        if count <= 0:
+            continue
+            
+        try:
+            source_type_enum = SourceType(source_type_str)
+        except ValueError:
+            logger.warning("Unknown source type: %s, skipping", source_type_str)
+            continue
+        
+        statement = (
+            select(RawIngest)
+            .where(
+                RawIngest.status == IngestStatus.PENDING,
+                RawIngest.source_type == source_type_enum,
+            )
+            .order_by(RawIngest.ingested_at.asc())
+            .limit(count)
+        )
+        
+        source_results = list(session.exec(statement).all())
+        results.extend(source_results)
+        
+        logger.debug(
+            "Fetched %d/%d records for source_type=%s",
+            len(source_results),
+            count,
+            source_type_str,
+        )
+    
+    # If we didn't get enough records, fill from any source type
+    if len(results) < limit:
+        fetched_ids = {r.id for r in results}
+        remaining = limit - len(results)
+        
+        fill_statement = (
+            select(RawIngest)
+            .where(
+                RawIngest.status == IngestStatus.PENDING,
+                RawIngest.id.notin_(fetched_ids) if fetched_ids else True,
+            )
+            .order_by(RawIngest.ingested_at.asc())
+            .limit(remaining)
+        )
+        
+        fill_results = list(session.exec(fill_statement).all())
+        results.extend(fill_results)
+        
+        if fill_results:
+            logger.debug(
+                "Filled %d additional records from any source type",
+                len(fill_results),
+            )
+    
+    return results
+
+
 def insert_content_atom(
     session: Session,
     raw_ingest: RawIngest,

@@ -60,7 +60,9 @@ def bulk_insert_raw_ingest(
     """
     Bulk insert RawIngest records with conflict handling.
 
-    Uses INSERT ... ON CONFLICT DO NOTHING for deduplication.
+    Deduplication is performed on two levels:
+    1. source_identifier (unique constraint) - catches same post from same source
+    2. content_hash (MD5 of raw_content) - catches identical content across sources
 
     Args:
         session: SQLModel session
@@ -70,10 +72,83 @@ def bulk_insert_raw_ingest(
     Returns:
         Tuple of (stored_count, skipped_count)
     """
+    import hashlib
+    from sqlalchemy import func
+    
     stored = 0
     skipped = 0
 
-    for record in records:
+    if not records:
+        return stored, skipped
+
+    # Step 1: Compute content hashes for all incoming records
+    record_hashes = {}
+    for i, record in enumerate(records):
+        raw_content = record.get("raw_content", "")
+        content_hash = hashlib.md5(raw_content.encode("utf-8")).hexdigest()
+        record_hashes[i] = content_hash
+
+    # Step 2: Query existing content_hashes in batch to detect duplicates
+    unique_hashes = list(set(record_hashes.values()))
+    
+    existing_hashes_query = (
+        select(RawIngest.content_hash)
+        .where(RawIngest.content_hash.in_(unique_hashes))
+    )
+    existing_hashes = set(session.exec(existing_hashes_query).all())
+    
+    logger.debug(
+        "[BULK_INSERT] Found %d existing content_hashes out of %d unique incoming",
+        len(existing_hashes),
+        len(unique_hashes),
+    )
+
+    # Step 3: Also check for existing source_identifiers in batch
+    source_identifiers = [
+        (record.get("source_type"), record.get("source_identifier"))
+        for record in records
+        if record.get("source_identifier")
+    ]
+    
+    existing_source_ids = set()
+    if source_identifiers:
+        # Query existing source_identifiers
+        for source_type, source_id in source_identifiers:
+            exists_query = (
+                select(RawIngest.source_identifier)
+                .where(
+                    RawIngest.source_type == source_type,
+                    RawIngest.source_identifier == source_id,
+                )
+            )
+            result = session.exec(exists_query).first()
+            if result:
+                existing_source_ids.add((source_type, source_id))
+
+    # Step 4: Insert only non-duplicate records
+    for i, record in enumerate(records):
+        content_hash = record_hashes[i]
+        source_key = (record.get("source_type"), record.get("source_identifier"))
+        
+        # Skip if content_hash already exists
+        if content_hash in existing_hashes:
+            logger.debug(
+                "[BULK_INSERT] Skipping duplicate content_hash=%s source_id=%s",
+                content_hash[:8],
+                record.get("source_identifier", "unknown"),
+            )
+            skipped += 1
+            continue
+        
+        # Skip if source_identifier already exists
+        if source_key[1] and source_key in existing_source_ids:
+            logger.debug(
+                "[BULK_INSERT] Skipping duplicate source_identifier=%s",
+                source_key[1],
+            )
+            skipped += 1
+            continue
+
         # Ensure batch_id is set
         record["batch_id"] = batch_id
 
@@ -85,11 +160,16 @@ def bulk_insert_raw_ingest(
         if "ingested_at" not in record:
             record["ingested_at"] = datetime.now(timezone.utc)
 
+        # Use ON CONFLICT for safety (handles race conditions)
         stmt = insert(RawIngest).values(**record).on_conflict_do_nothing()
         result = session.exec(stmt)
 
         if result.rowcount and result.rowcount > 0:
             stored += 1
+            # Add to existing sets to handle duplicates within same batch
+            existing_hashes.add(content_hash)
+            if source_key[1]:
+                existing_source_ids.add(source_key)
         else:
             skipped += 1
 
