@@ -179,15 +179,6 @@ class ContentAtom(SQLModel, table=True):
     # ---------- LIFECYCLE ----------
     lifecycle_state: LifecycleState = Field(default=LifecycleState.ACTIVE)
 
-    lifecycle_metadata: Dict[str, Any] = Field(
-        default_factory=dict,
-        sa_column=Column(
-            JSONB,
-            nullable=False,
-            server_default=text("'{}'::jsonb"),
-        ),
-    )
-
     deleted_at: Optional[datetime] = Field(
         default=None,
         sa_column=Column(TIMESTAMP(timezone=True)),
@@ -236,3 +227,5 @@ class ContentAtom(SQLModel, table=True):
 
     # ---------- RELATIONSHIPS ----------
     raw_ingest: Optional["RawIngest"] = Relationship(back_populates="content_atoms")
+    content_schedules: List["ContentSchedule"] = Relationship(back_populates="atom")
+    usage_histories: List["UsageHistory"] = Relationship(back_populates="atom")

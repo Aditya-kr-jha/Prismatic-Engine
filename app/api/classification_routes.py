@@ -16,7 +16,7 @@ import uuid
 from typing import Any, Optional, cast
 
 from fastapi import APIRouter, HTTPException, Query, status
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 from sqlmodel import Session
 
 from app.classification import db_services
@@ -88,7 +88,9 @@ def _generate_request_id() -> str:
 
 @router.post("/classify", response_model=ClassifyBatchResponse)
 async def classify_batch(
-    limit: int = Query(default=5, ge=1, le=10, description="Number of rows to process (max 10)"),
+    limit: int = Query(
+        default=5, ge=1, le=50, description="Number of rows to process (max 10)"
+    ),
 ) -> ClassifyBatchResponse:
     """
     Classify pending raw_ingest records and create content atoms.

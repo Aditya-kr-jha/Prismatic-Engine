@@ -87,8 +87,8 @@ class RawRedditPost(BaseModel):
 class HarvesterConfig(BaseModel):
     """Configuration for the Reddit harvester."""
 
-    posts_per_subreddit: int = 2
-    lookback_days: int = 2
+    posts_per_subreddit: int = 10
+    lookback_days: int = 7
     request_delay_seconds: float = 2.0
     min_score: int = 10
     min_content_length: int = 300
@@ -300,7 +300,7 @@ class RedditHarvester:
     async def _fetch_reddit_api(self, name: str, retry: bool = True) -> List[dict]:
         """Fetch posts from Reddit API."""
         url = f"{self.BASE_URL}/r/{name}/top.json"
-        params = {"t": "day", "limit": self.config.posts_per_subreddit}
+        params = {"t": "week", "limit": self.config.posts_per_subreddit}
 
         logger.info("[FETCH] r/%s", name)
         resp = await self.http_client.get(url, params=params)
