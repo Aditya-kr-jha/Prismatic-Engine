@@ -223,6 +223,12 @@ class PostingStatus(str, Enum):
     ARCHIVED = "ARCHIVED"
 
 
+class GeneratedContentStatus(str, Enum):
+    APPROVED = "APPROVED"
+    FLAGGED_FOR_REVIEW = "FLAGGED_FOR_REVIEW"
+    REJECTED = "REJECTED"
+
+
 class EmergencyStatus(str, Enum):
     AVAILABLE = "AVAILABLE"
     USED = "USED"

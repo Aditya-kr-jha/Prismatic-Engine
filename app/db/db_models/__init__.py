@@ -20,6 +20,7 @@ from app.db.db_models.ingestion import RawIngest, RejectedContent
 from app.db.db_models.pre_ingestion import EvergreenSource, ContentReservoir
 from app.db.db_models.classification import ContentAtom
 from app.db.db_models.strategy import AngleMatrix, ContentSchedule, UsageHistory
+from app.db.db_models.creation import GeneratedContent
 
 __all__ = [
     "RawIngest",
@@ -30,6 +31,7 @@ __all__ = [
     "AngleMatrix",
     "ContentSchedule",
     "UsageHistory",
+    "GeneratedContent",
     # "ContentCalendar",
     # "FutureContentQueue",
     # "ContentDraft",

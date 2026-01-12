@@ -22,6 +22,7 @@ from app.db.enums import ContentPillar, Format, ScheduleStatus, PostingStatus
 
 if TYPE_CHECKING:
     from app.db.db_models.classification import ContentAtom
+    from app.db.db_models.creation import GeneratedContent
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -225,6 +226,7 @@ class ContentSchedule(SQLModel, table=True):
     atom: Optional["ContentAtom"] = Relationship(back_populates="content_schedules")
     angle: Optional["AngleMatrix"] = Relationship(back_populates="schedules")
     usage_histories: List["UsageHistory"] = Relationship(back_populates="schedule")
+    generated_content: Optional["GeneratedContent"] = Relationship(back_populates="schedule")
 
 
 # ═══════════════════════════════════════════════════════════════════════════════

@@ -64,6 +64,12 @@ class Settings(BaseSettings):
         default="gpt-5-mini",
         description="OpenAI LLM model name",
     )
+
+    # Phase 5 Creation LLM Settings
+    CREATION_LLM_MODEL: str = Field(
+        default="gpt-5.2",
+        description="LLM model for Phase 5 content creation",
+    )
     ELEVENLABS_API_KEY: str = Field(
         default="",
         description="ElevenLabs API key for TTS",
