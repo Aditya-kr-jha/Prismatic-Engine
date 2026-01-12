@@ -8,6 +8,7 @@ from app.api.creation_routes import router as creation_router
 from app.api.ingestion_routes import router as ingestion_router
 from app.api.classification_routes import router as classification_router
 from app.api.strategy_routes import router as strategy_router
+from app.api.delivery_routes import router as delivery_router
 from app.db.db_session import create_db_and_tables
 from app.infra.http import HTTPClientManager
 
@@ -61,6 +62,7 @@ app.include_router(creation_router, prefix="/api/v1")
 app.include_router(ingestion_router, prefix="/api/v1")
 app.include_router(classification_router, prefix="/api/v1")
 app.include_router(strategy_router, prefix="/api/v1")
+app.include_router(delivery_router, prefix="/api/v1")
 
 
 @app.get("/")

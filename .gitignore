@@ -15,3 +15,4 @@ aws_credentials.json
 app/.env
 __pycache__/
 *.py[cod]
+content_output/

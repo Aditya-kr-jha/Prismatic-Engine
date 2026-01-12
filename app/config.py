@@ -107,6 +107,26 @@ class Settings(BaseSettings):
         description="Maximum word count per content chunk",
     )
 
+    # ============================================================================
+    # DELIVERY SETTINGS
+    # ============================================================================
+
+    # Telegram Bot Configuration
+    TELEGRAM_BOT_TOKEN: str = Field(
+        default="irjguriekjfeiefkjnrugut84u",
+        description="Telegram bot token from @BotFather",
+    )
+    TELEGRAM_CHAT_ID: str = Field(
+        default="6859695945949549",
+        description="Your Telegram chat ID for notifications",
+    )
+
+    # Output directory
+    DELIVERY_OUTPUT_DIR: str = Field(
+        default="content_output",
+        description="Directory for Markdown output files",
+    )
+
     class Config:
         env_file = os.path.join(_CONFIG_DIR, ".env")
         env_file_encoding = "utf-8"

@@ -48,7 +48,8 @@ dependencies = [
     "langchain-core (>=1.2.5,<2.0.0)",
     "langchain-ollama (>=1.0.1,<2.0.0)",
     "sentence-transformers (>=5.2.0,<6.0.0)",
-    "firecrawl-py (>=2.0.0,<3.0.0)"
+    "firecrawl-py (>=2.0.0,<3.0.0)",
+    "status (>=0.2.5,<0.3.0)"
 ]
 
 [build-system]

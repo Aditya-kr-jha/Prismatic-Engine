@@ -135,24 +135,9 @@ class ScheduleStatus(str, Enum):
     SCHEDULED = "SCHEDULED"
     CREATING = "CREATING"
     DRAFT = "DRAFT"
-    QA_PENDING = "QA_PENDING"
-    QA_PASSED = "QA_PASSED"
-    QA_FAILED = "QA_FAILED"
-    PRODUCING = "PRODUCING"
-    READY = "READY"
     DELIVERED = "DELIVERED"
     PUBLISHED = "PUBLISHED"
     SKIPPED = "SKIPPED"
-    EMERGENCY = "EMERGENCY"
-
-
-class EventType(str, Enum):
-    HOLIDAY = "HOLIDAY"
-    AWARENESS_DAY = "AWARENESS_DAY"
-    TRENDING_MOMENT = "TRENDING_MOMENT"
-    BRAND_EVENT = "BRAND_EVENT"
-    CULTURAL = "CULTURAL"
-    SEASONAL = "SEASONAL"
 
 
 class RemixType(str, Enum):
@@ -171,14 +156,6 @@ class QueueStatus(str, Enum):
     EXPIRED = "EXPIRED"
 
 
-class QAStatus(str, Enum):
-    PENDING = "PENDING"
-    IN_PROGRESS = "IN_PROGRESS"
-    PASSED = "PASSED"
-    FAILED = "FAILED"
-    SKIPPED = "SKIPPED"
-
-
 class Tone(str, Enum):
     EDGY = "EDGY"
     GENTLE = "GENTLE"
@@ -187,40 +164,6 @@ class Tone(str, Enum):
     EMPOWERING = "EMPOWERING"
 
 
-class SizeCategory(str, Enum):
-    NICHE = "NICHE"
-    MEDIUM = "MEDIUM"
-    LARGE = "LARGE"
-
-
-class HashtagStatus(str, Enum):
-    ACTIVE = "ACTIVE"
-    TESTING = "TESTING"
-    BANNED = "BANNED"
-    RETIRED = "RETIRED"
-
-
-class AssetType(str, Enum):
-    IMAGE = "IMAGE"
-    VIDEO = "VIDEO"
-    AUDIO = "AUDIO"
-    CAROUSEL_SET = "CAROUSEL_SET"
-
-
-class ProductionStatus(str, Enum):
-    RENDERING = "RENDERING"
-    READY = "READY"
-    DELIVERED = "DELIVERED"
-    FAILED = "FAILED"
-
-
-class PostingStatus(str, Enum):
-    GENERATED = "GENERATED"
-    DELIVERED = "DELIVERED"
-    REVIEWED = "REVIEWED"
-    POSTED = "POSTED"
-    SKIPPED = "SKIPPED"
-    ARCHIVED = "ARCHIVED"
 
 
 class GeneratedContentStatus(str, Enum):
