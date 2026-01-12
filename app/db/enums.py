@@ -164,8 +164,6 @@ class Tone(str, Enum):
     EMPOWERING = "EMPOWERING"
 
 
-
-
 class GeneratedContentStatus(str, Enum):
     APPROVED = "APPROVED"
     FLAGGED_FOR_REVIEW = "FLAGGED_FOR_REVIEW"
