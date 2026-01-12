@@ -329,7 +329,7 @@ flowchart TD
     
     H --> I[For each row: acquire semaphore]
     I --> J[ContentClassifier.classify]
-    J --> K[CLASSIFICATION_PROMPT | structured_llm]
+    J --> K["CLASSIFICATION_PROMPT → structured_llm"]
     K --> L[OpenAI API call with json_schema method]
     
     L --> M{Success?}
