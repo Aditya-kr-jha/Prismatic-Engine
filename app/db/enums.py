@@ -63,9 +63,7 @@ class EmotionalTrigger(str, Enum):
 
 class IngestStatus(str, Enum):
     PENDING = "PENDING"
-    PROCESSING = "PROCESSING"
     PASSED = "PASSED"
-    REJECTED = "REJECTED"
     ERROR = "ERROR"
 
 
@@ -93,9 +91,6 @@ class LifecycleState(str, Enum):
 class VerificationStatus(str, Enum):
     VERIFIED = "VERIFIED"
     UNVERIFIED = "UNVERIFIED"
-    FLAGGED = "FLAGGED"
-    DISPUTED = "DISPUTED"
-    RETRACTED = "RETRACTED"
 
 
 class ProofType(str, Enum):
@@ -129,6 +124,10 @@ class DayOfWeek(str, Enum):
     FRIDAY = "FRIDAY"
     SATURDAY = "SATURDAY"
     SUNDAY = "SUNDAY"
+
+
+class PostingStatus(str, Enum):
+    GENERA = "MONDAY"
 
 
 class ScheduleStatus(str, Enum):
@@ -222,8 +221,6 @@ class EvergreenSourceStatus(str, Enum):
 class ReservoirStatus(str, Enum):
     AVAILABLE = "AVAILABLE"
     QUEUED = "QUEUED"
-    USED = "USED"
-    COOLDOWN = "COOLDOWN"
 
 
 # ============================================================================

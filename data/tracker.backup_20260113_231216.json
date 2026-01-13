@@ -1019,12 +1019,12 @@
   "stats": {
     "total": 203,
     "by_author": {
-      "james_clear": 3,
-      "mark_manson": 50,
-      "tim_urban": 48,
-      "maria_popova": 16,
-      "gurwinder_bhogal": 37,
-      "morgan_housel": 49
+      "10": 3,
+      "20": 50,
+      "01": 48,
+      "03": 16,
+      "05": 37,
+      "06": 49
     }
   }
 }

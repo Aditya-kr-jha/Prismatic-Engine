@@ -199,9 +199,17 @@ def calculate_candidate_score(
     if slot_priority == 1:
         score *= 1.2
 
-    # Boost for underused pillars (diversity bonus)
-    if pillar in underused_pillars:
-        score *= 1.15
+    # Boost for atoms whose secondary pillars touch underused topics
+    # This helps balance diversity even when slot pillar is fixed by template
+    atom_secondary_pillars = []
+    for p in (atom.secondary_pillars or []):
+        try:
+            atom_secondary_pillars.append(ContentPillar(p) if isinstance(p, str) else p)
+        except ValueError:
+            continue  # Skip invalid pillar values
+    
+    if any(sp in underused_pillars for sp in atom_secondary_pillars):
+        score *= 1.15  # Boost atoms that touch underused topics via secondary pillars
 
     # Penalty for low-credibility with scientific angles
     constraints = angle.constraints or {}

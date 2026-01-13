@@ -220,13 +220,13 @@ def update_atom_after_scheduling(
     atom.times_used = (atom.times_used or 0) + 1
     atom.last_used_at = datetime.now(timezone.utc)
 
-    # Check if should transition to COOLING
-    if config.enable_cooling:
-        transition_to_cooling(session, atom)
-
-    # Check if should archive (too many uses)
-    elif atom.times_used >= config.max_uses_before_archive:
+    # Check if should archive FIRST (max uses takes priority over cooling)
+    if atom.times_used >= config.max_uses_before_archive:
         transition_to_archived(session, atom, reason="max_uses_reached")
+
+    # Otherwise, transition to COOLING if enabled
+    elif config.enable_cooling:
+        transition_to_cooling(session, atom)
 
     else:
         session.add(atom)
