@@ -1014,15 +1014,20 @@
       "title": "Everything You Cant Have",
       "author": "Morgan Housel",
       "date": "2026-01-02T15:39:38.799858+00:00"
+    },
+    "48ffb6bebb06f6c8": {
+      "title": "Christian Wiman Love",
+      "author": "Maria Popova",
+      "date": "2026-01-13T18:01:07.776189+00:00"
     }
   },
   "stats": {
-    "total": 203,
+    "total": 204,
     "by_author": {
       "james_clear": 3,
       "mark_manson": 50,
       "tim_urban": 48,
-      "maria_popova": 16,
+      "maria_popova": 17,
       "gurwinder_bhogal": 37,
       "morgan_housel": 49
     }

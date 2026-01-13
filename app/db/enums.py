@@ -126,10 +126,6 @@ class DayOfWeek(str, Enum):
     SUNDAY = "SUNDAY"
 
 
-class PostingStatus(str, Enum):
-    GENERA = "MONDAY"
-
-
 class ScheduleStatus(str, Enum):
     SCHEDULED = "SCHEDULED"
     CREATING = "CREATING"
@@ -216,6 +212,15 @@ class EvergreenSourceStatus(str, Enum):
     PROCESSING = "PROCESSING"
     COMPLETED = "COMPLETED"
     FAILED = "FAILED"
+
+
+class PostingStatus(str, Enum):
+    GENERATED = "GENERATED"
+    DELIVERED = "DELIVERED"
+    REVIEWED = "REVIEWED"
+    POSTED = "POSTED"
+    SKIPPED = "SKIPPED"
+    ARCHIVED = "ARCHIVED"
 
 
 class ReservoirStatus(str, Enum):

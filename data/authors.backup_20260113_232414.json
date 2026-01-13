@@ -1,6 +1,6 @@
 {
   "authors": {
-    "01": {
+    "tim_urban": {
       "name": "Tim Urban",
       "blog_url": "https://waitbutwhy.com/archive",
       "platform": "WORDPRESS",
@@ -10,7 +10,7 @@
       ],
       "max_articles": 50
     },
-    "02": {
+    "scott_alexander": {
       "name": "Scott Alexander",
       "blog_url": "https://www.astralcodexten.com/archive",
       "platform": "SUBSTACK",
@@ -20,7 +20,7 @@
       ],
       "max_articles": 50
     },
-    "03": {
+    "maria_popova": {
       "name": "Maria Popova",
       "blog_url": "https://www.themarginalian.org/archives",
       "platform": "WORDPRESS",
@@ -31,7 +31,7 @@
       ],
       "max_articles": 50
     },
-    "04": {
+    "mary_harrington": {
       "name": "Mary Harrington",
       "blog_url": "https://reactionaryfeminist.substack.com/archive",
       "platform": "SUBSTACK",
@@ -41,7 +41,7 @@
       ],
       "max_articles": 50
     },
-    "05": {
+    "gurwinder_bhogal": {
       "name": "Gurwinder Bhogal",
       "blog_url": "https://gurwinder.substack.com/archive",
       "platform": "SUBSTACK",
@@ -51,7 +51,7 @@
       ],
       "max_articles": 50
     },
-    "06": {
+    "morgan_housel": {
       "name": "Morgan Housel",
       "blog_url": "https://collabfund.com/blog/",
       "platform": "WORDPRESS",
@@ -61,7 +61,7 @@
       ],
       "max_articles": 50
     },
-    "07": {
+    "kevin_simler": {
       "name": "Kevin Simler",
       "blog_url": "https://meltingasphalt.com/",
       "platform": "WORDPRESS",
@@ -71,7 +71,7 @@
       ],
       "max_articles": 50
     },
-    "08": {
+    "lawrence_yeo": {
       "name": "Lawrence Yeo",
       "blog_url": "https://moretothat.com/",
       "platform": "WORDPRESS",
@@ -81,7 +81,7 @@
       ],
       "max_articles": 50
     },
-    "09": {
+    "shane_parrish": {
       "name": "Shane Parrish",
       "blog_url": "https://fs.blog/blog",
       "platform": "WORDPRESS",
@@ -91,7 +91,7 @@
       ],
       "max_articles": 50
     },
-    "10": {
+    "james_clear": {
       "name": "James Clear",
       "blog_url": "https://jamesclear.com/articles",
       "platform": "WORDPRESS",
@@ -100,7 +100,7 @@
       ],
       "max_articles": 50
     },
-    "11": {
+    "cal_newport": {
       "name": "Cal Newport",
       "blog_url": "https://calnewport.com/blog/",
       "platform": "WORDPRESS",
@@ -110,7 +110,7 @@
       ],
       "max_articles": 50
     },
-    "12": {
+    "derek_sivers": {
       "name": "Derek Sivers",
       "blog_url": "https://sive.rs/",
       "platform": "CUSTOM",
@@ -120,7 +120,7 @@
       ],
       "max_articles": 50
     },
-    "13": {
+    "paul_graham": {
       "name": "Paul Graham",
       "blog_url": "http://paulgraham.com/articles.html",
       "platform": "CUSTOM",
@@ -130,7 +130,7 @@
       ],
       "max_articles": 50
     },
-    "14": {
+    "george_mack": {
       "name": "George Mack",
       "blog_url": "https://www.george-mack.com/",
       "platform": "CUSTOM",
@@ -140,7 +140,7 @@
       ],
       "max_articles": 50
     },
-    "15": {
+    "lucio_buffalmano": {
       "name": "Lucio Buffalmano",
       "blog_url": "https://thepowermoves.com/blog/",
       "platform": "WORDPRESS",
@@ -150,7 +150,7 @@
       ],
       "max_articles": 50
     },
-    "16": {
+    "illimitable_man": {
       "name": "Illimitable Man",
       "blog_url": "https://illimitablemen.com/archives/",
       "platform": "WORDPRESS",
@@ -159,7 +159,7 @@
       ],
       "max_articles": 50
     },
-    "17": {
+    "robert_greene": {
       "name": "Robert Greene",
       "blog_url": "https://powerseductionandwar.com/blog/",
       "platform": "WORDPRESS",
@@ -168,7 +168,7 @@
       ],
       "max_articles": 50
     },
-    "18": {
+    "richard_hanania": {
       "name": "Richard Hanania",
       "blog_url": "https://richardhanania.substack.com/archive",
       "platform": "SUBSTACK",
@@ -178,7 +178,7 @@
       ],
       "max_articles": 50
     },
-    "19": {
+    "ed_latimore": {
       "name": "Ed Latimore",
       "blog_url": "https://edlatimore.com/archives/",
       "platform": "WORDPRESS",
@@ -188,7 +188,7 @@
       ],
       "max_articles": 50
     },
-    "20": {
+    "mark_manson": {
       "name": "Mark Manson",
       "blog_url": "https://markmanson.net/archive",
       "platform": "WORDPRESS",
@@ -198,7 +198,7 @@
       ],
       "max_articles": 50
     },
-    "21": {
+    "rollo_tomassi": {
       "name": "Rollo Tomassi",
       "blog_url": "https://therationalmale.com/",
       "platform": "WORDPRESS",
@@ -208,7 +208,7 @@
       ],
       "max_articles": 50
     },
-    "22": {
+    "john_gottman": {
       "name": "John Gottman",
       "blog_url": "https://www.gottman.com/blog/",
       "platform": "WORDPRESS",
@@ -217,7 +217,7 @@
       ],
       "max_articles": 50
     },
-    "23": {
+    "esther_perel": {
       "name": "Esther Perel",
       "blog_url": "https://www.estherperel.com/blog",
       "platform": "CUSTOM",
@@ -226,7 +226,7 @@
       ],
       "max_articles": 50
     },
-    "24": {
+    "attached_blog": {
       "name": "Attached Blog",
       "blog_url": "https://www.attachedthebook.com/blog/",
       "platform": "WORDPRESS",
@@ -236,7 +236,7 @@
       ],
       "max_articles": 50
     },
-    "25": {
+    "mark_groves": {
       "name": "Mark Groves",
       "blog_url": "https://markgroves.com/blog/",
       "platform": "WORDPRESS",
@@ -246,7 +246,7 @@
       ],
       "max_articles": 50
     },
-    "26": {
+    "david_deida": {
       "name": "David Deida",
       "blog_url": "https://deida.info/blog/",
       "platform": "WORDPRESS",
@@ -255,7 +255,7 @@
       ],
       "max_articles": 50
     },
-    "27": {
+    "evan_marc_katz": {
       "name": "Evan Marc Katz",
       "blog_url": "https://www.evanmarckatz.com/blog/",
       "platform": "WORDPRESS",
@@ -264,7 +264,7 @@
       ],
       "max_articles": 50
     },
-    "28": {
+    "nedra_glover_tawwab": {
       "name": "Nedra Glover Tawwab",
       "blog_url": "https://www.nedratawwab.com/blog",
       "platform": "WORDPRESS",
@@ -274,7 +274,7 @@
       ],
       "max_articles": 50
     },
-    "29": {
+    "matthew_hussey": {
       "name": "Matthew Hussey",
       "blog_url": "https://www.matthewhussey.com/blog/",
       "platform": "WORDPRESS",
@@ -283,7 +283,7 @@
       ],
       "max_articles": 50
     },
-    "30": {
+    "suzanne_venker": {
       "name": "Suzanne Venker",
       "blog_url": "https://www.suzannevenker.com/blog/",
       "platform": "WORDPRESS",
@@ -293,7 +293,7 @@
       ],
       "max_articles": 50
     },
-    "31": {
+    "brianna_wiest": {
       "name": "Brianna Wiest",
       "blog_url": "https://briannawiest.com/blog/",
       "platform": "WORDPRESS",
@@ -303,7 +303,7 @@
       ],
       "max_articles": 50
     },
-    "32": {
+    "clementine_ford": {
       "name": "Clementine Ford",
       "blog_url": "https://clementineford.substack.com/archive",
       "platform": "SUBSTACK",
@@ -312,7 +312,7 @@
       ],
       "max_articles": 50
     },
-    "33": {
+    "the_attractive_man": {
       "name": "The Attractive Man",
       "blog_url": "https://attractiveman.com/blog/",
       "platform": "WORDPRESS",
@@ -322,7 +322,7 @@
       ],
       "max_articles": 50
     },
-    "34": {
+    "alain_de_botton_relationships": {
       "name": "Alain de Botton (Relationships)",
       "blog_url": "https://www.theschooloflife.com/thebookoflife/relationships/",
       "platform": "WORDPRESS",
@@ -332,7 +332,7 @@
       ],
       "max_articles": 50
     },
-    "35": {
+    "paul_byerly": {
       "name": "Paul Byerly",
       "blog_url": "https://www.happierhuman.com/blog/",
       "platform": "WORDPRESS",
@@ -341,7 +341,7 @@
       ],
       "max_articles": 50
     },
-    "36": {
+    "female_dating_strategy": {
       "name": "Female Dating Strategy",
       "blog_url": "https://www.thefemaledatingstrategy.com/blog",
       "platform": "WORDPRESS",
@@ -351,7 +351,7 @@
       ],
       "max_articles": 50
     },
-    "37": {
+    "psychology_today_relationships": {
       "name": "Psychology Today \u2013 Relationships",
       "blog_url": "https://www.psychologytoday.com/us/basics/relationships",
       "platform": "CUSTOM",
@@ -360,7 +360,7 @@
       ],
       "max_articles": 50
     },
-    "38": {
+    "nicole_lepera": {
       "name": "Nicole LePera",
       "blog_url": "https://theholisticpsychologist.com/blog/",
       "platform": "WORDPRESS",
@@ -369,7 +369,7 @@
       ],
       "max_articles": 50
     },
-    "39": {
+    "irene_lyon": {
       "name": "Irene Lyon",
       "blog_url": "https://irenelyon.com/blog/",
       "platform": "WORDPRESS",
@@ -379,7 +379,7 @@
       ],
       "max_articles": 50
     },
-    "40": {
+    "peter_attia": {
       "name": "Peter Attia",
       "blog_url": "https://peterattiamd.com/category/blog/",
       "platform": "WORDPRESS",
@@ -389,7 +389,7 @@
       ],
       "max_articles": 50
     },
-    "41": {
+    "bessel_van_der_kolk": {
       "name": "Bessel van der Kolk",
       "blog_url": "https://www.besselvanderkolk.com/resources",
       "platform": "CUSTOM",
@@ -401,50 +401,50 @@
     }
   },
   "url_patterns": {
-    "waitbutwhy.com": "01",
-    "astralcodexten.com": "02",
-    "themarginalian.org": "03",
-    "reactionaryfeminist.substack.com": "04",
-    "reactionaryfeminist": "04",
-    "gurwinder.substack.com": "05",
-    "gurwinder": "05",
-    "collabfund.com": "06",
-    "meltingasphalt.com": "07",
-    "moretothat.com": "08",
-    "fs.blog": "09",
-    "jamesclear.com": "10",
-    "calnewport.com": "11",
-    "sive.rs": "12",
-    "paulgraham.com": "13",
-    "george-mack.com": "14",
-    "thepowermoves.com": "15",
-    "illimitablemen.com": "16",
-    "powerseductionandwar.com": "17",
-    "richardhanania.substack.com": "18",
-    "richardhanania": "18",
-    "edlatimore.com": "19",
-    "markmanson.net": "20",
-    "therationalmale.com": "21",
-    "gottman.com": "22",
-    "estherperel.com": "23",
-    "attachedthebook.com": "24",
-    "markgroves.com": "25",
-    "deida.info": "26",
-    "evanmarckatz.com": "27",
-    "nedratawwab.com": "28",
-    "matthewhussey.com": "29",
-    "suzannevenker.com": "30",
-    "briannawiest.com": "31",
-    "clementineford.substack.com": "32",
-    "clementineford": "32",
-    "attractiveman.com": "33",
-    "theschooloflife.com": "34",
-    "happierhuman.com": "35",
-    "thefemaledatingstrategy.com": "36",
-    "psychologytoday.com": "37",
-    "theholisticpsychologist.com": "38",
-    "irenelyon.com": "39",
-    "peterattiamd.com": "40",
-    "besselvanderkolk.com": "41"
+    "waitbutwhy.com": "tim_urban",
+    "astralcodexten.com": "scott_alexander",
+    "themarginalian.org": "maria_popova",
+    "reactionaryfeminist.substack.com": "mary_harrington",
+    "reactionaryfeminist": "mary_harrington",
+    "gurwinder.substack.com": "gurwinder_bhogal",
+    "gurwinder": "gurwinder_bhogal",
+    "collabfund.com": "morgan_housel",
+    "meltingasphalt.com": "kevin_simler",
+    "moretothat.com": "lawrence_yeo",
+    "fs.blog": "shane_parrish",
+    "jamesclear.com": "james_clear",
+    "calnewport.com": "cal_newport",
+    "sive.rs": "derek_sivers",
+    "paulgraham.com": "paul_graham",
+    "george-mack.com": "george_mack",
+    "thepowermoves.com": "lucio_buffalmano",
+    "illimitablemen.com": "illimitable_man",
+    "powerseductionandwar.com": "robert_greene",
+    "richardhanania.substack.com": "richard_hanania",
+    "richardhanania": "richard_hanania",
+    "edlatimore.com": "ed_latimore",
+    "markmanson.net": "mark_manson",
+    "therationalmale.com": "rollo_tomassi",
+    "gottman.com": "john_gottman",
+    "estherperel.com": "esther_perel",
+    "attachedthebook.com": "attached_blog",
+    "markgroves.com": "mark_groves",
+    "deida.info": "david_deida",
+    "evanmarckatz.com": "evan_marc_katz",
+    "nedratawwab.com": "nedra_glover_tawwab",
+    "matthewhussey.com": "matthew_hussey",
+    "suzannevenker.com": "suzanne_venker",
+    "briannawiest.com": "brianna_wiest",
+    "clementineford.substack.com": "clementine_ford",
+    "clementineford": "clementine_ford",
+    "attractiveman.com": "the_attractive_man",
+    "theschooloflife.com": "alain_de_botton_relationships",
+    "happierhuman.com": "paul_byerly",
+    "thefemaledatingstrategy.com": "female_dating_strategy",
+    "psychologytoday.com": "psychology_today_relationships",
+    "theholisticpsychologist.com": "nicole_lepera",
+    "irenelyon.com": "irene_lyon",
+    "peterattiamd.com": "peter_attia",
+    "besselvanderkolk.com": "bessel_van_der_kolk"
   }
 }
