@@ -13,7 +13,7 @@ Run this every Sunday evening to generate the upcoming week's schedule.
 import logging
 import uuid
 from datetime import date, time as dt_time, timedelta
-from typing import Any, Dict, List, Optional, Tuple, cast
+from typing import Any, Dict, List, Optional, Set, Tuple, cast
 
 from pydantic import BaseModel
 from sqlmodel import Session, and_, select
@@ -314,6 +314,7 @@ def fill_single_slot(
     config: AntiRepetitionConfig = DEFAULT_CONFIG,
     lifecycle_config: LifecycleConfig = LifecycleConfig(),
     underused_pillars: Optional[List[ContentPillar]] = None,
+    atoms_used_this_week: Optional[Set[uuid.UUID]] = None,
 ) -> Tuple[ContentSchedule, Optional[UsageHistory], SlotFillResult]:
     """
     Fill a single slot with the best atom + angle combination.
@@ -328,12 +329,15 @@ def fill_single_slot(
         config: Anti-repetition configuration
         lifecycle_config: Lifecycle management configuration
         underused_pillars: Pillars that need diversity boost
+        atoms_used_this_week: Set of atom IDs already used in this week's generation
 
     Returns:
         Tuple of (ContentSchedule, UsageHistory or None, SlotFillResult)
     """
     if underused_pillars is None:
         underused_pillars = []
+    if atoms_used_this_week is None:
+        atoms_used_this_week = set()
 
     # Calculate scheduled date
     day_offset = DAY_OFFSETS[slot.day_of_week]
@@ -350,6 +354,11 @@ def fill_single_slot(
         config=config,
         as_of_date=scheduled_date,
     )
+
+    # Step 1b: Exclude atoms already used in this week's generation run
+    # This prevents the same atom from being used for multiple slots (e.g., PRODUCTIVITY-REEL and PRODUCTIVITY-QUOTE)
+    if atoms_used_this_week:
+        eligible_atoms = [a for a in eligible_atoms if a.id not in atoms_used_this_week]
 
     # Step 2: If no atoms found, return empty schedule
     if not eligible_atoms:
@@ -600,6 +609,9 @@ class ScheduleGeneratorService:
             schedules: List[ContentSchedule] = []
             usages: List[UsageHistory] = []
             slot_results: List[SlotFillResult] = []
+            
+            # Track atoms used in THIS generation run to prevent same atom in multiple slots
+            atoms_used_this_week: Set[uuid.UUID] = set()
 
             for slot in WEEKLY_SLOTS_TEMPLATE:
                 schedule, usage, result = fill_single_slot(
@@ -612,7 +624,12 @@ class ScheduleGeneratorService:
                     config=self.config,
                     lifecycle_config=self.lifecycle_config,
                     underused_pillars=underused_pillars,
+                    atoms_used_this_week=atoms_used_this_week,
                 )
+
+                # Track atom to prevent reuse in subsequent slots
+                if result.atom_id:
+                    atoms_used_this_week.add(result.atom_id)
 
                 schedules.append(schedule)
                 slot_results.append(result)
