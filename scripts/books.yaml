@@ -11,6 +11,9 @@ books:
   - title: "The mind"
     author: "palak singh"
     file: "the brain.pdf"
+  - title: "The 48 Laws Of Power"
+    author: "Robert Greene"
+    file: "The 48 Laws Of Power.pdf"
 
   # Add more books here:
   # - title: "Atomic Habits"
