@@ -1019,12 +1019,17 @@
       "title": "Christian Wiman Love",
       "author": "Maria Popova",
       "date": "2026-01-13T18:01:07.776189+00:00"
+    },
+    "e9adb5c40b567c84": {
+      "title": "Stay On The Bus",
+      "author": "James Clear",
+      "date": "2026-01-14T11:18:17.107319+00:00"
     }
   },
   "stats": {
-    "total": 204,
+    "total": 205,
     "by_author": {
-      "james_clear": 3,
+      "james_clear": 4,
       "mark_manson": 50,
       "tim_urban": 48,
       "maria_popova": 17,
