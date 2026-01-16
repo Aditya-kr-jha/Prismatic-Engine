@@ -5,21 +5,65 @@ books:
   - title: "Deep Work"
     author: "Cal Newport"
     file: "deep-work.pdf"
-  - title: "The-Courage-to-be-Disliked"
+
+  - title: "The Courage to Be Disliked"
     author: "Ichiro Kishimi and Fumitake Koga"
     file: "the-courage-to-be-disliked.pdf"
-  - title: "The mind"
-    author: "palak singh"
+
+  - title: "The Mind"
+    author: "Palak Singh"
     file: "the brain.pdf"
-  - title: "The 48 Laws Of Power"
+
+  - title: "The 48 Laws of Power"
     author: "Robert Greene"
     file: "The 48 Laws Of Power.pdf"
 
-  # Add more books here:
-  # - title: "Atomic Habits"
-  #   author: "James Clear"
-  #   file: "atomic_habits.pdf"
-  #
-  # - title: "Thinking, Fast and Slow"
-  #   author: "Daniel Kahneman"
-  #   file: "thinking_fast_slow.pdf"
+  # Newly added books inferred from filenames
+
+  - title: "Why Has Nobody Told Me This Before?"
+    author: "Dr. Julie Smith"
+    file: "wife_hat.pdf"
+
+  - title: "Men Are from Mars, Women Are from Venus"
+    author: "John Gray"
+    file: "Men-are-from-mars-women-are-from-venus.pdf"
+
+  - title: "Man's Search for Meaning"
+    author: "Viktor E. Frankl"
+    file: "dokumen.pub_viktor-frankls-search-for-meaning-an-emblematic-20th-century-life-9781782388319.pdf"
+
+  - title: "The 5 Love Languages"
+    author: "Gary Chapman"
+    file: "the-5-love-languages-gary-chapman.pdf"
+
+  - title: "Thinking, Fast and Slow"
+    author: "Daniel Kahneman"
+    file: "2950_Daniel Kahneman - Thinking, Fast and Slow (2013).pdf"
+
+  - title: "Getting the Love You Want"
+    author: "Harville Hendrix"
+    file: "AMAZON-NOIR--Getting_the_Love_You_Want__A_Guide_for_Couples--By--Harville_Hendrix--0805068953.pdf"
+
+  - title: "The Laws of Human Nature"
+    author: "Robert Greene"
+    file: "The-Laws-of-Human-Nature-by-Robert-Greene-z-lib.org_.pdf"
+
+  - title: "Influence: The Psychology of Persuasion"
+    author: "Robert B. Cialdini"
+    file: "The Psychology of Persuasion.pdf"
+
+  - title: "Attached: The New Science of Adult Attachment"
+    author: "Amir Levine and Rachel Heller"
+    file: "Amir_Levine,_Rachel_Heller-Attached__The_New_Science_of_Adult_Attachment_and_How_It_Can_Help_You_Find_–_and_Keep_–_Love__-Penguin_Group_USA_(2010)[1].pdf"
+
+  - title: "The Seven Principles for Making Marriage Work"
+    author: "John Gottman"
+    file: "The Seven Principles for Making Marriage Work.pdf"
+
+  - title: "The Art of Seduction"
+    author: "Robert Greene"
+    file: "the-art-of-seduction-robert-greene.pdf"
+
+  - title: "The Body Keeps the Score"
+    author: "Bessel van der Kolk"
+    file: "The-Body-Keeps-the-Score-PDF.pdf"

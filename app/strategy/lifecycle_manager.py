@@ -11,7 +11,6 @@ from pydantic import BaseModel
 from sqlmodel import Session, select, and_
 
 from app.db.db_models.classification import ContentAtom
-from app.db.db_session import get_session
 from app.db.enums import LifecycleState
 
 
@@ -20,7 +19,7 @@ class LifecycleConfig(BaseModel):
 
     # ACTIVE → COOLING: After being scheduled
     enable_cooling: bool = True  # Set to True if you want a cooling period
-    cooling_duration_days: int = 30  # How long before COOLING → ACTIVE
+    cooling_duration_days: int = 42  # How long before COOLING → ACTIVE
 
     # ACTIVE → ARCHIVED: After N uses
     max_uses_before_archive: int = 5
@@ -108,11 +107,18 @@ def transition_to_active(session: Session, atom: ContentAtom) -> ContentAtom:
 
 
 def process_cooling_atoms(
-    session: Session, config: LifecycleConfig = LifecycleConfig()
+    session: Session,
+    config: LifecycleConfig = LifecycleConfig(),
+    commit: bool = True,
 ) -> int:
     """
     Process atoms in COOLING state.
     Transition back to ACTIVE if cooling period has elapsed.
+
+    Args:
+        session: Database session
+        config: Lifecycle configuration
+        commit: If True, commit the transaction. Set False when called within another transaction.
 
     Returns: Number of atoms transitioned
     """
@@ -137,7 +143,8 @@ def process_cooling_atoms(
         transition_to_active(session, atom)
         transitioned += 1
 
-    session.commit()
+    if commit:
+        session.commit()
     return transitioned
 
 

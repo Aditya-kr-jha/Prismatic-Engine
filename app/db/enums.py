@@ -200,6 +200,7 @@ class EvergreenSourceType(str, Enum):
     BOOK = "BOOK"
     BLOG = "BLOG"
     PODCAST = "PODCAST"
+    YOUTUBE = "YOUTUBE"
 
 
 class FileType(str, Enum):
@@ -226,6 +227,7 @@ class PostingStatus(str, Enum):
 class ReservoirStatus(str, Enum):
     AVAILABLE = "AVAILABLE"
     QUEUED = "QUEUED"
+    USED = "USED"
 
 
 # ============================================================================

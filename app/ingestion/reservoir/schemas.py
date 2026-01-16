@@ -5,7 +5,7 @@ All FastAPI-ready models for PDF extraction, text cleaning, chunking, and filter
 """
 
 from enum import Enum
-from typing import Optional, List, Dict, Any
+from typing import Optional, List, Dict
 
 from pydantic import BaseModel, Field, field_validator, ConfigDict
 
@@ -111,9 +111,9 @@ class ChunkingConfig(BaseModel):
     model_config = ConfigDict(frozen=False)
 
     min_words: int = Field(default=250, ge=50)
-    target_min_words: int = Field(default=350, ge=100)
-    target_max_words: int = Field(default=700, ge=100)
-    hard_max_words: int = Field(default=900, ge=100)
+    target_min_words: int = Field(default=250, ge=100)
+    target_max_words: int = Field(default=900, ge=100)
+    hard_max_words: int = Field(default=1100, ge=100)
     paragraph_separator: str = Field(default="\n\n")
     enable_early_close: bool = True
     early_close_patterns: List[str] = Field(

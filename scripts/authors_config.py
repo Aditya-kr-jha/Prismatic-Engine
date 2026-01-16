@@ -244,7 +244,7 @@ AUTHORS: List[AuthorConfig] = [
     {
         "name": "Mark Groves",
         "platform": BlogPlatform.WORDPRESS,
-        "blog_url": "https://markgroves.com/blog/",
+        "blog_url": "https://markgroves.com/blog/",  # NEVER USE HIM AGAIN HE WRITE VERY SMALL ARTICLES.FEEL LIKE A TWITTER THREADS
         "max_articles": 50,
         "content_pillars": [ContentPillar.RELATIONSHIPS, ContentPillar.SELF_WORTH],
     },
@@ -276,7 +276,7 @@ AUTHORS: List[AuthorConfig] = [
     {
         "name": "Matthew Hussey",
         "platform": BlogPlatform.WORDPRESS,
-        "blog_url": "https://www.matthewhussey.com/blog/",
+        "blog_url": "https://www.matthewhussey.com/blog/",  # maybe skip him too
         "max_articles": 50,
         "content_pillars": [ContentPillar.RELATIONSHIPS],
     },
@@ -351,7 +351,7 @@ AUTHORS: List[AuthorConfig] = [
     {
         "name": "Nicole LePera",
         "platform": BlogPlatform.WORDPRESS,
-        "blog_url": "https://theholisticpsychologist.com/blog/",
+        "blog_url": "https://theholisticpsychologist.com/blog/",  # SKIP
         "max_articles": 50,
         "content_pillars": [ContentPillar.HEALING_GROWTH],
     },
@@ -359,7 +359,7 @@ AUTHORS: List[AuthorConfig] = [
     {
         "name": "Irene Lyon",
         "platform": BlogPlatform.WORDPRESS,
-        "blog_url": "https://irenelyon.com/blog/",
+        "blog_url": "https://irenelyon.com/blog/",  # SKIP
         "max_articles": 50,
         "content_pillars": [ContentPillar.HEALING_GROWTH, ContentPillar.NEUROSCIENCE],
     },
@@ -367,7 +367,7 @@ AUTHORS: List[AuthorConfig] = [
     {
         "name": "Peter Attia",
         "platform": BlogPlatform.WORDPRESS,
-        "blog_url": "https://peterattiamd.com/category/blog/",
+        "blog_url": "https://peterattiamd.com/category/blog/",  # SKIP
         "max_articles": 50,
         "content_pillars": [ContentPillar.NEUROSCIENCE, ContentPillar.SELF_CARE],
     },
@@ -375,7 +375,7 @@ AUTHORS: List[AuthorConfig] = [
     {
         "name": "Bessel van der Kolk",
         "platform": BlogPlatform.CUSTOM,
-        "blog_url": "https://www.besselvanderkolk.com/resources",
+        "blog_url": "https://www.besselvanderkolk.com/resources",  # SKIP
         "max_articles": 50,
         "content_pillars": [ContentPillar.HEALING_GROWTH, ContentPillar.NEUROSCIENCE],
     },

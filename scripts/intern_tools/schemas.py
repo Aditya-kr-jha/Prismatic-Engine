@@ -4,8 +4,6 @@ Pydantic Schemas for Intern Tools.
 Shared data models for the human-in-the-loop blog intake pipeline.
 """
 
-from typing import Optional
-
 from pydantic import BaseModel, Field
 
 
@@ -52,6 +50,6 @@ class AuthorsData(BaseModel):
 class ChunkConfig(BaseModel):
     """Configuration for text chunking."""
 
-    chunk_size: int = 1500  # words per chunk
+    chunk_size: int = 1800  # words per chunk
     chunk_overlap: int = 100  # overlap between chunks
     min_words: int = 50  # minimum article length

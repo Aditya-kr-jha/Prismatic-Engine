@@ -78,6 +78,10 @@ class Settings(BaseSettings):
         default="hurghrugrugjryfghurfrufgurfuruhfurh",
         description="Firecrawl API key for web scraping",
     )
+    YOUTUBE_API_KEY: str = Field(
+        default="",
+        description="YouTube Data API v3 key for video metadata extraction",
+    )
 
     # Scraping Settings
     SCRAPE_BATCH_SIZE: int = Field(

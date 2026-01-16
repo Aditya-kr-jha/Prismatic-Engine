@@ -84,9 +84,10 @@ class ClassificationService:
     # Default source type distribution ratios
     # This ensures balanced classification across different content sources
     DEFAULT_SOURCE_RATIOS: Dict[str, float] = {
-        "REDDIT": 0.50,  # 40% Reddit posts
-        "BOOK": 0.20,  # 30% Book chunks
-        "BLOG": 0.30,  # 30% Blog articles
+        "REDDIT": 0.30,
+        "BOOK": 0.20,
+        "BLOG": 0.30,
+        "YOUTUBE": 0.20,
     }
 
     def __init__(

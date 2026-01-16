@@ -89,7 +89,7 @@ def _generate_request_id() -> str:
 @router.post("/classify", response_model=ClassifyBatchResponse)
 async def classify_batch(
     limit: int = Query(
-        default=5, ge=1, le=50, description="Number of rows to process (max 10)"
+        default=30, ge=1, le=100, description="Number of rows to process (max 10)"
     ),
 ) -> ClassifyBatchResponse:
     """
@@ -99,7 +99,7 @@ async def classify_batch(
     and saves results to content_atoms table.
 
     Args:
-        limit: Number of rows to process (1-10, default 5)
+        limit: Number of rows to process (1-100, default 30)
     """
     request_id = _generate_request_id()
     start_time = time.time()

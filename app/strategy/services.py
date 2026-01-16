@@ -31,7 +31,11 @@ from app.strategy.anti_repetition import (
     get_underused_pillars,
     calculate_diversity_score,
 )
-from app.strategy.lifecycle_manager import LifecycleConfig, update_atom_after_scheduling
+from app.strategy.lifecycle_manager import (
+    LifecycleConfig,
+    update_atom_after_scheduling,
+    process_cooling_atoms,
+)
 from app.strategy.weekly_slots import (
     DAY_OFFSETS,
     WEEKLY_SLOTS_TEMPLATE,
@@ -592,6 +596,16 @@ class ScheduleGeneratorService:
                 for sched in existing_schedules:
                     session.delete(sched)
                 session.commit()
+
+            # Reactivate atoms whose cooling period has ended (COOLING → ACTIVE)
+            # This must happen BEFORE we query for eligible atoms
+            reactivated_count = process_cooling_atoms(
+                session, self.lifecycle_config, commit=False
+            )
+            if reactivated_count > 0:
+                logger.info(
+                    f"Reactivated {reactivated_count} atoms from COOLING to ACTIVE"
+                )
 
             # Get underused pillars for diversity boosting
             underused_pillars = get_underused_pillars(
