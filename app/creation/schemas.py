@@ -48,7 +48,15 @@ class Stage1Analysis(BaseModel):
 
     core_truth: str = Field(
         ...,
-        description="The irreducible insight in one sentence. Speakable in one breath.",
+        description="The irreducible insight in one sentence. THE DESTINATION.",
+    )
+    counter_truth: str = Field(
+        ...,
+        description="The lie, delusion, or anxiety the audience currently holds. THE STARTING POINT.",
+    )
+    contrast_pair: str = Field(
+        ...,
+        description="The A→B journey: 'FROM [counter_truth] TO [core_truth]'",
     )
     brief_quality_score: int = Field(
         ...,
@@ -133,6 +141,8 @@ class EmotionalJourney(BaseModel):
     Three-state emotional journey the content must create.
 
     Shows MOVEMENT through emotional states, not static feelings.
+
+    DEPRECATED: Use EmotionalArc instead for new implementations.
     """
 
     state_1: str = Field(
@@ -149,21 +159,114 @@ class EmotionalJourney(BaseModel):
     )
 
 
+# ============================================================================
+# STAGE 2: MODE SEQUENCE (MANSON PROTOCOL)
+# ============================================================================
+
+
+class ModeStep(BaseModel):
+    """
+    Single step in the mode sequence.
+
+    Each step defines a mode, its function at that point, and energy level.
+    """
+
+    mode: str = Field(
+        ...,
+        description="Mode name: ROAST_MASTER, MIRROR, ORACLE, SURGEON, etc.",
+    )
+    function: str = Field(
+        ...,
+        description="What this mode achieves at this point in the sequence",
+    )
+    energy: float = Field(
+        ...,
+        ge=0.0,
+        le=1.0,
+        description="Energy level 0.0 (calm/clinical) to 1.0 (sharp/intense)",
+    )
+
+
+class ModeSequence(BaseModel):
+    """
+    The three-part mode journey (Manson Protocol).
+
+    Trust requires CONTRAST: Mean then kind. Confusing then clear.
+    A 60-second Roast is verbal abuse. A 10-slide Oracle is a lecture.
+    """
+
+    opener: ModeStep = Field(
+        ...,
+        description="The Callout - create dissonance, wake them up",
+    )
+    bridge: ModeStep = Field(
+        ...,
+        description="The Validation - soften, show you understand the pain",
+    )
+    closer: ModeStep = Field(
+        ...,
+        description="The Truth - reveal the mechanism, give them the truth",
+    )
+
+
+class EmotionalArc(BaseModel):
+    """
+    Continuous emotional arc with pacing notes.
+
+    Replaces discrete EmotionalJourney. Shows a continuous arc with
+    destabilization, resistance, and earned breakthrough.
+    """
+
+    entry_state: str = Field(
+        ...,
+        description="Where they are before (usually unconscious avoidance)",
+    )
+    destabilization_trigger: str = Field(
+        ...,
+        description="The specific moment of recognition - they see themselves",
+    )
+    resistance_point: str = Field(
+        ...,
+        description="Where they want to dismiss this - MUST be addressed",
+    )
+    breakthrough_moment: str = Field(
+        ...,
+        description="The reframe they can't unsee - must feel EARNED by resistance",
+    )
+    landing_state: str = Field(
+        ...,
+        description="Implication, not resolution. What now? Leave something open.",
+    )
+    pacing_note: str = Field(
+        ...,
+        description="Timing guidance (e.g., 'Breakthrough must feel EARNED. Don't rush past resistance.')",
+    )
+
+
 class Stage2Targeting(BaseModel):
     """
     Stage 2 LLM output: Emotional targeting architecture.
 
-    Defines the precise emotional journey the content must create.
+    Defines the mode sequence (Manson Protocol) and continuous emotional arc.
     Instagram rewards emotional response, not information.
     """
 
-    emotional_journey: EmotionalJourney = Field(
+    # New: Mode Sequence (Manson Protocol)
+    mode_sequence: ModeSequence = Field(
         ...,
-        description="Three-state emotional journey",
+        description="Three-part mode journey: opener → bridge → closer",
     )
+
+    # New: Continuous Emotional Arc
+    emotional_arc: EmotionalArc = Field(
+        ...,
+        description="5-stage continuous emotional arc with pacing",
+    )
+
+    # Engagement triggers
     physical_response_goal: str = Field(
         ...,
-        description="Somatic response (sharp exhale, screenshot impulse, etc.)",
+        description="Somatic response (sharp exhale at opener, screenshot impulse at closer, etc.)",
     )
     share_trigger: str = Field(
         ...,
@@ -171,7 +274,7 @@ class Stage2Targeting(BaseModel):
     )
     share_target: str = Field(
         ...,
-        description="Who they send it to (specific, not 'friends')",
+        description="Who they send it to (specific person type, not 'friends')",
     )
     comment_trigger: str = Field(
         ...,
@@ -181,9 +284,21 @@ class Stage2Targeting(BaseModel):
         ...,
         description="Why they'd save this",
     )
-    mode_energy_note: str = Field(
+
+    # Tone guidance
+    tone_shift_instruction: str = Field(
         ...,
-        description="How this mode should feel for THIS specific piece",
+        description="How tone shifts across the piece (e.g., 'Start sharp → Move clinical → End warm')",
+    )
+
+    # DEPRECATED: Keep for backward compatibility during transition
+    emotional_journey: Optional[EmotionalJourney] = Field(
+        default=None,
+        description="DEPRECATED: Use emotional_arc instead",
+    )
+    mode_energy_note: Optional[str] = Field(
+        default=None,
+        description="DEPRECATED: Energy is now per-mode in mode_sequence",
     )
 
 
@@ -208,24 +323,53 @@ class GenerationContext(BaseModel):
     brief: Dict[str, Any] = Field(default_factory=dict, description="Original brief")
 
     # From Stage 1
-    core_truth: str = Field(..., description="The irreducible insight")
+    core_truth: str = Field(..., description="The irreducible insight (THE DESTINATION)")
+    counter_truth: str = Field(..., description="The lie/anxiety the audience holds (THE STARTING POINT)")
+    contrast_pair: str = Field(..., description="The A→B journey phrase")
     requires_heavy_reframe: bool = Field(default=False)
     suggested_reframe: Optional[str] = Field(default=None)
     strongest_hook: str = Field(..., description="Best hook element")
     primary_emotion: str = Field(..., description="Primary visceral emotion")
     secondary_emotion: str = Field(..., description="Secondary emotion")
 
-    # From Stage 2 / Matrix
-    resolved_mode: str = Field(..., description="Mode from Format × Pillar matrix")
-    structural_note: str = Field(..., description="Structural guidance for the mode")
-    emotional_journey: EmotionalJourney = Field(
+    # From Stage 2: New Mode Sequence (Manson Protocol)
+    mode_sequence: ModeSequence = Field(
         ...,
-        description="Three-state emotional journey",
+        description="Three-part mode journey: opener → bridge → closer",
     )
+    emotional_arc: EmotionalArc = Field(
+        ...,
+        description="5-stage continuous emotional arc with pacing",
+    )
+    tone_shift_instruction: str = Field(
+        ...,
+        description="How tone shifts across the piece",
+    )
+
+    # From Stage 2: Engagement triggers
     physical_response_goal: str = Field(...)
     share_trigger: str = Field(...)
     share_target: str = Field(...)
-    mode_energy_note: str = Field(...)
+
+    # BACKWARD COMPATIBILITY: resolved_mode derived from opener.mode
+    resolved_mode: str = Field(
+        ...,
+        description="Primary mode (opener.mode) - kept for backward compatibility",
+    )
+    structural_note: Optional[str] = Field(
+        default=None,
+        description="DEPRECATED: Structural guidance now in mode.function",
+    )
+
+    # DEPRECATED: Keep for existing downstream consumers
+    emotional_journey: Optional[EmotionalJourney] = Field(
+        default=None,
+        description="DEPRECATED: Use emotional_arc instead",
+    )
+    mode_energy_note: Optional[str] = Field(
+        default=None,
+        description="DEPRECATED: Energy is now per-mode in mode_sequence",
+    )
 
     # Rewrite context (populated on Stage 4 retry)
     rewrite_focus: Optional[str] = Field(
@@ -264,6 +408,174 @@ class Stage2Result(BaseModel):
         default=None,
         description="Error message if targeting failed",
     )
+
+
+# ============================================================================
+# STAGE 2.5: LOGIC SKELETON (THE STRUCTURAL PLAN)
+# ============================================================================
+
+
+class CarouselSlideSpec(BaseModel):
+    """Specification for a single slide in the carousel skeleton."""
+
+    slide: int = Field(..., ge=1, le=10, description="Slide number (1-indexed)")
+    phase: str = Field(
+        ...,
+        description="Phase name: THE_TRAP, THE_SHIFT, or THE_RELEASE",
+    )
+    mode: str = Field(..., description="Mode for this slide (can include transitions like 'ROAST_MASTER → MIRROR')")
+    purpose: str = Field(..., description="What this slide must accomplish")
+    energy_level: float = Field(..., ge=0.0, le=1.0, description="Energy level 0.0-1.0")
+    resolves_tension: Optional[str] = Field(
+        default=None,
+        description="What tension from previous slide this resolves (None for slide 1)",
+    )
+    creates_tension: str = Field(..., description="Tension this slide creates for the next")
+    handover_to_next: str = Field(..., description="What the reader needs/wants after this slide")
+
+
+class CarouselPhaseSpec(BaseModel):
+    """Phase structure specification for carousel."""
+
+    slides: List[int] = Field(..., description="Which slides belong to this phase")
+    function: str = Field(..., description="What this phase accomplishes")
+
+
+class CarouselSkeleton(BaseModel):
+    """
+    Stage 2.5 output for CAROUSEL format.
+
+    The structural plan that Stage 3 must follow.
+    Ensures psychological sequence, not just visual adjacency.
+    """
+
+    narrative_arc_summary: str = Field(
+        ...,
+        description="From [State A] to [State B] via [Mechanism]",
+    )
+    total_slides: int = Field(..., ge=6, le=10, description="Total number of slides (6-10)")
+    skeleton: List[CarouselSlideSpec] = Field(
+        ...,
+        min_length=6,
+        max_length=10,
+        description="The slide-by-slide skeleton",
+    )
+    phase_structure: Dict[str, CarouselPhaseSpec] = Field(
+        ...,
+        description="THE_TRAP, THE_SHIFT, THE_RELEASE phases",
+    )
+    tone_progression: str = Field(
+        ...,
+        description="How tone shifts (e.g., 'Sharp (1-2) → Clinical (3-5) → Warm (6-8)')",
+    )
+    dependency_chain_valid: bool = Field(
+        ...,
+        description="True if all 'Since... Then...' tests pass",
+    )
+    golden_thread_test: str = Field(
+        ...,
+        description="The complete 'Since... Then...' chain as a string",
+    )
+
+
+class ReelBeatSpec(BaseModel):
+    """Specification for a single beat in the reel skeleton."""
+
+    beat: int = Field(..., ge=1, le=6, description="Beat number (1-indexed)")
+    name: str = Field(
+        ...,
+        description="Beat name: THE_HOOK, THE_BUILD, THE_BREATH, THE_TRUTH, THE_LAND",
+    )
+    mode: str = Field(..., description="Mode for this beat")
+    function: str = Field(..., description="What this beat must accomplish")
+    duration_seconds: int = Field(..., ge=1, le=20, description="Target duration in seconds")
+    energy: float = Field(..., ge=0.0, le=1.0, description="Energy level 0.0-1.0")
+    sentence_style: str = Field(
+        ...,
+        description="How sentences should be structured (e.g., 'Short. Punchy. Incomplete.')",
+    )
+    breath_point: bool = Field(
+        default=False,
+        description="True if this beat is a pause/breath moment",
+    )
+    ends_with: str = Field(..., description="What state/tension this beat ends with")
+
+
+class ReelPacingValidation(BaseModel):
+    """Validation results for reel pacing architecture."""
+
+    has_breath_point: bool = Field(..., description="At least one breath beat exists")
+    energy_varies: bool = Field(..., description="Energy level changes across beats")
+    mode_shifts: bool = Field(..., description="Mode changes at least once")
+    not_wall_of_sound: bool = Field(..., description="Not uniform intensity throughout")
+
+
+class ReelSkeleton(BaseModel):
+    """
+    Stage 2.5 output for REEL format.
+
+    The beat structure that Stage 3 must follow.
+    Ensures rhythmic variation and breath architecture.
+    """
+
+    narrative_arc_summary: str = Field(
+        ...,
+        description="From [State A] to [State B] via [Mechanism]",
+    )
+    total_duration_target: int = Field(
+        ...,
+        ge=15,
+        le=60,
+        description="Target duration in seconds (15-60)",
+    )
+    beat_structure: List[ReelBeatSpec] = Field(
+        ...,
+        min_length=3,
+        max_length=6,
+        description="The beat-by-beat structure",
+    )
+    pacing_validation: ReelPacingValidation = Field(
+        ...,
+        description="Pacing architecture validation results",
+    )
+
+
+class QuoteSkeleton(BaseModel):
+    """
+    Stage 2.5 output for QUOTE format.
+
+    Simplified skeleton for single-image quotes.
+    """
+
+    core_tension: str = Field(
+        ...,
+        description="The single tension the quote creates",
+    )
+    resolution_style: str = Field(
+        ...,
+        description="How the quote resolves or leaves open (implication vs statement)",
+    )
+    mode: str = Field(..., description="Primary mode for the quote")
+    energy: float = Field(..., ge=0.0, le=1.0, description="Energy level")
+    screenshot_quality: str = Field(
+        ...,
+        description="Why someone would screenshot this (the 'tattoo test')",
+    )
+
+
+class Stage2_5Result(BaseModel):
+    """Result from Stage 2.5 logic skeleton generation."""
+
+    schedule_id: str = Field(..., description="UUID of the ContentSchedule row")
+    trace_id: str = Field(..., description="Trace ID for lineage")
+    format_type: str = Field(..., description="REEL, CAROUSEL, or QUOTE")
+
+    # Only one of these will be populated based on format_type
+    carousel_skeleton: Optional[CarouselSkeleton] = Field(default=None)
+    reel_skeleton: Optional[ReelSkeleton] = Field(default=None)
+    quote_skeleton: Optional[QuoteSkeleton] = Field(default=None)
+
+    error: Optional[str] = Field(default=None, description="Error if skeleton generation failed")
 
 
 # ============================================================================
@@ -437,12 +749,142 @@ class Stage3Result(BaseModel):
 
 
 # ============================================================================
+# STAGE 3.5: COHERENCE AUDIT
+# ============================================================================
+
+
+class TransitionResult(BaseModel):
+    """Result from checking a single transition (e.g., slide 1→2)."""
+
+    transition: str = Field(..., description="Transition label (e.g., '1→2')")
+    valid: bool = Field(..., description="True if transition maintains narrative thread")
+    failure_type: Optional[str] = Field(
+        default=None,
+        description="Failure type if invalid: PLATEAU, RESET, REDUNDANCY, etc.",
+    )
+    issue: Optional[str] = Field(default=None, description="Specific issue description")
+
+
+class SinceThenCompletion(BaseModel):
+    """Result from the 'Since... Then...' test for a transition pair."""
+
+    pair: str = Field(..., description="Transition pair (e.g., '1→2')")
+    completion: Optional[str] = Field(
+        default=None,
+        description="The completed 'Since X, then Y' sentence (None if cannot complete)",
+    )
+    issue: Optional[str] = Field(
+        default=None,
+        description="Why the sentence cannot be completed (if applicable)",
+    )
+
+
+class CoherenceFailure(BaseModel):
+    """Details of a specific coherence failure requiring rewrite."""
+
+    location: str = Field(..., description="Where the failure occurred (e.g., 'Slide 4')")
+    failure_type: str = Field(
+        ...,
+        description="PLATEAU, RESET, REDUNDANCY, PREMATURE_PEAK, ORPHAN_PUNCH, MODE_VIOLATION, BROKEN_HANDOVER",
+    )
+    issue: str = Field(..., description="Specific problem identified")
+    fix: str = Field(..., description="Specific fix instruction")
+
+
+class CoherenceAuditResult(BaseModel):
+    """
+    Stage 3.5 LLM output: Coherence audit evaluation.
+
+    Determines whether generated content functions as a SEQUENCE
+    or merely a COLLECTION of unrelated units.
+    """
+
+    sequence_integrity_score: int = Field(
+        ...,
+        ge=1,
+        le=10,
+        description="Overall sequence integrity score (must be >= 7 to pass)",
+    )
+    is_collection_not_sequence: bool = Field(
+        ...,
+        description="True if content is a collection of unrelated units, not a sequence",
+    )
+
+    # Dependency chain validation
+    dependency_chain_results: List[TransitionResult] = Field(
+        ...,
+        description="Results for each transition (slide-to-slide or beat-to-beat)",
+    )
+
+    # Energy curve validation
+    energy_curve_valid: bool = Field(..., description="Energy varies as specified")
+    energy_curve_issues: List[str] = Field(
+        default_factory=list,
+        description="Issues with energy curve (e.g., plateaus)",
+    )
+
+    # Mode adherence
+    mode_adherence_valid: bool = Field(..., description="Modes match skeleton specification")
+    mode_violations: List[str] = Field(
+        default_factory=list,
+        description="Mode violations found",
+    )
+
+    # Since... Then... test results
+    since_then_completions: List[SinceThenCompletion] = Field(
+        ...,
+        description="Results of 'Since... Then...' test for each transition",
+    )
+
+    # Overall result
+    coherence_pass: bool = Field(
+        ...,
+        description="True if content passes coherence audit",
+    )
+    failures_requiring_rewrite: List[CoherenceFailure] = Field(
+        default_factory=list,
+        description="Failures that require rewriting",
+    )
+    rewrite_required: bool = Field(
+        ...,
+        description="True if content must return to Stage 3",
+    )
+    rewrite_instruction: Optional[str] = Field(
+        default=None,
+        description="Specific rewrite instruction for Stage 3",
+    )
+
+
+class Stage3_5Result(BaseModel):
+    """Result from Stage 3.5 coherence audit."""
+
+    schedule_id: str = Field(..., description="UUID of the ContentSchedule row")
+    trace_id: str = Field(..., description="Trace ID for lineage")
+    audit_result: Optional[CoherenceAuditResult] = Field(
+        default=None,
+        description="Coherence audit result (None if error)",
+    )
+    error: Optional[str] = Field(default=None, description="Error if audit failed")
+
+
+# ============================================================================
 # STAGE 4: SELF-CRITIQUE
 # ============================================================================
 
 
 class CritiqueScores(BaseModel):
-    """Scores from Stage 4 critique evaluation (1-10 scale)."""
+    """
+    Scores from Stage 4 critique evaluation (1-10 scale).
+
+    7 criteria (revised):
+    1. Scroll-stop power
+    2. AI voice risk (expanded with uniformity detection)
+    3. Share impulse
+    4. Emotional precision (arc-based)
+    5. Mode progression (replaces mode fidelity)
+    6. Pacing & breath
+    7. Format execution (revised for psychological flow)
+    """
 
     scroll_stop_power: int = Field(
         ...,
@@ -454,7 +896,7 @@ class CritiqueScores(BaseModel):
         ...,
         ge=1,
         le=10,
-        description="Does this sound AI-generated? Higher = more human.",
+        description="Humanity detection. Higher = more human. Checks uniformity, contrast, rhythm.",
     )
     share_impulse: int = Field(
         ...,
@@ -466,19 +908,25 @@ class CritiqueScores(BaseModel):
         ...,
         ge=1,
         le=10,
-        description="Does this hit the target emotional journey?",
+        description="Does this hit the target emotional arc with peaks and valleys?",
     )
-    mode_fidelity: int = Field(
+    mode_progression: int = Field(
         ...,
         ge=1,
         le=10,
-        description="Does the content stay in the assigned mode?",
+        description="Does content shift modes appropriately? Each shift earned and impactful?",
+    )
+    pacing_breath: int = Field(
+        ...,
+        ge=1,
+        le=10,
+        description="Rhythmic variation, energy peaks/valleys, strategic pauses?",
     )
     format_execution: int = Field(
         ...,
         ge=1,
         le=10,
-        description="Does the content work for its specific format?",
+        description="Format-specific execution: Reels=timing, Carousels=psychological flow, Quotes=standalone power",
     )
 
 

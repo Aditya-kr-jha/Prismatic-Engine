@@ -244,6 +244,8 @@ def store_generated_content(
     generation_context: dict,
     resolved_mode: str,
     emotional_journey: dict,
+    emotional_arc: dict,
+    mode_sequence: dict,
     critique_scores: dict,
     generation_attempts: int,
     flag_reasons: list = None,
@@ -260,7 +262,9 @@ def store_generated_content(
         content_json: The full content as a dictionary
         generation_context: Full GenerationContext for debugging
         resolved_mode: Mode used for generation
-        emotional_journey: Three-state emotional journey
+        emotional_journey: Three-state emotional journey (DEPRECATED)
+        emotional_arc: 5-stage continuous emotional arc
+        mode_sequence: Three-part mode journey (opener, bridge, closer)
         critique_scores: CritiqueScores from Stage 4
         generation_attempts: Number of attempts used
         flag_reasons: List of hard filter failures (if any)
@@ -288,6 +292,8 @@ def store_generated_content(
         generation_context=generation_context,
         resolved_mode=resolved_mode,
         emotional_journey=emotional_journey,
+        emotional_arc=emotional_arc,
+        mode_sequence=mode_sequence,
         critique_scores=critique_scores,
         generation_attempts=generation_attempts,
         status=status,

@@ -32,18 +32,21 @@ from app.creation import db_services
 from app.creation.schemas import (
     GenerationContext,
     Stage1Analysis,
+    Stage2_5Result,
     Stage3Result,
+    Stage3_5Result,
     Stage4Result,
     Stage5Result,
 )
 from app.creation.stages.stage_1_analyze import Stage1Analyzer
+from app.creation.stages.stage_2_5_skeleton import Stage2_5SkeletonGenerator
 from app.creation.stages.stage_2_target import Stage2Targeter
+from app.creation.stages.stage_3_5_coherence import Stage3_5CoherenceAuditor
 from app.creation.stages.stage_3_generate import Stage3Generator
 from app.creation.stages.stage_4_critique import Stage4Critic
 from app.creation.stages.stage_5_storage import Stage5Storage
 from app.db.db_models.strategy import ContentSchedule
 from app.db.db_session import get_session
-from app.db.enums import ScheduleStatus
 
 logger = logging.getLogger(__name__)
 
@@ -60,13 +63,17 @@ class SingleItemResult(BaseModel):
     trace_id: str
     stage1_analysis: Optional[Stage1Analysis] = None
     stage2_context: Optional[GenerationContext] = None
+    stage2_5_result: Optional[Stage2_5Result] = None  # NEW: Logic skeleton
     stage3_result: Optional[Stage3Result] = None
+    stage3_5_result: Optional[Stage3_5Result] = None  # NEW: Coherence audit
     stage4_result: Optional[Stage4Result] = None
     stage5_result: Optional[Stage5Result] = None
     is_unsuitable: bool = False
     unsuitable_reason: Optional[str] = None
     error: Optional[str] = None
-    error_stage: Optional[str] = None  # "stage1", "stage2", "stage3", "stage4", "stage5"
+    error_stage: Optional[str] = (
+        None  # "stage1", "stage2", "stage2_5", "stage3", "stage3_5", "stage4", "stage5"
+    )
 
     model_config = {"arbitrary_types_allowed": True}
 
@@ -154,14 +161,18 @@ class CreationService:
         self,
         analyzer: Optional[Stage1Analyzer] = None,
         targeter: Optional[Stage2Targeter] = None,
+        skeleton_generator: Optional[Stage2_5SkeletonGenerator] = None,
         generator: Optional[Stage3Generator] = None,
+        coherence_auditor: Optional[Stage3_5CoherenceAuditor] = None,
         critic: Optional[Stage4Critic] = None,
         storage: Optional[Stage5Storage] = None,
     ):
         """Initialize the creation service with optional custom stage handlers."""
         self.analyzer = analyzer or Stage1Analyzer()
         self.targeter = targeter or Stage2Targeter()
+        self.skeleton_generator = skeleton_generator or Stage2_5SkeletonGenerator()
         self.generator = generator or Stage3Generator()
+        self.coherence_auditor = coherence_auditor or Stage3_5CoherenceAuditor()
         self.critic = critic or Stage4Critic()
         self.storage = storage or Stage5Storage()
 
@@ -309,15 +320,71 @@ class CreationService:
 
         item_result.stage2_context = stage2_context
 
-        stage3_result = await self.run_stage3(stage2_context)
-        if stage3_result is None or stage3_result.error:
+        # Stage 2.5: Generate logic skeleton
+        stage2_5_result = await self.run_stage2_5(stage2_context)
+        if stage2_5_result is None or stage2_5_result.error:
             item_result.error = (
-                stage3_result.error if stage3_result else "Stage 3 generation failed"
+                stage2_5_result.error
+                if stage2_5_result
+                else "Stage 2.5 skeleton failed"
             )
-            item_result.error_stage = "stage3"
+            item_result.error_stage = "stage2_5"
             return item_result
 
+        item_result.stage2_5_result = stage2_5_result
+
+        # Stage 3 + 3.5 loop: Generate content, then coherence audit
+        # Coherence failures trigger rewrites back to Stage 3
+        max_coherence_attempts = 2
+        coherence_attempt = 0
+        stage3_result = None
+        stage3_5_result = None
+
+        while coherence_attempt < max_coherence_attempts:
+            coherence_attempt += 1
+
+            # Run Stage 3 generation (pass skeleton)
+            stage3_result = await self.run_stage3(stage2_context, stage2_5_result)
+            if stage3_result is None or stage3_result.error:
+                item_result.error = (
+                    stage3_result.error
+                    if stage3_result
+                    else "Stage 3 generation failed"
+                )
+                item_result.error_stage = "stage3"
+                return item_result
+
+            # Run Stage 3.5 coherence audit
+            stage3_5_result = await self.run_stage3_5(stage3_result, stage2_5_result)
+            if stage3_5_result is None or stage3_5_result.error:
+                item_result.error = (
+                    stage3_5_result.error
+                    if stage3_5_result
+                    else "Stage 3.5 audit failed"
+                )
+                item_result.error_stage = "stage3_5"
+                return item_result
+
+            # Check if coherence passed
+            if not self.coherence_auditor.needs_rewrite(stage3_5_result):
+                break
+
+            # Coherence failed - inject rewrite instruction and retry Stage 3
+            rewrite_instruction = self.coherence_auditor.get_rewrite_instruction(
+                stage3_5_result
+            )
+            if rewrite_instruction:
+                stage2_context.rewrite_focus = rewrite_instruction
+                stage2_context.attempt_number = coherence_attempt + 1
+
+            logger.info(
+                "[CREATION:S3.5] coherence_rewrite trace_id=%s attempt=%d",
+                row.trace_id,
+                coherence_attempt,
+            )
+
         item_result.stage3_result = stage3_result
+        item_result.stage3_5_result = stage3_5_result
 
         # Run Stage 4 critique loop
         stage4_result = await self.run_stage4(stage3_result, stage2_context)
@@ -478,18 +545,74 @@ class CreationService:
         return None
 
     # ========================================================================
+    # STAGE 2.5: LOGIC SKELETON
+    # ========================================================================
+
+    async def run_stage2_5(
+        self, context: GenerationContext
+    ) -> Optional[Stage2_5Result]:
+        """Run Stage 2.5 to generate the logic skeleton."""
+        last_error: Optional[Exception] = None
+
+        for attempt in range(self.MAX_RETRIES):
+            try:
+                result = await self.skeleton_generator.generate_skeleton(context)
+                if result and not result.error:
+                    logger.debug(
+                        "[CREATION:S2.5] success trace_id=%s format=%s",
+                        context.trace_id,
+                        context.required_format,
+                    )
+                    return result
+                if result and result.error:
+                    raise Exception(result.error)
+            except Exception as e:
+                last_error = e
+                if self._is_rate_limit_error(e):
+                    wait_time = self._calculate_retry_wait(str(e), attempt)
+                    logger.info(
+                        "[CREATION:S2.5] rate_limited trace_id=%s attempt=%d/%d",
+                        context.trace_id,
+                        attempt + 1,
+                        self.MAX_RETRIES,
+                    )
+                    await asyncio.sleep(wait_time)
+                    continue
+                break
+
+        logger.warning(
+            "[CREATION:S2.5] failed trace_id=%s error=%s",
+            context.trace_id,
+            str(last_error)[:100] if last_error else "Unknown",
+        )
+        return None
+
+    # ========================================================================
     # STAGE 3: GENERATE
     # ========================================================================
 
-    async def run_stage3(self, context: GenerationContext) -> Optional[Stage3Result]:
-        """Run Stage 3 content generation."""
+    async def run_stage3(
+        self,
+        context: GenerationContext,
+        skeleton_result: Optional[Stage2_5Result] = None,
+    ) -> Optional[Stage3Result]:
+        """Run Stage 3 content generation with skeleton from Stage 2.5."""
         last_error: Optional[Exception] = None
         stage3_result: Optional[Stage3Result] = None
+
+        # Extract skeleton JSON for prompt injection
+        skeleton_json = None
+        if skeleton_result:
+            skeleton_json = self.skeleton_generator.get_skeleton_for_stage3(
+                skeleton_result
+            )
 
         for attempt in range(self.MAX_RETRIES):
             try:
                 stage3_result = await self.generator.generate(
-                    context=context, attempt=attempt + 1
+                    context=context,
+                    attempt=attempt + 1,
+                    skeleton_json=skeleton_json,
                 )
                 if stage3_result and not stage3_result.error:
                     logger.debug(
@@ -514,6 +637,58 @@ class CreationService:
 
         logger.warning("[CREATION:S3] failed trace_id=%s", context.trace_id)
         return stage3_result
+
+    # ========================================================================
+    # STAGE 3.5: COHERENCE AUDIT
+    # ========================================================================
+
+    async def run_stage3_5(
+        self,
+        stage3_result: Stage3Result,
+        stage2_5_result: Stage2_5Result,
+    ) -> Optional[Stage3_5Result]:
+        """Run Stage 3.5 coherence audit on generated content."""
+        last_error: Optional[Exception] = None
+
+        for attempt in range(self.MAX_RETRIES):
+            try:
+                result = await self.coherence_auditor.audit(
+                    stage3_result=stage3_result,
+                    stage2_5_result=stage2_5_result,
+                )
+                if result and not result.error:
+                    logger.debug(
+                        "[CREATION:S3.5] success trace_id=%s pass=%s",
+                        stage3_result.trace_id,
+                        (
+                            result.audit_result.coherence_pass
+                            if result.audit_result
+                            else "N/A"
+                        ),
+                    )
+                    return result
+                if result and result.error:
+                    raise Exception(result.error)
+            except Exception as e:
+                last_error = e
+                if self._is_rate_limit_error(e):
+                    wait_time = self._calculate_retry_wait(str(e), attempt)
+                    logger.info(
+                        "[CREATION:S3.5] rate_limited trace_id=%s attempt=%d/%d",
+                        stage3_result.trace_id,
+                        attempt + 1,
+                        self.MAX_RETRIES,
+                    )
+                    await asyncio.sleep(wait_time)
+                    continue
+                break
+
+        logger.warning(
+            "[CREATION:S3.5] failed trace_id=%s error=%s",
+            stage3_result.trace_id,
+            str(last_error)[:100] if last_error else "Unknown",
+        )
+        return None
 
     # ========================================================================
     # STAGE 4: CRITIQUE
@@ -593,7 +768,6 @@ class CreationService:
 
         This is synchronous (no LLM calls).
         """
-        from app.creation.schemas import CritiqueResult as CritiqueResultType
 
         # Ensure critique is the correct type
         if critique is None:
@@ -605,7 +779,8 @@ class CreationService:
                     ai_voice_risk=7,
                     share_impulse=7,
                     emotional_precision=7,
-                    mode_fidelity=7,
+                    mode_progression=7,
+                    pacing_breath=7,
                     format_execution=7,
                 ),
                 lowest_score_criterion="N/A",

@@ -98,6 +98,20 @@ class GeneratedContent(SQLModel, table=True):
         ),
     )
 
+    # New: Emotional Arc (replaces emotional_journey)
+    emotional_arc: Dict[str, str] = Field(
+        default_factory=dict,
+        sa_column=Column(JSONB, nullable=True, server_default=text("'{}'::jsonb")),
+        description="5-stage continuous emotional arc (entry_state, destabilization_trigger, etc.)",
+    )
+
+    # New: Mode Sequence (Manson Protocol)
+    mode_sequence: Dict[str, Any] = Field(
+        default_factory=dict,
+        sa_column=Column(JSONB, nullable=True, server_default=text("'{}'::jsonb")),
+        description="Three-part mode journey (opener, bridge, closer)",
+    )
+
     approved_at: Optional[datetime] = Field(
         default=None,
         sa_column=Column(TIMESTAMP(timezone=True)),

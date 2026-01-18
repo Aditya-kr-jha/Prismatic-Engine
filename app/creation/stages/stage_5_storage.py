@@ -109,7 +109,15 @@ class Stage5Storage:
                 content_json=content.model_dump(),
                 generation_context=context.model_dump(),
                 resolved_mode=context.resolved_mode,
-                emotional_journey=context.emotional_journey.model_dump(),
+                # Keep emotional_journey for backward compatibility
+                emotional_journey=(
+                    context.emotional_journey.model_dump()
+                    if context.emotional_journey
+                    else {}
+                ),
+                # New fields
+                emotional_arc=context.emotional_arc.model_dump(),
+                mode_sequence=context.mode_sequence.model_dump(),
                 critique_scores=critique.scores.model_dump(),
                 generation_attempts=generation_attempts,
                 flag_reasons=filter_result.failures,

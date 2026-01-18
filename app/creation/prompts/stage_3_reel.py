@@ -45,24 +45,48 @@ STAGE3_REEL_HUMAN_PROMPT = """\
 Generate a REEL script for this content:
 
 ---
-**Mode**: {resolved_mode}
-**Mode Energy**: {mode_energy_note}
+**Primary Mode**: {resolved_mode}
+**Tone Shift**: {tone_shift_instruction}
 
-**Emotional Journey**:
-- Start: {emotional_state_1}
-- Shift: {emotional_state_2}
-- End: {emotional_state_3}
+**Mode Sequence (Manson Protocol)**:
+- **Opener** ({opener_mode}, energy {opener_energy}): {opener_function}
+- **Bridge** ({bridge_mode}, energy {bridge_energy}): {bridge_function}
+- **Closer** ({closer_mode}, energy {closer_energy}): {closer_function}
+
+**Emotional Arc**:
+- Entry: {entry_state}
+- Destabilization: {destabilization_trigger}
+- Resistance Point: {resistance_point}
+- Breakthrough: {breakthrough_moment}
+- Landing: {landing_state}
+- Pacing: {pacing_note}
+
+**The Journey (A → B)**:
+- **Counter-Truth (State A)**: {counter_truth}
+- **Core Truth (State B)**: {core_truth}
+- **Contrast**: {contrast_pair}
 
 **Physical Response Goal**: {physical_response_goal}
 **They share this because**: {share_trigger}
 **They send it to**: {share_target}
 
-**Core Truth**: {core_truth}
 **Strongest Hook**: {strongest_hook}
 **Primary Emotion**: {primary_emotion}
 **Pillar**: {required_pillar}
 
 {reframe_note}
+
+---
+
+## LOGIC SKELETON / BEAT STRUCTURE (FROM STAGE 2.5)
+
+Follow this beat structure. Each beat maps to timing and pacing requirements.
+
+```json
+{skeleton_json}
+```
+
+---
 
 **Full Brief**:
 ```json
@@ -72,7 +96,7 @@ Generate a REEL script for this content:
 
 {rewrite_context}
 
-Generate the REEL script.\\
+Generate the REEL script following the beat structure.\\
 """
 
 # ============================================================================

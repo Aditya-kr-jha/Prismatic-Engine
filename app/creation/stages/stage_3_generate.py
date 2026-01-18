@@ -166,6 +166,7 @@ class Stage3Generator:
         self,
         context: GenerationContext,
         attempt: int = 1,
+        skeleton_json: Optional[str] = None,
     ) -> Stage3Result:
         """
         Generate content for the given GenerationContext.
@@ -173,6 +174,7 @@ class Stage3Generator:
         Args:
             context: GenerationContext from Stage 2
             attempt: Retry attempt number for temperature adjustment
+            skeleton_json: JSON string of skeleton from Stage 2.5 (optional)
 
         Returns:
             Stage3Result with format-specific content
@@ -199,25 +201,44 @@ class Stage3Generator:
                 f"Use the suggested reframe:\n{context.suggested_reframe}"
             )
 
-        # Build prompt input
+        # Build prompt input with mode sequence and emotional arc
         prompt_input = {
+            # Mode sequence fields
             "resolved_mode": context.resolved_mode,
-            "mode_energy_note": context.mode_energy_note,
-            "structural_note": context.structural_note,
-            "emotional_state_1": context.emotional_journey.state_1,
-            "emotional_state_2": context.emotional_journey.state_2,
-            "emotional_state_3": context.emotional_journey.state_3,
+            "tone_shift_instruction": context.tone_shift_instruction or "N/A",
+            "opener_mode": context.mode_sequence.opener.mode,
+            "opener_energy": context.mode_sequence.opener.energy,
+            "opener_function": context.mode_sequence.opener.function,
+            "bridge_mode": context.mode_sequence.bridge.mode,
+            "bridge_energy": context.mode_sequence.bridge.energy,
+            "bridge_function": context.mode_sequence.bridge.function,
+            "closer_mode": context.mode_sequence.closer.mode,
+            "closer_energy": context.mode_sequence.closer.energy,
+            "closer_function": context.mode_sequence.closer.function,
+            # Emotional arc fields
+            "entry_state": context.emotional_arc.entry_state,
+            "destabilization_trigger": context.emotional_arc.destabilization_trigger,
+            "resistance_point": context.emotional_arc.resistance_point,
+            "breakthrough_moment": context.emotional_arc.breakthrough_moment,
+            "landing_state": context.emotional_arc.landing_state,
+            "pacing_note": context.emotional_arc.pacing_note,
+            # Engagement triggers
             "physical_response_goal": context.physical_response_goal,
             "share_trigger": context.share_trigger,
             "share_target": context.share_target,
             "save_trigger": context.share_trigger,  # Use share_trigger as fallback
+            # Content context
+            "counter_truth": context.counter_truth,
             "core_truth": context.core_truth,
+            "contrast_pair": context.contrast_pair,
             "strongest_hook": context.strongest_hook,
             "primary_emotion": context.primary_emotion,
             "required_pillar": context.required_pillar,
             "reframe_note": reframe_note,
             "rewrite_context": self._build_rewrite_context(context),
             "brief": json.dumps(context.brief, indent=2, default=str),
+            # Skeleton from Stage 2.5
+            "skeleton_json": skeleton_json or "Not provided",
         }
 
         logger.debug(

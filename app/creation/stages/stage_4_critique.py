@@ -35,20 +35,26 @@ class Stage4Critic:
     """
     LLM-based content critic for Stage 4 self-evaluation.
 
-    Evaluates content against 6 performance criteria:
+    Evaluates content against 7 performance criteria (revised):
     1. Scroll-stop power
-    2. AI voice risk
+    2. AI voice risk (with uniformity detection)
     3. Share impulse
-    4. Emotional precision
-    5. Mode fidelity
-    6. Format execution
+    4. Emotional precision (arc-based)
+    5. Mode progression (replaces mode fidelity)
+    6. Pacing & breath
+    7. Format execution (psychological flow)
 
-    Pass threshold: All scores >= 6, AI Voice Risk >= 7
+    Pass thresholds are format-aware:
+    - All >= 6, AI Voice >= 7 (all formats)
+    - Mode Progression >= 6 (Reels/Carousels)
+    - Pacing/Breath >= 7 for Reels, >= 6 for Carousels
+    - Mode Progression and Pacing N/A for Quotes
     """
 
     # Pass thresholds
     MIN_SCORE_THRESHOLD = 6
     MIN_AI_VOICE_THRESHOLD = 7
+    MIN_PACING_REEL_THRESHOLD = 7
 
     def __init__(
         self,
@@ -105,6 +111,7 @@ class Stage4Critic:
         self,
         content: GeneratedContent,
         context: GenerationContext,
+        coherence_audit_summary: str = "Not available",
     ) -> CritiqueResult:
         """
         Run single critique evaluation on content.
@@ -112,6 +119,7 @@ class Stage4Critic:
         Args:
             content: Generated content (ReelContent, CarouselContent, or QuoteContent)
             context: GenerationContext with emotional targeting
+            coherence_audit_summary: Summary from Stage 3.5 coherence audit
 
         Returns:
             CritiqueResult with scores and pass/fail decision
@@ -119,38 +127,50 @@ class Stage4Critic:
         Raises:
             Exception: If LLM call fails
         """
-        # Build prompt input
+        # Build prompt input with mode sequence and emotional arc
         prompt_input = {
             "required_format": context.required_format,
             "required_pillar": context.required_pillar,
-            "resolved_mode": context.resolved_mode,
             "core_truth": context.core_truth,
-            "emotional_state_1": context.emotional_journey.state_1,
-            "emotional_state_2": context.emotional_journey.state_2,
-            "emotional_state_3": context.emotional_journey.state_3,
+            # Mode sequence
+            "mode_opener": context.mode_sequence.opener.mode,
+            "mode_bridge": context.mode_sequence.bridge.mode,
+            "mode_closer": context.mode_sequence.closer.mode,
+            # Emotional arc
+            "emotional_entry_state": context.emotional_arc.entry_state,
+            "destabilization_trigger": context.emotional_arc.destabilization_trigger,
+            "resistance_point": context.emotional_arc.resistance_point,
+            "breakthrough_moment": context.emotional_arc.breakthrough_moment,
+            "landing_state": context.emotional_arc.landing_state,
             "physical_response_goal": context.physical_response_goal,
+            "pacing_note": context.emotional_arc.pacing_note,
+            # Content and coherence
             "generated_content": self._serialize_content(content),
+            "coherence_audit_summary": coherence_audit_summary,
         }
 
         logger.debug(
-            "[CREATION:S4] critiquing format=%s mode=%s attempt=%d",
+            "[CREATION:S4] critiquing format=%s mode_sequence=%s→%s→%s attempt=%d",
             context.required_format,
-            context.resolved_mode,
+            context.mode_sequence.opener.mode,
+            context.mode_sequence.bridge.mode,
+            context.mode_sequence.closer.mode,
             context.attempt_number,
         )
 
         result: CritiqueResult = await self.chain.ainvoke(prompt_input)
 
-        # Log scores
+        # Log all 7 scores
         scores = result.scores
         logger.info(
-            "[CREATION:S4] scores trace_id=%s scroll=%d ai=%d share=%d emotion=%d mode=%d format=%d pass=%s",
+            "[CREATION:S4] scores trace_id=%s scroll=%d ai=%d share=%d emotion=%d mode_prog=%d pacing=%d format=%d pass=%s",
             context.trace_id,
             scores.scroll_stop_power,
             scores.ai_voice_risk,
             scores.share_impulse,
             scores.emotional_precision,
-            scores.mode_fidelity,
+            scores.mode_progression,
+            scores.pacing_breath,
             scores.format_execution,
             result.overall_pass,
         )

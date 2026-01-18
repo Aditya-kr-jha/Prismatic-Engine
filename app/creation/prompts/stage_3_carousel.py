@@ -46,25 +46,48 @@ STAGE3_CAROUSEL_HUMAN_PROMPT = """\
 Generate a CAROUSEL for this content:
 
 ---
-**Mode**: {resolved_mode}
-**Mode Energy**: {mode_energy_note}
-**Structural Note**: {structural_note}
+**Primary Mode**: {resolved_mode}
+**Tone Shift**: {tone_shift_instruction}
 
-**Emotional Journey**:
-- Start: {emotional_state_1}
-- Shift: {emotional_state_2}
-- End: {emotional_state_3}
+**Mode Sequence (Manson Protocol)**:
+- **Opener** ({opener_mode}, energy {opener_energy}): {opener_function}
+- **Bridge** ({bridge_mode}, energy {bridge_energy}): {bridge_function}
+- **Closer** ({closer_mode}, energy {closer_energy}): {closer_function}
+
+**Emotional Arc**:
+- Entry: {entry_state}
+- Destabilization: {destabilization_trigger}
+- Resistance Point: {resistance_point}
+- Breakthrough: {breakthrough_moment}
+- Landing: {landing_state}
+- Pacing: {pacing_note}
+
+**The Journey (A → B)**:
+- **Counter-Truth (State A)**: {counter_truth}
+- **Core Truth (State B)**: {core_truth}
+- **Contrast**: {contrast_pair}
 
 **Physical Response Goal**: {physical_response_goal}
 **They save this because**: {save_trigger}
 **They share this because**: {share_trigger}
 
-**Core Truth**: {core_truth}
 **Strongest Hook**: {strongest_hook}
 **Primary Emotion**: {primary_emotion}
 **Pillar**: {required_pillar}
 
 {reframe_note}
+
+---
+
+## LOGIC SKELETON (FROM STAGE 2.5)
+
+Follow this structural plan exactly. Each slide must fulfill its specified function.
+
+```json
+{skeleton_json}
+```
+
+---
 
 **Full Brief**:
 ```json
@@ -74,7 +97,7 @@ Generate a CAROUSEL for this content:
 
 {rewrite_context}
 
-Generate the CAROUSEL slides.\\
+Generate the CAROUSEL slides following the skeleton structure.\\
 """
 
 # ============================================================================

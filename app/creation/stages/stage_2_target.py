@@ -1,8 +1,8 @@
 """
-Stage 2: Resolve Mode & Set Emotional Target.
+Stage 2: Mode Sequence + Emotional Arc Targeting.
 
-Resolves generation mode from Format × Pillar matrix and defines
-emotional architecture using LLM-based targeting.
+Designs the mode journey (Manson Protocol) and emotional arc using LLM.
+No mode matrix—the LLM determines the full sequence based on content.
 """
 
 import logging
@@ -11,9 +11,9 @@ from typing import Any, Dict, Optional
 from langchain_openai import ChatOpenAI
 
 from app.config import settings
-from app.creation.mode_matrix import resolve_mode
 from app.creation.prompts.stage_2 import STAGE2_PROMPT
 from app.creation.schemas import (
+    EmotionalJourney,
     GenerationContext,
     Stage1Analysis,
     Stage2Targeting,
@@ -25,9 +25,10 @@ logger = logging.getLogger(__name__)
 
 class Stage2Targeter:
     """
-    LLM-based emotional targeting for Stage 2.
+    LLM-based mode sequencing and emotional targeting for Stage 2.
 
-    Combines mode matrix lookup with LLM-generated emotional architecture.
+    Generates the full mode journey (opener → bridge → closer) and
+    continuous emotional arc with pacing notes.
     """
 
     def __init__(
@@ -74,7 +75,10 @@ class Stage2Targeter:
         stage1_analysis: Stage1Analysis,
     ) -> GenerationContext:
         """
-        Resolve mode and generate emotional targeting for a content piece.
+        Generate mode sequence and emotional targeting for a content piece.
+
+        The LLM determines the full mode journey (opener → bridge → closer)
+        and the continuous emotional arc with pacing notes.
 
         Args:
             schedule_id: UUID of the ContentSchedule row
@@ -90,23 +94,12 @@ class Stage2Targeter:
         Raises:
             Exception: If LLM call fails
         """
-        # Step 1: Resolve mode from matrix
-        resolved_mode, structural_note = resolve_mode(required_format, required_pillar)
-
-        logger.debug(
-            "Stage2 mode resolved: format=%s, pillar=%s -> mode=%s",
-            required_format,
-            required_pillar,
-            resolved_mode,
-        )
-
-        # Step 2: Run LLM targeting
+        # Run LLM targeting — LLM now determines the full mode sequence
         targeting: Stage2Targeting = await self.chain.ainvoke(
             {
                 "required_format": required_format,
                 "required_pillar": required_pillar,
-                "resolved_mode": resolved_mode,
-                "structural_note": structural_note,
+                "counter_truth": stage1_analysis.counter_truth,
                 "core_truth": stage1_analysis.core_truth,
                 "primary_emotion": stage1_analysis.emotional_core.primary_emotion,
                 "why_someone_shares_this": stage1_analysis.emotional_core.why_someone_shares_this,
@@ -115,15 +108,37 @@ class Stage2Targeter:
             }
         )
 
+        # Derive resolved_mode from opener.mode for backward compatibility
+        resolved_mode = targeting.mode_sequence.opener.mode
+
         logger.debug(
-            "Stage2 targeting complete: share_target=%s, physical_response=%s",
-            targeting.share_target[:30] if targeting.share_target else "N/A",
-            targeting.physical_response_goal[:30]
-            if targeting.physical_response_goal
+            "Stage2 mode sequence: opener=%s, bridge=%s, closer=%s",
+            targeting.mode_sequence.opener.mode,
+            targeting.mode_sequence.bridge.mode,
+            targeting.mode_sequence.closer.mode,
+        )
+
+        logger.debug(
+            "Stage2 emotional arc: entry=%s → breakthrough=%s → landing=%s",
+            targeting.emotional_arc.entry_state[:30]
+            if targeting.emotional_arc.entry_state
+            else "N/A",
+            targeting.emotional_arc.breakthrough_moment[:30]
+            if targeting.emotional_arc.breakthrough_moment
+            else "N/A",
+            targeting.emotional_arc.landing_state[:30]
+            if targeting.emotional_arc.landing_state
             else "N/A",
         )
 
-        # Step 3: Compile GenerationContext
+        # Build deprecated EmotionalJourney for backward compatibility
+        deprecated_journey = EmotionalJourney(
+            state_1=targeting.emotional_arc.entry_state,
+            state_2=targeting.emotional_arc.breakthrough_moment,
+            state_3=targeting.emotional_arc.landing_state,
+        )
+
+        # Compile GenerationContext
         context = GenerationContext(
             # From ContentSchedule
             schedule_id=schedule_id,
@@ -133,19 +148,28 @@ class Stage2Targeter:
             brief=brief,
             # From Stage 1
             core_truth=stage1_analysis.core_truth,
+            counter_truth=stage1_analysis.counter_truth,
+            contrast_pair=stage1_analysis.contrast_pair,
             requires_heavy_reframe=stage1_analysis.requires_heavy_reframe,
             suggested_reframe=stage1_analysis.suggested_reframe,
             strongest_hook=stage1_analysis.strongest_hook_in_material,
             primary_emotion=stage1_analysis.emotional_core.primary_emotion,
             secondary_emotion=stage1_analysis.emotional_core.secondary_emotion,
-            # From Stage 2 / Matrix
-            resolved_mode=resolved_mode,
-            structural_note=structural_note,
-            emotional_journey=targeting.emotional_journey,
+            # From Stage 2: New fields
+            mode_sequence=targeting.mode_sequence,
+            emotional_arc=targeting.emotional_arc,
+            tone_shift_instruction=targeting.tone_shift_instruction,
+            # From Stage 2: Engagement triggers
             physical_response_goal=targeting.physical_response_goal,
             share_trigger=targeting.share_trigger,
             share_target=targeting.share_target,
-            mode_energy_note=targeting.mode_energy_note,
+            # Backward compatibility
+            resolved_mode=resolved_mode,
+            structural_note=targeting.mode_sequence.opener.function,
+            emotional_journey=deprecated_journey,
+            mode_energy_note=f"Opener: {targeting.mode_sequence.opener.energy}, "
+            f"Bridge: {targeting.mode_sequence.bridge.energy}, "
+            f"Closer: {targeting.mode_sequence.closer.energy}",
         )
 
         return context
