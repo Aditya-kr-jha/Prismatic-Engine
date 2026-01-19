@@ -29,12 +29,30 @@ You are creating a moment of recognition or exposure that demands attention.
 - **Ending**: The last line is the most shareable line, not the conclusion
 - **Screenshot Line**: At least one line must work as a still image
 
+## BREATH ARCHITECTURE (NON-NEGOTIABLE)
+
+Reels fail when they are "walls of sound." You MUST build rhythmic variation:
+
+**Bad Structure:**
+Bang. Bang. Bang. Bang. (Feels like a rant, sounds like AI)
+
+**Good Structure:**
+Bang. Bang. *Breath*. Flowing explanation that lands softly. Bang.
+
+**Requirements:**
+- At least ONE beat must be a breath moment — softer, validating, "I get it"
+- Energy must DROP below 0.5 at least once in the script
+- Not every line can be punchy — vary the meter
+- The skeleton's `breath_point` beats are REQUIRED pauses
+
 ## THE ONLY TEST THAT MATTERS
 
 Before outputting, verify:
-> Would a human creator with 500K+ followers post this exact script, word-for-word, and expect it to perform?
+1. **The Breath Test**: Is there at least one soft, human moment? If not → add one.
+2. **The Rant Test**: Read it aloud. Does it sound like a lecture or a rant? If yes → rewrite.
+3. **The Creator Test**: Would a human creator with 500K+ followers post this word-for-word?
 
-If no → rewrite internally before outputting.\
+If any test fails → rewrite internally before outputting.\
 """
 
 # ============================================================================
@@ -80,7 +98,21 @@ Generate a REEL script for this content:
 
 ## LOGIC SKELETON / BEAT STRUCTURE (FROM STAGE 2.5)
 
-Follow this beat structure. Each beat maps to timing and pacing requirements.
+This skeleton defines the EXACT beat structure. You MUST:
+
+1. **Match Beat Function**: Each beat's content must accomplish its `function` field.
+2. **Honor Mode**: Each beat must use the voice of its specified `mode`.
+3. **Respect Duration**: Write content that fits the `duration_seconds` when spoken.
+4. **Vary Energy**: If the skeleton says beat 3 is 0.4 energy, it MUST feel calmer than beat 2 at 0.8.
+5. **Mark Breath Points**: Beats with `breath_point: true` are softer, validating moments.
+6. **Deliver Endings**: Each beat must end with its specified `ends_with` state.
+
+For EACH beat, before writing, ask:
+- Does this accomplish [function]?
+- Does this feel like [mode]?
+- Does the energy level match?
+- Is this the right sentence style?
+- If breath_point is true, is this actually soft/validating?
 
 ```json
 {skeleton_json}

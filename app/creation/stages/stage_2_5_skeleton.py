@@ -81,7 +81,7 @@ class Stage2_5SkeletonGenerator:
 
             structured_llm = llm.with_structured_output(
                 schema,
-                method="json_schema",
+                method="function_calling",  # json_schema mode doesn't support Dict types
             )
 
             self._chains[format_type] = prompt | structured_llm

@@ -194,6 +194,8 @@ class DeliveryService:
         schedule: "ContentSchedule",
     ) -> DeliveryBrief:
         """Transform a GeneratedContent + ContentSchedule into a DeliveryBrief."""
+        from app.delivery.schemas import EmotionalArcSummary
+        
         # Get format type
         format_type = (
             content.format_type.value
@@ -209,10 +211,29 @@ class DeliveryService:
             content.critique_scores or {}
         )
 
-        # Build emotional journey
-        emotional_journey = transformer.build_emotional_journey(
-            content.emotional_journey or {}
-        )
+        # Build emotional arc (new) or journey (deprecated fallback)
+        emotional_arc = None
+        emotional_journey = None
+        arc_section = ""
+        
+        if content.emotional_arc and format_type in ("REEL", "CAROUSEL"):
+            # Use new EmotionalArc for Reels/Carousels
+            arc_data = content.emotional_arc
+            emotional_arc = EmotionalArcSummary(
+                entry_state=arc_data.get("entry_state", "Unknown"),
+                destabilization_trigger=arc_data.get("destabilization_trigger", "Unknown"),
+                resistance_point=arc_data.get("resistance_point", "Unknown"),
+                breakthrough_moment=arc_data.get("breakthrough_moment", "Unknown"),
+                landing_state=arc_data.get("landing_state", "Unknown"),
+                pacing_note=arc_data.get("pacing_note", ""),
+            )
+            arc_section = transformer.render_emotional_arc(emotional_arc)
+        else:
+            # Fallback to deprecated emotional_journey for Quotes or missing data
+            emotional_journey = transformer.build_emotional_journey(
+                content.emotional_journey or {}
+            )
+            arc_section = transformer.render_emotional_journey(emotional_journey)
 
         # Transform content to Markdown
         content_markdown = transformer.transform_content(content.content_json or {})
@@ -242,15 +263,14 @@ class DeliveryService:
             quality_avg=quality_scores.average,
         )
 
-        # Add emotional journey section
-        journey_section = transformer.render_emotional_journey(emotional_journey)
-
         # Add quality scores section
         quality_section = transformer.render_quality_scores(quality_scores)
 
         # Add metadata footer
         brief_data = schedule.brief or {}
         footer = transformer.render_metadata_footer(
+            generated_content_id=str(content.id),
+            schedule_id=str(schedule.id),
             atom_id=brief_data.get("atom_id", "N/A"),
             angle_name=brief_data.get("angle_name", "N/A"),
             trace_id=str(content.trace_id),
@@ -259,7 +279,7 @@ class DeliveryService:
         )
 
         # Combine all sections
-        full_markdown = header + content_markdown + journey_section + quality_section + footer
+        full_markdown = header + content_markdown + arc_section + quality_section + footer
 
         return DeliveryBrief(
             generated_content_id=str(content.id),
@@ -273,6 +293,7 @@ class DeliveryService:
             pillar=pillar,
             resolved_mode=content.resolved_mode,
             quality_scores=quality_scores,
+            emotional_arc=emotional_arc,
             emotional_journey=emotional_journey,
             generation_attempts=content.generation_attempts,
             content_markdown=full_markdown,

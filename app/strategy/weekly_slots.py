@@ -1,22 +1,16 @@
 """
-Weekly Schedule Template for Prismatic Engine.
+Weekly Schedule Template for Prismatic Engine (OPTIMIZED v4).
 
-Defines the "perfect week" structure — 21 slots mapped to days, times, pillars, and formats.
-This is the STATIC part. The schedule generator HYDRATES it with real dates.
+Key insight: Quotes waste content atoms. A 700-word atom reduced to 15 words = 98% waste.
 
-Distribution Strategy:
-- 3 posts per day (morning / midday / evening)
-- Each pillar appears 2-3 times per week
-- Formats distributed: ~7 Quotes, ~7 Carousels, ~7 Reels
-- High-engagement slots (Tue/Thu evening) get viral-friendly pillars
+Distribution: 2 Quotes / 10 Carousels / 9 Reels
+- Quotes ONLY for: Monday AM opener, Saturday AM softness
+- Everything else maximizes atom utilization
 
-Timing Strategy (IST assumed):
-- 08:00 → Morning commute / coffee scroll
-- 12:00 → Lunch break engagement
-- 18:00 → Evening wind-down (highest engagement)
+Relationship content: 3 Reels + 2 Carousels = 5 slots
 """
 
-from typing import Dict, List
+from typing import Dict, List, Any
 
 from pydantic import BaseModel, ConfigDict
 
@@ -58,21 +52,21 @@ DAY_OFFSETS: Dict[str, int] = {
 
 
 # ════════════════════════════════════════════════════════════════════════════════
-# THE MASTER TEMPLATE: 21 Slots Per Week
+# THE MASTER TEMPLATE: 21 Slots Per Week (OPTIMIZED v4 — MINIMAL QUOTES)
 # ════════════════════════════════════════════════════════════════════════════════
 
 WEEKLY_SLOTS_TEMPLATE: tuple[SlotTemplate, ...] = (
     # ═══════════════════════════════════════════════════════════════════════════
-    # MONDAY — Week opener, Productivity focus
+    # MONDAY — Week opener
     # ═══════════════════════════════════════════════════════════════════════════
     SlotTemplate(
         slot_number=1,
         day_of_week="monday",
         time="08:00",
         pillar=ContentPillar.PRODUCTIVITY,
-        format=Format.QUOTE,
+        format=Format.QUOTE,  # ← QUOTE #1: Week opener, quick hit
         priority=1,
-        notes="Monday motivation. Quick, punchy quote to start the week.",
+        notes="✨ QUOTE #1. Monday motivation. Only quote justified—quick dopamine.",
     ),
     SlotTemplate(
         slot_number=2,
@@ -81,7 +75,7 @@ WEEKLY_SLOTS_TEMPLATE: tuple[SlotTemplate, ...] = (
         pillar=ContentPillar.NEUROSCIENCE,
         format=Format.CAROUSEL,
         priority=2,
-        notes="Educational lunch content. Science-backed insights.",
+        notes="Science deep-dive. Lunch break learning.",
     ),
     SlotTemplate(
         slot_number=3,
@@ -90,19 +84,19 @@ WEEKLY_SLOTS_TEMPLATE: tuple[SlotTemplate, ...] = (
         pillar=ContentPillar.SELF_WORTH,
         format=Format.REEL,
         priority=1,
-        notes="Evening emotional hook. High engagement window.",
+        notes="Evening identity content. High emotional engagement.",
     ),
     # ═══════════════════════════════════════════════════════════════════════════
-    # TUESDAY — Relationships & Dark Psychology (high engagement day)
+    # TUESDAY — Relationships + Dark Psychology
     # ═══════════════════════════════════════════════════════════════════════════
     SlotTemplate(
         slot_number=4,
         day_of_week="tuesday",
         time="08:00",
-        pillar=ContentPillar.RELATIONSHIPS,
-        format=Format.QUOTE,
+        pillar=ContentPillar.HEALING_GROWTH,
+        format=Format.CAROUSEL,  # ← Upgraded from Quote
         priority=2,
-        notes="Relatable relationship truth.",
+        notes="Morning healing carousel. Full depth, high save.",
     ),
     SlotTemplate(
         slot_number=5,
@@ -111,28 +105,28 @@ WEEKLY_SLOTS_TEMPLATE: tuple[SlotTemplate, ...] = (
         pillar=ContentPillar.DARK_PSYCHOLOGY,
         format=Format.CAROUSEL,
         priority=1,
-        notes="Dark psychology deep-dive. High save rate expected.",
+        notes="Dark psychology deep-dive. High save rate.",
     ),
     SlotTemplate(
         slot_number=6,
         day_of_week="tuesday",
         time="18:00",
-        pillar=ContentPillar.HEALING_GROWTH,
+        pillar=ContentPillar.RELATIONSHIPS,  # ← RELATIONSHIP REEL #1
         format=Format.REEL,
         priority=1,
-        notes="Tuesday evening — emotional content performs well.",
+        notes="🔥 RELATIONSHIP REEL #1. Evening emotional scroll.",
     ),
     # ═══════════════════════════════════════════════════════════════════════════
-    # WEDNESDAY — Mid-week balance, Philosophy & Self-Care
+    # WEDNESDAY — Mid-week Reset
     # ═══════════════════════════════════════════════════════════════════════════
     SlotTemplate(
         slot_number=7,
         day_of_week="wednesday",
         time="08:00",
-        pillar=ContentPillar.PHILOSOPHY,
-        format=Format.QUOTE,
+        pillar=ContentPillar.DARK_PSYCHOLOGY,
+        format=Format.REEL,  # ← Changed: Morning reel for pattern interrupt
         priority=2,
-        notes="Philosophical reflection to break the week.",
+        notes="Morning dark psychology reel. Wake them up.",
     ),
     SlotTemplate(
         slot_number=8,
@@ -141,58 +135,58 @@ WEEKLY_SLOTS_TEMPLATE: tuple[SlotTemplate, ...] = (
         pillar=ContentPillar.PRODUCTIVITY,
         format=Format.CAROUSEL,
         priority=2,
-        notes="Actionable productivity framework.",
+        notes="Tactical productivity frameworks.",
     ),
     SlotTemplate(
         slot_number=9,
         day_of_week="wednesday",
         time="18:00",
         pillar=ContentPillar.SELF_CARE,
-        format=Format.REEL,
+        format=Format.CAROUSEL,
         priority=2,
-        notes="Mid-week self-care reminder.",
+        notes="Mid-week self-care permission. Full depth.",
     ),
     # ═══════════════════════════════════════════════════════════════════════════
-    # THURSDAY — Peak engagement day, Dark Psychology & Neuroscience
+    # THURSDAY — RELATIONSHIPS HEAVY (Peak Engagement Day)
     # ═══════════════════════════════════════════════════════════════════════════
     SlotTemplate(
         slot_number=10,
         day_of_week="thursday",
         time="08:00",
-        pillar=ContentPillar.NEUROSCIENCE,
-        format=Format.QUOTE,
-        priority=2,
-        notes="Brain fact to start the day.",
+        pillar=ContentPillar.RELATIONSHIPS,  # ← RELATIONSHIP CAROUSEL #1
+        format=Format.CAROUSEL,
+        priority=1,
+        notes="📚 RELATIONSHIP CAROUSEL #1. Morning relationship dynamics.",
     ),
     SlotTemplate(
         slot_number=11,
         day_of_week="thursday",
         time="12:00",
-        pillar=ContentPillar.RELATIONSHIPS,
+        pillar=ContentPillar.NEUROSCIENCE,
         format=Format.CAROUSEL,
         priority=1,
-        notes="Relationship dynamics breakdown.",
+        notes="Neuroscience deep-dive. Thursday lunch = high attention.",
     ),
     SlotTemplate(
         slot_number=12,
         day_of_week="thursday",
         time="18:00",
-        pillar=ContentPillar.DARK_PSYCHOLOGY,
+        pillar=ContentPillar.RELATIONSHIPS,  # ← RELATIONSHIP REEL #2
         format=Format.REEL,
         priority=1,
-        notes="Thursday evening viral slot. Dark psychology reel.",
+        notes="🔥 RELATIONSHIP REEL #2. Thursday evening viral slot.",
     ),
     # ═══════════════════════════════════════════════════════════════════════════
-    # FRIDAY — Lighter tone, Self-Worth & Healing
+    # FRIDAY — Reflection + Philosophy
     # ═══════════════════════════════════════════════════════════════════════════
     SlotTemplate(
         slot_number=13,
         day_of_week="friday",
         time="08:00",
         pillar=ContentPillar.SELF_WORTH,
-        format=Format.QUOTE,
+        format=Format.CAROUSEL,  # ← Upgraded from Quote
         priority=2,
-        notes="Friday confidence boost.",
+        notes="Friday self-worth deep-dive. End-of-week validation.",
     ),
     SlotTemplate(
         slot_number=14,
@@ -201,7 +195,7 @@ WEEKLY_SLOTS_TEMPLATE: tuple[SlotTemplate, ...] = (
         pillar=ContentPillar.HEALING_GROWTH,
         format=Format.CAROUSEL,
         priority=2,
-        notes="Growth mindset content for weekend reflection.",
+        notes="Growth reflection carousel.",
     ),
     SlotTemplate(
         slot_number=15,
@@ -210,58 +204,58 @@ WEEKLY_SLOTS_TEMPLATE: tuple[SlotTemplate, ...] = (
         pillar=ContentPillar.PHILOSOPHY,
         format=Format.REEL,
         priority=2,
-        notes="Philosophical reel to end the work week.",
+        notes="Philosophical reel. End-of-week existential content.",
     ),
     # ═══════════════════════════════════════════════════════════════════════════
-    # SATURDAY — Weekend mode, Self-Care & Relationships
+    # SATURDAY — Weekend Mode
     # ═══════════════════════════════════════════════════════════════════════════
     SlotTemplate(
         slot_number=16,
         day_of_week="saturday",
-        time="09:00",  # Slightly later on weekends
+        time="10:00",
         pillar=ContentPillar.SELF_CARE,
-        format=Format.QUOTE,
+        format=Format.QUOTE,  # ← QUOTE #2: Weekend softness, permission energy
         priority=2,
-        notes="Weekend self-care affirmation.",
+        notes="✨ QUOTE #2. Weekend self-care. Only other justified quote—gentle AM.",
     ),
     SlotTemplate(
         slot_number=17,
         day_of_week="saturday",
-        time="13:00",
-        pillar=ContentPillar.NEUROSCIENCE,
+        time="14:00",
+        pillar=ContentPillar.DARK_PSYCHOLOGY,
         format=Format.REEL,
-        priority=2,
-        notes="Science reel for weekend scrollers.",
+        priority=1,
+        notes="Dark psychology reel. Weekend 'guilty pleasure' scroll.",
     ),
     SlotTemplate(
         slot_number=18,
         day_of_week="saturday",
-        time="19:00",
-        pillar=ContentPillar.RELATIONSHIPS,
-        format=Format.CAROUSEL,
-        priority=2,
-        notes="Saturday evening relationship content.",
+        time="20:00",
+        pillar=ContentPillar.RELATIONSHIPS,  # ← RELATIONSHIP REEL #3
+        format=Format.REEL,
+        priority=1,
+        notes="🔥 RELATIONSHIP REEL #3. Saturday night emotional content.",
     ),
     # ═══════════════════════════════════════════════════════════════════════════
-    # SUNDAY — Reflection day, Philosophy & Healing
+    # SUNDAY — Reflection + Prep
     # ═══════════════════════════════════════════════════════════════════════════
     SlotTemplate(
         slot_number=19,
         day_of_week="sunday",
-        time="09:00",
-        pillar=ContentPillar.HEALING_GROWTH,
-        format=Format.QUOTE,
+        time="10:00",
+        pillar=ContentPillar.PHILOSOPHY,
+        format=Format.CAROUSEL,  # ← Added Philosophy carousel
         priority=2,
-        notes="Sunday healing affirmation.",
+        notes="Sunday philosophy deep-dive. Reflective scrollers.",
     ),
     SlotTemplate(
         slot_number=20,
         day_of_week="sunday",
-        time="13:00",
-        pillar=ContentPillar.SELF_WORTH,
+        time="14:00",
+        pillar=ContentPillar.RELATIONSHIPS,  # ← RELATIONSHIP CAROUSEL #2
         format=Format.CAROUSEL,
-        priority=2,
-        notes="Self-worth deep-dive for Sunday reflection.",
+        priority=1,
+        notes="📚 RELATIONSHIP CAROUSEL #2. Sunday relationship reflection.",
     ),
     SlotTemplate(
         slot_number=21,
@@ -270,7 +264,7 @@ WEEKLY_SLOTS_TEMPLATE: tuple[SlotTemplate, ...] = (
         pillar=ContentPillar.PRODUCTIVITY,
         format=Format.REEL,
         priority=1,
-        notes="Sunday evening prep-for-Monday reel. High intent audience.",
+        notes="Sunday evening prep reel. 'Tomorrow you will...' energy.",
     ),
 )
 
@@ -309,6 +303,42 @@ def get_high_priority_slots() -> List[SlotTemplate]:
     return [slot for slot in WEEKLY_SLOTS_TEMPLATE if slot.priority == 1]
 
 
+def get_relationship_content() -> Dict[str, List[SlotTemplate]]:
+    """Get all Relationship content slots grouped by format."""
+    relationship_slots = get_slots_by_pillar(ContentPillar.RELATIONSHIPS)
+    return {
+        "reels": [s for s in relationship_slots if s.format == Format.REEL],
+        "carousels": [s for s in relationship_slots if s.format == Format.CAROUSEL],
+        "quotes": [s for s in relationship_slots if s.format == Format.QUOTE],
+    }
+
+
+def get_content_atom_utilization() -> Dict[str, float]:
+    """Calculate content atom utilization efficiency by format."""
+    format_counts = {}
+    for slot in WEEKLY_SLOTS_TEMPLATE:
+        fmt = slot.format.value
+        format_counts[fmt] = format_counts.get(fmt, 0) + 1
+
+    # Utilization estimates (% of 700-word atom used)
+    utilization_rates = {
+        "quote": 0.02,  # ~15 words / 700 = 2%
+        "carousel": 0.85,  # ~600 words across slides = 85%
+        "reel": 0.70,  # ~500 words in script = 70%
+    }
+
+    total_atoms = len(WEEKLY_SLOTS_TEMPLATE)
+    weighted_utilization = (
+        sum(format_counts.get(fmt, 0) * rate for fmt, rate in utilization_rates.items())
+        / total_atoms
+    )
+
+    return {
+        "by_format": {fmt: format_counts.get(fmt, 0) for fmt in utilization_rates},
+        "average_utilization": round(weighted_utilization * 100, 1),
+    }
+
+
 # ════════════════════════════════════════════════════════════════════════════════
 # VALIDATION
 # ════════════════════════════════════════════════════════════════════════════════
@@ -322,6 +352,7 @@ class ValidationResult(BaseModel):
     errors: List[str]
     warnings: List[str]
     distribution: Dict[str, Dict[str, int]]
+    atom_utilization: Dict[str, Any]  # fix: Any (typing) not any (built-in)
 
 
 def validate_template() -> ValidationResult:
@@ -332,7 +363,9 @@ def validate_template() -> ValidationResult:
     - Exactly 21 slots
     - No duplicate slot numbers
     - Slot numbers are 1-21
-    - Distribution analysis
+    - Relationship content requirements (>= 3 Reels, >= 1 Carousel)
+    - Quote count <= 3 (minimal quotes policy)
+    - Content atom utilization
     """
     errors: List[str] = []
     warnings: List[str] = []
@@ -340,6 +373,7 @@ def validate_template() -> ValidationResult:
         "by_pillar": {},
         "by_format": {},
         "by_day": {},
+        "by_pillar_format": {},
     }
 
     # Check slot count
@@ -363,6 +397,10 @@ def validate_template() -> ValidationResult:
             errors.append(f"Invalid slot numbers: {extra}")
 
     # Distribution analysis
+    relationship_reel_count = 0
+    relationship_carousel_count = 0
+    quote_count = 0
+
     for slot in WEEKLY_SLOTS_TEMPLATE:
         # By pillar
         pillar_name = slot.pillar.value
@@ -381,10 +419,39 @@ def validate_template() -> ValidationResult:
             distribution["by_day"].get(slot.day_of_week, 0) + 1
         )
 
-    # Warn if distribution is uneven
-    format_counts = list(distribution["by_format"].values())
-    if format_counts and max(format_counts) - min(format_counts) > 2:
-        warnings.append("Format distribution is uneven")
+        # Cross-reference pillar-format
+        combo_key = f"{pillar_name}_{format_name}"
+        distribution["by_pillar_format"][combo_key] = (
+            distribution["by_pillar_format"].get(combo_key, 0) + 1
+        )
+
+        # Count specifics
+        if slot.format == Format.QUOTE:
+            quote_count += 1
+        if slot.pillar == ContentPillar.RELATIONSHIPS:
+            if slot.format == Format.REEL:
+                relationship_reel_count += 1
+            elif slot.format == Format.CAROUSEL:
+                relationship_carousel_count += 1
+
+    # Validate relationship content requirements
+    if relationship_reel_count < 3:
+        errors.append(
+            f"Required at least 3 Relationship Reels, found {relationship_reel_count}"
+        )
+    if relationship_carousel_count < 1:
+        errors.append(
+            f"Required at least 1 Relationship Carousel, found {relationship_carousel_count}"
+        )
+
+    # Validate minimal quotes policy
+    if quote_count > 3:
+        warnings.append(
+            f"Quote count ({quote_count}) exceeds minimal quotes policy (max 3)"
+        )
+
+    # Calculate atom utilization
+    atom_utilization = get_content_atom_utilization()
 
     return ValidationResult(
         total_slots=len(WEEKLY_SLOTS_TEMPLATE),
@@ -392,12 +459,26 @@ def validate_template() -> ValidationResult:
         errors=errors,
         warnings=warnings,
         distribution=distribution,
+        atom_utilization=atom_utilization,
     )
 
 
 if __name__ == "__main__":
-    # Quick validation when run directly
     import json
 
     result = validate_template()
     print(json.dumps(result.model_dump(), indent=2))
+
+    # Print relationship content breakdown
+    print("\n📊 Relationship Content:")
+    rel_content = get_relationship_content()
+    for fmt, slots in rel_content.items():
+        print(f"  {fmt.upper()}: {len(slots)}")
+        for slot in slots:
+            print(f"    - Slot {slot.slot_number}: {slot.day_of_week} {slot.time}")
+
+    # Print atom utilization
+    print("\n⚡ Content Atom Utilization:")
+    util = get_content_atom_utilization()
+    print(f"  Average: {util['average_utilization']}%")
+    print(f"  By format: {util['by_format']}")

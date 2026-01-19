@@ -20,13 +20,25 @@ class DeliveryStatus(str, Enum):
 
 
 class QualityScoreSummary(BaseModel):
-    """Condensed quality scores for display."""
+    """
+    Condensed quality scores for display.
+
+    7 criteria (synced with creation module's CritiqueScores):
+    1. Scroll-stop power
+    2. AI voice risk (expanded with uniformity detection)
+    3. Share impulse
+    4. Emotional precision (arc-based)
+    5. Mode progression (replaces mode fidelity)
+    6. Pacing & breath
+    7. Format execution (revised for psychological flow)
+    """
 
     scroll_stop_power: int = Field(..., ge=1, le=10)
     ai_voice_risk: int = Field(..., ge=1, le=10)
     share_impulse: int = Field(..., ge=1, le=10)
     emotional_precision: int = Field(..., ge=1, le=10)
-    mode_fidelity: int = Field(..., ge=1, le=10)
+    mode_progression: int = Field(..., ge=1, le=10)
+    pacing_breath: int = Field(..., ge=1, le=10)
     format_execution: int = Field(..., ge=1, le=10)
 
     @property
@@ -37,7 +49,8 @@ class QualityScoreSummary(BaseModel):
             self.ai_voice_risk,
             self.share_impulse,
             self.emotional_precision,
-            self.mode_fidelity,
+            self.mode_progression,
+            self.pacing_breath,
             self.format_execution,
         ]
         return sum(scores) / len(scores)
@@ -50,17 +63,34 @@ class QualityScoreSummary(BaseModel):
             and self.ai_voice_risk >= 7  # Higher threshold
             and self.share_impulse >= 6
             and self.emotional_precision >= 6
-            and self.mode_fidelity >= 6
+            and self.mode_progression >= 6
+            and self.pacing_breath >= 6
             and self.format_execution >= 6
         )
 
 
 class EmotionalJourneySummary(BaseModel):
-    """Three-state emotional journey."""
+    """Three-state emotional journey. DEPRECATED: Use EmotionalArcSummary instead."""
 
     state_1: str = Field(..., description="Starting emotional state")
     state_2: str = Field(..., description="Middle transformation")
     state_3: str = Field(..., description="Final emotional state")
+
+
+class EmotionalArcSummary(BaseModel):
+    """
+    5-stage continuous emotional arc with pacing notes.
+    
+    Replaces EmotionalJourneySummary for Reels and Carousels.
+    Shows destabilization, resistance, and earned breakthrough.
+    """
+
+    entry_state: str = Field(..., description="Where they are before")
+    destabilization_trigger: str = Field(..., description="Moment of recognition")
+    resistance_point: str = Field(..., description="Where they want to dismiss this")
+    breakthrough_moment: str = Field(..., description="The reframe they can't unsee")
+    landing_state: str = Field(..., description="Implication, not resolution")
+    pacing_note: str = Field(default="", description="Timing guidance")
 
 
 class DeliveryBrief(BaseModel):
@@ -88,7 +118,14 @@ class DeliveryBrief(BaseModel):
 
     # === QUALITY ===
     quality_scores: QualityScoreSummary
-    emotional_journey: EmotionalJourneySummary
+    emotional_arc: Optional[EmotionalArcSummary] = Field(
+        default=None,
+        description="5-stage emotional arc (for Reels/Carousels)"
+    )
+    emotional_journey: Optional[EmotionalJourneySummary] = Field(
+        default=None,
+        description="DEPRECATED: Use emotional_arc instead"
+    )
     generation_attempts: int
 
     # === FORMAT-SPECIFIC CONTENT ===

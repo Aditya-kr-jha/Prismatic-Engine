@@ -70,6 +70,10 @@ class Settings(BaseSettings):
         default="gpt-5.2",
         description="LLM model for Phase 5 content creation",
     )
+    CREATION_ANALYTICAL_MODEL: str = Field(
+        default="gpt-5-mini",
+        description="Cheaper LLM model for analytical stages (3.5 coherence, 4 critique)",
+    )
     ELEVENLABS_API_KEY: str = Field(
         default="",
         description="ElevenLabs API key for TTS",

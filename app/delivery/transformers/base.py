@@ -8,6 +8,7 @@ from typing import Dict, Any
 from app.delivery.schemas import (
     QualityScoreSummary,
     EmotionalJourneySummary,
+    EmotionalArcSummary,
 )
 
 
@@ -41,7 +42,8 @@ class BaseBriefTransformer(ABC):
             ai_voice_risk=critique_scores.get("ai_voice_risk", 0),
             share_impulse=critique_scores.get("share_impulse", 0),
             emotional_precision=critique_scores.get("emotional_precision", 0),
-            mode_fidelity=critique_scores.get("mode_fidelity", 0),
+            mode_progression=critique_scores.get("mode_progression", 0),
+            pacing_breath=critique_scores.get("pacing_breath", 0),
             format_execution=critique_scores.get("format_execution", 0),
         )
 
@@ -84,15 +86,33 @@ class BaseBriefTransformer(ABC):
 """
 
     def render_emotional_journey(self, journey: EmotionalJourneySummary) -> str:
-        """Render the emotional journey section."""
+        """Render the emotional journey section. DEPRECATED: Use render_emotional_arc."""
         return f"""
-## 🎭 EMOTIONAL JOURNEY
+## 🎭 EMOTIONAL JOURNEY (DEPRECATED)
 
 | State | Description |
 |-------|-------------|
 | **Start** | {journey.state_1} |
 | **Middle** | {journey.state_2} |
 | **End** | {journey.state_3} |
+
+---
+"""
+
+    def render_emotional_arc(self, arc: "EmotionalArcSummary") -> str:
+        """Render the 5-stage emotional arc section for Reels/Carousels."""
+        return f"""
+## 🎭 EMOTIONAL ARC
+
+| Stage | Description |
+|-------|-------------|
+| **Entry State** | {arc.entry_state} |
+| **Destabilization** | {arc.destabilization_trigger} |
+| **Resistance Point** | {arc.resistance_point} |
+| **Breakthrough** | {arc.breakthrough_moment} |
+| **Landing** | {arc.landing_state} |
+
+**Pacing Note:** {arc.pacing_note if arc.pacing_note else "N/A"}
 
 ---
 """
@@ -114,7 +134,8 @@ class BaseBriefTransformer(ABC):
 | AI Voice Risk | {scores.ai_voice_risk}/10 {ai_indicator} |
 | Share Impulse | {scores.share_impulse}/10 {score_indicator(scores.share_impulse)} |
 | Emotional Precision | {scores.emotional_precision}/10 {score_indicator(scores.emotional_precision)} |
-| Mode Fidelity | {scores.mode_fidelity}/10 {score_indicator(scores.mode_fidelity)} |
+| Mode Progression | {scores.mode_progression}/10 {score_indicator(scores.mode_progression)} |
+| Pacing & Breath | {scores.pacing_breath}/10 {score_indicator(scores.pacing_breath)} |
 | Format Execution | {scores.format_execution}/10 {score_indicator(scores.format_execution)} |
 
 ---
@@ -122,17 +143,21 @@ class BaseBriefTransformer(ABC):
 
     def render_metadata_footer(
         self,
+        generated_content_id: str,
+        schedule_id: str,
         atom_id: str,
         angle_name: str,
         trace_id: str,
         generated_at: str,
         attempts: int,
     ) -> str:
-        """Render the collapsible metadata footer."""
+        """Render the collapsible metadata footer with traceability IDs."""
         return f"""
 <details>
 <summary>📊 Source Metadata (click to expand)</summary>
 
+- **Generated Content ID:** `{generated_content_id}`
+- **Schedule ID:** `{schedule_id}`
 - **Atom ID:** `{atom_id}`
 - **Angle:** {angle_name}
 - **Trace ID:** `{trace_id}`

@@ -460,9 +460,9 @@ class CarouselSkeleton(BaseModel):
         max_length=10,
         description="The slide-by-slide skeleton",
     )
-    phase_structure: Dict[str, CarouselPhaseSpec] = Field(
-        ...,
-        description="THE_TRAP, THE_SHIFT, THE_RELEASE phases",
+    phase_structure: Optional[Dict[str, CarouselPhaseSpec]] = Field(
+        default=None,
+        description="THE_TRAP, THE_SHIFT, THE_RELEASE phases (optional, derived from skeleton)",
     )
     tone_progression: str = Field(
         ...,

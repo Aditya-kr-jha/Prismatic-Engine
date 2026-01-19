@@ -54,7 +54,7 @@ class Stage3_5CoherenceAuditor:
             model: LLM model name (defaults to settings.CREATION_LLM_MODEL)
             temperature: LLM temperature (defaults to stage_4_critique temperature)
         """
-        self.model = model or settings.CREATION_LLM_MODEL
+        self.model = model or settings.CREATION_ANALYTICAL_MODEL
         self.temperature = (
             temperature
             if temperature is not None

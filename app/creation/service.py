@@ -295,6 +295,15 @@ class CreationService:
 
         item_result.stage1_analysis = stage1_analysis
 
+        # COST OPTIMIZATION: Detect high-quality briefs for downstream skips
+        is_high_quality_brief = stage1_analysis.brief_quality_score >= 9
+        if is_high_quality_brief:
+            logger.debug(
+                "[CREATION:S1] high_quality_brief trace_id=%s score=%d",
+                row.trace_id,
+                stage1_analysis.brief_quality_score,
+            )
+
         if stage1_analysis.instagram_readiness == "UNSUITABLE":
             item_result.is_unsuitable = True
             item_result.unsuitable_reason = (
@@ -321,21 +330,30 @@ class CreationService:
         item_result.stage2_context = stage2_context
 
         # Stage 2.5: Generate logic skeleton
-        stage2_5_result = await self.run_stage2_5(stage2_context)
-        if stage2_5_result is None or stage2_5_result.error:
-            item_result.error = (
-                stage2_5_result.error
-                if stage2_5_result
-                else "Stage 2.5 skeleton failed"
+        # COST OPTIMIZATION: Skip skeleton generation for QUOTE format (single-line content)
+        if stage2_context.required_format.upper() == "QUOTE":
+            stage2_5_result = None
+            logger.debug(
+                "[CREATION:S2.5] skipped for QUOTE format trace_id=%s", row.trace_id
             )
-            item_result.error_stage = "stage2_5"
-            return item_result
+        else:
+            stage2_5_result = await self.run_stage2_5(stage2_context)
+            if stage2_5_result is None or stage2_5_result.error:
+                item_result.error = (
+                    stage2_5_result.error
+                    if stage2_5_result
+                    else "Stage 2.5 skeleton failed"
+                )
+                item_result.error_stage = "stage2_5"
+                return item_result
 
         item_result.stage2_5_result = stage2_5_result
 
         # Stage 3 + 3.5 loop: Generate content, then coherence audit
         # Coherence failures trigger rewrites back to Stage 3
-        max_coherence_attempts = 2
+        # COST OPTIMIZATION: Skip coherence audit for high-quality briefs and QUOTE format
+        skip_coherence_audit = is_high_quality_brief or stage2_context.required_format.upper() == "QUOTE"
+        max_coherence_attempts = 1 if skip_coherence_audit else 2
         coherence_attempt = 0
         stage3_result = None
         stage3_5_result = None
@@ -353,6 +371,17 @@ class CreationService:
                 )
                 item_result.error_stage = "stage3"
                 return item_result
+
+            # COST OPTIMIZATION: Skip Stage 3.5 for high-quality briefs and quotes
+            if skip_coherence_audit:
+                logger.debug(
+                    "[CREATION:S3.5] skipped (high_quality=%s, format=%s) trace_id=%s",
+                    is_high_quality_brief,
+                    stage2_context.required_format,
+                    row.trace_id,
+                )
+                stage3_5_result = None
+                break
 
             # Run Stage 3.5 coherence audit
             stage3_5_result = await self.run_stage3_5(stage3_result, stage2_5_result)
@@ -387,7 +416,11 @@ class CreationService:
         item_result.stage3_5_result = stage3_5_result
 
         # Run Stage 4 critique loop
-        stage4_result = await self.run_stage4(stage3_result, stage2_context)
+        # COST OPTIMIZATION: Reduce max attempts for high-quality briefs
+        stage4_max_attempts = 1 if is_high_quality_brief else 2
+        stage4_result = await self.run_stage4(
+            stage3_result, stage2_context, max_attempts=stage4_max_attempts
+        )
         if stage4_result is None or stage4_result.error:
             item_result.error = (
                 stage4_result.error if stage4_result else "Stage 4 critique failed"
@@ -695,21 +728,28 @@ class CreationService:
     # ========================================================================
 
     async def run_stage4(
-        self, stage3_result: Stage3Result, context: GenerationContext
+        self,
+        stage3_result: Stage3Result,
+        context: GenerationContext,
+        max_attempts: int = 2,
     ) -> Optional[Stage4Result]:
         """
         Run Stage 4 critique loop with rewrites.
 
         Note: Unlike Stages 1-3, Stage 4 has its own internal retry logic
-        in run_critique_loop (max 3 attempts with rewrites). We only handle
-        rate limiting at this level, not retries.
+        in run_critique_loop. We only handle rate limiting at this level.
+
+        Args:
+            stage3_result: Stage 3 generation result
+            context: Generation context
+            max_attempts: Max critique/rewrite attempts (default 2, reduced from 3)
         """
         try:
             stage4_result = await self.critic.run_critique_loop(
                 generator=self.generator,
                 initial_stage3_result=stage3_result,
                 context=context,
-                max_attempts=3,
+                max_attempts=max_attempts,
             )
             logger.debug(
                 "[CREATION:S4] complete trace_id=%s passed=%s attempts=%d",
@@ -733,7 +773,7 @@ class CreationService:
                         generator=self.generator,
                         initial_stage3_result=stage3_result,
                         context=context,
-                        max_attempts=3,
+                        max_attempts=max_attempts,
                     )
                 except Exception as retry_error:
                     logger.warning(

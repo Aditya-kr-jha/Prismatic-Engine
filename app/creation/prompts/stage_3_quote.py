@@ -79,7 +79,13 @@ Generate a QUOTE for this content:
 
 ## QUOTE SKELETON (FROM STAGE 2.5)
 
-Follow this structural plan for the quote architecture.
+This skeleton defines the quote's architecture. You MUST:
+
+1. **Honor Core Tension**: The quote must embody the `core_tension` — the single dissonance it creates.
+2. **Match Resolution Style**: The quote must use the specified `resolution_style` (implication vs. statement).
+3. **Honor Mode**: The quote must feel like its specified `mode`.
+4. **Match Energy**: The quote's intensity must match the `energy` level.
+5. **Pass Screenshot Quality**: The quote must deliver on `screenshot_quality` — why someone would capture it.
 
 ```json
 {skeleton_json}

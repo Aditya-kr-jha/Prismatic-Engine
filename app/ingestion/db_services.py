@@ -658,6 +658,8 @@ def transfer_reservoir_to_raw_ingest(
             source_type = SourceType.BOOK
         elif reservoir_item.source_type == EvergreenSourceType.BLOG.value:
             source_type = SourceType.BLOG
+        elif reservoir_item.source_type == EvergreenSourceType.YOUTUBE.value:
+            source_type = SourceType.YOUTUBE
         else:
             logger.warning(
                 f"Unknown source_type {reservoir_item.source_type} for {content_id}"

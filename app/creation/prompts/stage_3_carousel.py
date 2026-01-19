@@ -32,10 +32,18 @@ Carousels are consumed slide-by-slide. Each slide must stand alone AND advance a
 
 ## THE ONLY TEST THAT MATTERS
 
-Before outputting, verify for EACH slide:
-> Could someone screenshot this single slide and send it to a friend with zero context?
+Before outputting, verify the SEQUENCE:
 
-If any slide fails this test → rewrite that slide.\
+1. **The "Since... Then..." Test**: For every adjacent pair of slides, complete:
+   > "Since Slide N establishes X, then Slide N+1 naturally follows with Y."
+   If you cannot complete this sentence → the thread is broken → rewrite.
+
+2. **The Screenshot Test** (FINAL SLIDE ONLY):
+   > Could someone screenshot the final slide and share it with zero context?
+   The final slide is the "share slide" — it must work alone. All other slides earn it.
+
+3. **The Thread Test**: If Slide 4 were removed, would Slides 3 and 5 still make sense together?
+   If yes → Slide 4 is not doing its job → rewrite Slide 4.\
 """
 
 # ============================================================================
@@ -81,7 +89,21 @@ Generate a CAROUSEL for this content:
 
 ## LOGIC SKELETON (FROM STAGE 2.5)
 
-Follow this structural plan exactly. Each slide must fulfill its specified function.
+This skeleton defines the EXACT structure. You MUST:
+
+1. **Match Purpose**: Each slide's headline must accomplish its `purpose` field.
+2. **Honor Mode**: Each slide must use the voice of its specified `mode`.
+3. **Resolve Prior Tension**: Slides 2+ must open by addressing the `resolves_tension` from the previous slide.
+4. **Create Forward Tension**: Each slide must end with the reader NEEDING what comes next (`creates_tension`).
+5. **Vary Energy**: If the skeleton says slide 3 is 0.5 energy, it should feel calmer than slide 2 at 0.8.
+6. **Deliver Handover**: Each slide must leave the reader with the `handover_to_next` state.
+
+For EACH slide, before writing, ask:
+- Does this accomplish [purpose]?
+- Does this feel like [mode]?
+- Does this resolve [resolves_tension]?
+- Does this create [creates_tension]?
+- Does the energy level match?
 
 ```json
 {skeleton_json}

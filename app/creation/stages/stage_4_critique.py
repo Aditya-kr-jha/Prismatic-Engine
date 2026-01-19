@@ -68,7 +68,7 @@ class Stage4Critic:
             model: LLM model name (defaults to settings.CREATION_LLM_MODEL)
             temperature: LLM temperature (defaults to creation_temperatures.stage_4_critique)
         """
-        self.model = model or settings.CREATION_LLM_MODEL
+        self.model = model or settings.CREATION_ANALYTICAL_MODEL
         self.temperature = (
             temperature
             if temperature is not None
