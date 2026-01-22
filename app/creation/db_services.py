@@ -312,3 +312,34 @@ def store_generated_content(
 
     return generated.id
 
+
+def delete_generated_content(
+    session: Session,
+    content_id: uuid.UUID,
+) -> bool:
+    """
+    Delete a GeneratedContent record by ID.
+
+    Args:
+        session: SQLModel session
+        content_id: UUID of the GeneratedContent record
+
+    Returns:
+        True if deleted, False if not found
+    """
+    from app.db.db_models.creation import GeneratedContent
+
+    content = session.get(GeneratedContent, content_id)
+    if not content:
+        logger.warning(
+            "[CREATION] GeneratedContent not found for deletion: %s", content_id
+        )
+        return False
+
+    session.delete(content)
+    session.flush()
+
+    logger.info("[CREATION] Deleted GeneratedContent: id=%s", content_id)
+
+    return True
+

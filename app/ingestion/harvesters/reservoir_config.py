@@ -33,9 +33,9 @@ class ReservoirHarvesterConfig(BaseModel):
     }
 
     source_type_quotas: Dict[EvergreenSourceType, float] = {
-        EvergreenSourceType.YOUTUBE: 0.3,
-        EvergreenSourceType.BLOG: 0.4,
-        EvergreenSourceType.BOOK: 0.3,
+        EvergreenSourceType.YOUTUBE: 0.4,
+        EvergreenSourceType.BLOG: 0.5,
+        EvergreenSourceType.BOOK: 0.1,
     }
 
     @property

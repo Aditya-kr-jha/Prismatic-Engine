@@ -955,11 +955,11 @@ This phase **intentionally does NOT**:
 ---
 ---
 
-# PHASE 4: Creation
+# PHASE 4: Creation (7-Stage Pipeline)
 
 ## Purpose
 
-The Creation phase transforms scheduled content briefs into production-ready Instagram content (Reels, Carousels, Quotes) through a 5-stage LLM pipeline. It analyzes source material, resolves generation modes, creates format-specific content, self-critiques with a rewrite loop, and stores approved content. This phase produces the actual text/scripts that will be published.
+The Creation phase transforms scheduled content briefs into production-ready Instagram content (Reels, Carousels, Quotes) through a **7-stage LLM pipeline**. It analyzes source material with counter-truth extraction, resolves mode sequences using the Manson Protocol, generates logic skeletons, creates format-specific content, audits for narrative coherence, self-critiques with a rewrite loop, and stores approved content. This phase produces the actual text/scripts that will be published.
 
 ---
 
@@ -980,18 +980,19 @@ The Creation phase transforms scheduled content briefs into production-ready Ins
 
 | File | Responsibility |
 |------|---------------|
-| [`service.py`](file:///Users/ngcaditya/PycharmProjects/Prismatic-Engine/app/creation/service.py) | **CreationService** - Main orchestrator. Runs all 5 stages with retry logic. |
-| [`schemas.py`](file:///Users/ngcaditya/PycharmProjects/Prismatic-Engine/app/creation/schemas.py) | Extensive Pydantic schemas: Stage1Analysis, GenerationContext, ReelContent, CarouselContent, QuoteContent, CritiqueResult. |
-| [`mode_matrix.py`](file:///Users/ngcaditya/PycharmProjects/Prismatic-Engine/app/creation/mode_matrix.py) | Format × Pillar → Mode resolution (8 modes). |
+| [`service.py`](file:///Users/ngcaditya/PycharmProjects/Prismatic-Engine/app/creation/service.py) | **CreationService** - Main orchestrator. Runs all 7 stages with retry logic and cost optimizations. |
+| [`schemas.py`](file:///Users/ngcaditya/PycharmProjects/Prismatic-Engine/app/creation/schemas.py) | Extensive Pydantic schemas: Stage1Analysis, ModeSequence, EmotionalArc, GenerationContext, Skeleton schemas, ReelContent, CarouselContent, QuoteContent, CoherenceAuditResult, CritiqueResult. |
+| [`mode_matrix.py`](file:///Users/ngcaditya/PycharmProjects/Prismatic-Engine/app/creation/mode_matrix.py) | Format × Pillar → Mode resolution (8 modes) for backward compatibility. |
 | [`temperature_config.py`](file:///Users/ngcaditya/PycharmProjects/Prismatic-Engine/app/creation/temperature_config.py) | Stage-specific LLM temperatures. |
-| `stages/` | Individual stage handlers (Stage1-5). |
-| `prompts/` | Stage-specific prompt templates (stage_1.py through stage_4.py, format-specific stage_3). |
-| `filters/` | Hard filter implementations for Stage 5. |
+| `stages/` | Individual stage handlers (Stage1Analyzer, Stage2Targeter, Stage2_5SkeletonGenerator, Stage3Generator, Stage3_5CoherenceAuditor, Stage4Critic, Stage5Storage). |
+| `prompts/` | Stage-specific prompt templates (stage_1.py through stage_4.py, stage_2_5_*.py, stage_3_5_*.py, format-specific stage_3). |
+| `prompts/blocks/` | Shared prompt blocks (mode definitions, voice guidelines, anti-AI rules). |
+| `filters/` | Hard filter implementations for Stage 5 (character_limits.py, prohibited_phrases.py, structure_checks.py). |
 | [`db_services.py`](file:///Users/ngcaditya/PycharmProjects/Prismatic-Engine/app/creation/db_services.py) | CRUD for GeneratedContent, ContentSchedule status updates. |
 
 ---
 
-## The 5-Stage Pipeline
+## The 7-Stage Pipeline
 
 ```mermaid
 flowchart TD
@@ -1003,33 +1004,45 @@ flowchart TD
     E -->|UNSUITABLE| F[Flag for human review, SKIP]
     E -->|NEEDS_WORK/READY| G[Stage 2: Target]
     
-    G --> H[Resolve mode via Format×Pillar matrix]
-    H --> I[Build GenerationContext]
-    I --> J[Stage 3: Generate]
+    G --> H[Design Mode Sequence - Manson Protocol]
+    H --> I[Build GenerationContext with EmotionalArc]
+    I --> J{Format is QUOTE?}
+    J -->|Yes| K[Skip Stage 2.5]
+    J -->|No| L[Stage 2.5: Logic Skeleton]
     
-    J --> K[Generate format-specific content]
-    K --> L[Stage 4: Critique]
+    L --> M[Stage 3: Generate Content]
+    K --> M
+    M --> N{High-quality brief OR Quote?}
+    N -->|Yes| O[Skip Stage 3.5]
+    N -->|No| P[Stage 3.5: Coherence Audit]
     
-    L --> M{all scores >= 6?}
-    M -->|No| N{attempts < 3?}
-    N -->|Yes| O[Inject critique context, rerun Stage 3]
-    O --> K
-    N -->|No| P[Flag for human review]
-    M -->|Yes| Q[Stage 5: Filters & Storage]
+    P --> Q{coherence_pass?}
+    Q -->|No + attempts < 2| R[Inject rewrite instruction]
+    R --> M
+    Q -->|Yes| S[Stage 4: Critique]
+    O --> S
     
-    Q --> R[Run hard filters]
-    R --> S{filters passed?}
-    S -->|Yes| T[Store in GeneratedContent, set DRAFT]
-    S -->|No| U[Store flagged, set SKIPPED]
+    S --> T{all scores pass?}
+    T -->|No + attempts < max| U[Inject critique context, rerun Stage 3]
+    U --> M
+    T -->|No + max attempts| V[Flag for human review]
+    T -->|Yes| W[Stage 5: Filters & Storage]
+    
+    W --> X[Run hard filters]
+    X --> Y{filters passed?}
+    Y -->|Yes| Z[Store in GeneratedContent, set DRAFT]
+    Y -->|No| AA[Store flagged, set SKIPPED]
 ```
 
 ---
 
 ## Stage Details
 
-### Stage 1: Analyze
+### Stage 1: Analyze (Revised)
 
-**Purpose:** Extract psychological core from content brief, assess Instagram readiness.
+**Purpose:** Extract psychological core from content brief, including both the **destination (core_truth)** and **starting point (counter_truth)**, and assess Instagram readiness.
+
+**Key Change:** Now extracts the **counter-truth** — the comfortable lie, delusion, or anxiety the audience currently holds. This enables proper narrative arc construction (State A → State B) in downstream stages.
 
 **Inputs:**
 - `ContentSchedule.brief` (from Phase 3)
@@ -1038,8 +1051,11 @@ flowchart TD
 **Outputs:** `Stage1Analysis`
 ```python
 Stage1Analysis:
-    core_truth: str              # Irreducible insight in one sentence
+    core_truth: str              # THE DESTINATION - the irreducible insight
+    counter_truth: str           # THE STARTING POINT - the lie/delusion the audience holds
+    contrast_pair: str           # A→B journey: "FROM [counter_truth] TO [core_truth]"
     brief_quality_score: int     # 1-10 (7 is average)
+    brief_quality_issues: List[str]  # Specific issues found
     requires_heavy_reframe: bool
     suggested_reframe: Optional[str]
     emotional_core: EmotionalCore  # primary_emotion, secondary_emotion, why_someone_shares_this
@@ -1048,47 +1064,102 @@ Stage1Analysis:
     unsuitable_reason: Optional[str]
 ```
 
+**The Counter-Truth Rule:**
+> Every piece of content is a journey from State A to State B:
+> - **State A (Counter-Truth)**: The lie, delusion, cope, or anxiety the audience currently holds
+> - **State B (Core Truth)**: The insight that replaces the lie
+>
+> The counter-truth feeds the ROAST (opener) and MIRROR (bridge) modes.
+> The core truth feeds the ORACLE (closer) mode.
+
 **Exit Condition:** If `UNSUITABLE`, skip all remaining stages and flag for human review.
 
 ---
 
-### Stage 2: Target
+### Stage 2: Target (Revised - Manson Protocol)
 
-**Purpose:** Resolve generation mode and set emotional targeting architecture.
+**Purpose:** Design the **Mode Sequence** (Manson Protocol) and **Continuous Emotional Arc** for the content.
 
-**Mode Resolution:**
-Uses `mode_matrix.py` to map (Format, Pillar) → (Mode, StructuralNote).
+**Key Change:** No longer assigns a single mode. Instead, designs a **3-part mode journey** (opener → bridge → closer) with per-step energy levels. Uses **EmotionalArc** (5-stage continuous arc) instead of discrete EmotionalJourney.
 
-**8 Generation Modes:**
-| Mode | Description | Best For |
-|------|-------------|----------|
-| ROAST_MASTER | Direct call-out, behavior naming | REEL + RELATIONSHIPS/DARK_PSYCH |
-| MIRROR | Recognition without advice, "being seen" | REEL + NEUROSCIENCE/HEALING |
-| ORACLE | Mechanism reveal, prophecy-like truth | CAROUSEL + DARK_PSYCH/PHILOSOPHY |
-| SURGEON | Tactical precision, no emotional fluff | CAROUSEL + SELF_CARE |
-| ROAST_TO_SURGEON | Roast opener, Surgeon breakdown | CAROUSEL + RELATIONSHIPS/PRODUCTIVITY |
-| ROAST_TO_MIRROR | Expose false beliefs → recognize truth | CAROUSEL + SELF_WORTH |
-| ORACLE_SURGEON | Mechanism + structure hybrid | CAROUSEL + NEUROSCIENCE |
-| ORACLE_COMPRESSED | One-line mechanism | QUOTE + NEUROSCIENCE |
+**The Manson Protocol (Trust-Building Arc):**
+| Stage | Function | Typical Modes |
+|-------|----------|---------------|
+| **Opener** | The Callout — create dissonance, wake them up | ROAST_MASTER, sharp ORACLE |
+| **Bridge** | The Validation — soften, show you understand the pain | MIRROR |
+| **Closer** | The Truth — reveal the mechanism, give them the truth | ORACLE, SURGEON |
 
-**Outputs:** `GenerationContext` (combined brief for Stage 3)
+> A 60-second Roast is not entertainment. It is verbal abuse.
+> A 10-slide Oracle is not revelation. It is a lecture.
+> **Trust requires CONTRAST.** Mean then kind. Confusing then clear.
+
+**8 Available Modes:**
+| Mode | Description | Energy Level |
+|------|-------------|--------------|
+| ROAST_MASTER | Direct call-out, behavior naming, no softness | High (0.7-1.0) |
+| MIRROR | Recognition without advice, "being seen" energy | Medium (0.4-0.6) |
+| ORACLE | Mechanism reveal, prophecy-like truth delivery | Variable (0.3-0.8) |
+| SURGEON | Tactical precision, no emotional fluff | Low-Medium (0.2-0.5) |
+| ROAST_TO_SURGEON | Opens with roast, delivers surgical breakdown | Opener+Closer hybrid |
+| ROAST_TO_MIRROR | Exposes false belief, then recognition of truth | Opener+Bridge hybrid |
+| ORACLE_SURGEON | Mechanism + structure hybrid | Closer only |
+| ORACLE_COMPRESSED | One-line mechanism delivery | Quotes only |
+
+**Outputs:** 
+
+**ModeSequence (NEW):**
+```python
+ModeSequence:
+    opener: ModeStep  # {mode, function, energy}
+    bridge: ModeStep  # {mode, function, energy}
+    closer: ModeStep  # {mode, function, energy}
+
+ModeStep:
+    mode: str              # e.g., "ROAST_MASTER"
+    function: str          # What this mode achieves at this point
+    energy: float          # 0.0 (calm) to 1.0 (intense)
+```
+
+**EmotionalArc (NEW - Replaces EmotionalJourney):**
+```python
+EmotionalArc:
+    entry_state: str              # Where they are before (unconscious avoidance)
+    destabilization_trigger: str  # The moment of recognition
+    resistance_point: str         # Where they want to dismiss this
+    breakthrough_moment: str      # The reframe they can't unsee
+    landing_state: str            # Implication, not resolution
+    pacing_note: str              # Timing guidance
+```
+
+**GenerationContext (Revised):**
 ```python
 GenerationContext:
     # From ContentSchedule
     schedule_id, trace_id, required_format, required_pillar, brief
     
-    # From Stage 1
-    core_truth, requires_heavy_reframe, suggested_reframe, strongest_hook
-    primary_emotion, secondary_emotion
+    # From Stage 1 (NEW fields)
+    core_truth: str          # THE DESTINATION
+    counter_truth: str       # THE STARTING POINT
+    contrast_pair: str       # The A→B journey phrase
+    requires_heavy_reframe: bool
+    suggested_reframe: Optional[str]
+    strongest_hook: str
+    primary_emotion, secondary_emotion: str
     
-    # From Stage 2 / Matrix
-    resolved_mode: str           # e.g., "ROAST_MASTER"
-    structural_note: str         # e.g., "Direct call-out, behavior naming"
-    emotional_journey: EmotionalJourney  # state_1, state_2, state_3
-    physical_response_goal: str  # e.g., "sharp exhale", "screenshot impulse"
+    # From Stage 2: NEW Mode Sequence (Manson Protocol)
+    mode_sequence: ModeSequence  # opener → bridge → closer
+    emotional_arc: EmotionalArc  # 5-stage continuous arc
+    tone_shift_instruction: str  # e.g., "Start sharp → Move clinical → End warm"
+    
+    # From Stage 2: Engagement triggers
+    physical_response_goal: str  # Somatic, not cognitive
     share_trigger: str
-    share_target: str
-    mode_energy_note: str
+    share_target: str           # SPECIFIC person type (not "friends")
+    
+    # Backward compatibility
+    resolved_mode: str           # Primary mode (opener.mode)
+    structural_note: Optional[str]  # DEPRECATED
+    emotional_journey: Optional[EmotionalJourney]  # DEPRECATED
     
     # Rewrite context (populated on Stage 4 retry)
     rewrite_focus: Optional[str]
@@ -1099,9 +1170,94 @@ GenerationContext:
 
 ---
 
-### Stage 3: Generate
+### Stage 2.5: Logic Skeleton (NEW)
 
-**Purpose:** Create format-specific content using resolved mode and targeting.
+**Purpose:** Construct the **structural plan** before any copy is written. Ensures psychological sequence, not merely visual adjacency.
+
+**When Applied:**
+- **CAROUSEL**: Full skeleton with slide-by-slide specification
+- **REEL**: Beat structure with pacing and breath points
+- **QUOTE**: Skipped (single-line content doesn't need skeleton)
+
+**The Golden Thread Rule:**
+> Each unit must:
+> 1. RESOLVE a tension from the previous unit, OR
+> 2. INTRODUCE a specific tension that only the next unit can resolve
+>
+> For any two adjacent units, this must be true:
+> "Since [Unit N] establishes X, then [Unit N+1] naturally follows with Y."
+
+**Carousel Skeleton:**
+```python
+CarouselSkeleton:
+    narrative_arc_summary: str  # "From [State A] to [State B] via [Mechanism]"
+    total_slides: int           # 6-10 slides
+    skeleton: List[CarouselSlideSpec]
+    phase_structure: Dict[str, CarouselPhaseSpec]  # THE_TRAP, THE_SHIFT, THE_RELEASE
+    tone_progression: str       # e.g., "Sharp (1-2) → Clinical (3-5) → Warm (6-8)"
+    dependency_chain_valid: bool
+    golden_thread_test: str     # The complete "Since... Then..." chain
+
+CarouselSlideSpec:
+    slide: int              # 1-indexed
+    phase: str              # THE_TRAP, THE_SHIFT, or THE_RELEASE
+    mode: str               # Mode for this slide (can include transitions)
+    purpose: str            # What this slide must accomplish
+    energy_level: float     # 0.0-1.0
+    resolves_tension: Optional[str]  # What tension from previous slide this resolves
+    creates_tension: str    # Tension this slide creates for the next
+    handover_to_next: str   # What the reader needs/wants after this slide
+```
+
+**Reel Skeleton:**
+```python
+ReelSkeleton:
+    narrative_arc_summary: str
+    total_duration_target: int   # 15-60 seconds
+    beat_structure: List[ReelBeatSpec]
+    pacing_validation: ReelPacingValidation
+
+ReelBeatSpec:
+    beat: int               # 1-indexed
+    name: str               # THE_HOOK, THE_BUILD, THE_BREATH, THE_TRUTH, THE_LAND
+    mode: str
+    function: str
+    duration_seconds: int   # 1-20 seconds per beat
+    energy: float           # 0.0-1.0
+    sentence_style: str     # e.g., "Short. Punchy. Incomplete."
+    breath_point: bool      # True if this is a pause moment
+    ends_with: str          # State/tension at end of beat
+
+ReelPacingValidation:
+    has_breath_point: bool
+    energy_varies: bool
+    mode_shifts: bool
+    not_wall_of_sound: bool
+```
+
+**Quote Skeleton:**
+```python
+QuoteSkeleton:
+    core_tension: str       # The single tension the quote creates
+    resolution_style: str   # Implication vs statement
+    mode: str
+    energy: float
+    screenshot_quality: str  # Why someone would screenshot (the "tattoo test")
+```
+
+**Validation Before Output:**
+1. Can you complete the "Since... Then..." sentence for EVERY adjacent pair?
+2. Does energy level vary across units (no plateaus)?
+3. Does mode shift at least once (no single-mode content)?
+4. Is the highest energy NOT on the final unit? (Land, don't explode)
+
+---
+
+### Stage 3: Generate (Revised)
+
+**Purpose:** Create format-specific content using the **logic skeleton** from Stage 2.5 and targeting from Stage 2.
+
+**Key Change:** Now receives `skeleton_json` injection for structural guidance. Must follow the skeleton's tension/resolution chain.
 
 **Format-Specific Outputs:**
 
@@ -1143,36 +1299,132 @@ QuoteContent:
 
 ---
 
-### Stage 4: Critique
+### Stage 3.5: Coherence Audit (NEW)
 
-**Purpose:** Self-evaluate content against 6 performance criteria with rewrite loop.
+**Purpose:** Evaluate whether generated content functions as a **SEQUENCE** or merely a **COLLECTION** of unrelated units.
 
-**6 Critique Criteria (1-10 scale):**
+**When Applied:**
+- **CAROUSEL and REEL**: Full coherence audit against skeleton
+- **QUOTE**: Skipped (single-unit content)
+- **High-quality briefs** (score ≥ 9): Skipped (cost optimization)
+
+**Coherence Tests:**
+1. **Dependency Chain (Per Transition):** Does each unit create/resolve the specified tension?
+2. **Energy Curve:** Does energy vary as specified? Any plateaus?
+3. **Mode Adherence:** Does each unit use the mode specified in skeleton?
+4. **"Since... Then..." Verification:** Can you complete the sentence for each adjacent pair?
+
+**Failure Modes:**
+| Failure | Description |
+|---------|-------------|
+| PLATEAU | Two adjacent units at same energy level |
+| RESET | Unit N+1 starts a new thought instead of building |
+| REDUNDANCY | Unit N+1 says the same thing as N differently |
+| PREMATURE_PEAK | Highest energy unit comes too early |
+| ORPHAN_PUNCH | Final unit doesn't connect to prior buildup |
+| MODE_VIOLATION | Unit uses wrong mode for its position |
+| BROKEN_HANDOVER | Unit doesn't create specified tension |
+
+**Outputs:**
+```python
+CoherenceAuditResult:
+    sequence_integrity_score: int  # 1-10 (must be ≥ 7 to pass)
+    is_collection_not_sequence: bool
+    dependency_chain_results: List[TransitionResult]
+    energy_curve_valid: bool
+    energy_curve_issues: List[str]
+    mode_adherence_valid: bool
+    mode_violations: List[str]
+    since_then_completions: List[SinceThenCompletion]
+    coherence_pass: bool
+    failures_requiring_rewrite: List[CoherenceFailure]
+    rewrite_required: bool
+    rewrite_instruction: Optional[str]
+```
+
+**Pass Threshold:**
+- `sequence_integrity_score` ≥ 7
+- `is_collection_not_sequence` = false
+- No more than 1 transition failure
+- All mode violations must be zero
+
+**If Failed:** Content returns to Stage 3 with specific rewrite instructions (max 2 coherence attempts).
+
+---
+
+### Stage 4: Critique (Revised - 7 Criteria)
+
+**Purpose:** Self-evaluate content against **7 performance criteria** (revised from original 6) with rewrite loop.
+
+**Key Change:** Now evaluates content that has already passed coherence audit. Focus is on **IMPACT**, not structure.
+
+**7 Critique Criteria (1-10 scale):**
 | Criterion | Description | Pass Threshold |
 |-----------|-------------|----------------|
 | scroll_stop_power | Immediate tension/recognition/intrigue | ≥ 6 |
-| ai_voice_risk | Does it sound human? (higher = better) | ≥ 7 |
-| share_impulse | Would someone send this? | ≥ 6 |
-| emotional_precision | Hits target emotional journey | ≥ 6 |
-| mode_fidelity | Stays in assigned mode | ≥ 6 |
-| format_execution | Works for specific format | ≥ 6 |
+| ai_voice_risk | Humanity detection (uniformity, contrast, rhythm) | ≥ 7 |
+| share_impulse | Would someone send this to a specific person? | ≥ 6 |
+| emotional_precision | Hits target emotional arc with peaks/valleys | ≥ 6 |
+| mode_progression | Mode shifts appropriately, each shift earned | ≥ 6 |
+| pacing_breath | Rhythmic variation, energy peaks/valleys, strategic pauses | ≥ 6 (≥ 7 for Reels) |
+| format_execution | Format-specific execution quality | ≥ 6 |
 
-**Pass Condition:** All scores ≥ 6 AND ai_voice_risk ≥ 7
+**AI Voice Risk (Expanded):**
+Checks for:
+- Banned phrases ("Here's the thing", "Let me explain", etc.)
+- Banned structures (Q&A pairs, "Many people think X. But actually Y.")
+- **Uniform intensity throughout** (no contrast = AI)
+- **Uniform sentence length** (no rhythm variation = AI)
+- **Wall of sound** (no breath/pause moments = AI)
+
+> Humanity comes from CONTRAST: fast then slow, sharp then soft, mean then kind.
+
+**Format-Specific Pass Thresholds:**
+| Format | Additional Requirements |
+|--------|------------------------|
+| **Reels** | pacing_breath ≥ 7, mode_progression ≥ 6 |
+| **Carousels** | mode_progression ≥ 6, pacing_breath ≥ 6 |
+| **Quotes** | mode_progression = N/A (auto-score 7), pacing_breath = N/A (auto-score 7) |
+
+**Pass Condition:** All scores ≥ 6 AND ai_voice_risk ≥ 7 AND format-specific thresholds met
 
 **Rewrite Loop:**
 1. Run critique on content
 2. If pass → proceed to Stage 5
-3. If fail AND attempts < 3 → inject `rewrite_focus`, `specific_failures`, `ai_voice_violations` into GenerationContext and re-run Stage 3
-4. If 3 attempts failed → flag for human review
+3. If fail AND attempts < max → inject `rewrite_focus`, `specific_failures`, `ai_voice_violations` into GenerationContext and re-run Stage 3
+4. If max attempts failed → flag for human review
+
+**Cost Optimization:** High-quality briefs (score ≥ 9) get reduced max attempts (1 instead of 2).
 
 **Outputs:** `Stage4Result`
 ```python
 Stage4Result:
+    schedule_id: str
+    trace_id: str
     final_content: Union[ReelContent, CarouselContent, QuoteContent]
     final_critique: CritiqueResult
     attempts_used: int  # 1-3
     passed: bool
     flagged_for_review: bool
+    error: Optional[str]
+
+CritiqueScores:
+    scroll_stop_power: int
+    ai_voice_risk: int
+    share_impulse: int
+    emotional_precision: int
+    mode_progression: int
+    pacing_breath: int
+    format_execution: int
+
+CritiqueResult:
+    scores: CritiqueScores
+    lowest_score_criterion: str
+    overall_pass: bool
+    specific_failures: List[CritiqueFailure]
+    ai_voice_violations: List[str]
+    rewrite_required: bool
+    rewrite_focus: Optional[str]
 ```
 
 ---
@@ -1182,9 +1434,9 @@ Stage4Result:
 **Purpose:** Run automated hard filters and store approved content.
 
 **Hard Filters:**
-- Format-specific validation (slide count, duration, quote length)
-- AI voice detection patterns
-- Content policy checks
+- **Character Limits:** Format-specific validation (slide count, duration, quote length)
+- **Prohibited Phrases:** AI voice detection patterns
+- **Structure Checks:** Content policy and format compliance
 
 **Storage:**
 - Creates `GeneratedContent` record with full content JSON
@@ -1193,11 +1445,27 @@ Stage4Result:
 **Outputs:** `Stage5Result`
 ```python
 Stage5Result:
+    schedule_id: str
+    trace_id: str
     filter_result: HardFilterResult  # passed, failures[]
     stored: bool
     generated_content_id: Optional[str]
     final_status: "CONTENT_READY" | "NEEDS_REVIEW"
+    error: Optional[str]
 ```
+
+---
+
+## Cost Optimizations
+
+The pipeline includes several cost optimizations to reduce LLM calls:
+
+| Optimization | Condition | Skip |
+|--------------|-----------|------|
+| Skip Stage 2.5 | Format is QUOTE | Skeleton generation |
+| Skip Stage 3.5 | Format is QUOTE OR brief_quality_score ≥ 9 | Coherence audit |
+| Reduce Stage 4 attempts | brief_quality_score ≥ 9 | Max 1 attempt instead of 2 |
+| Reduce coherence attempts | High-quality brief | Max 1 attempt instead of 2 |
 
 ---
 
@@ -1213,7 +1481,7 @@ Stage5Result:
 
 | Table | Write Purpose |
 |-------|---------------|
-| `generated_content` | Store final content JSON, critique scores, emotional journey |
+| `generated_content` | Store final content JSON, critique scores, emotional arc |
 | `content_schedule` | Update status to DRAFT, SKIPPED, or NEEDS_REVIEW |
 
 ### State Transitions
@@ -1222,7 +1490,7 @@ Stage5Result:
 ```
 SCHEDULED → DRAFT     (Stage 5 passed)
 SCHEDULED → SKIPPED   (Stage 5 filter failed)
-SCHEDULED → NEEDS_REVIEW  (Stage 1 UNSUITABLE or Stage 4 max attempts)
+SCHEDULED → NEEDS_REVIEW  (Stage 1 UNSUITABLE, Stage 3.5/4 max attempts, or Stage 4 flagged)
 ```
 
 **GeneratedContent:**
@@ -1245,8 +1513,9 @@ GeneratedContent:
     generation_context: JSONB  # Full GenerationContext for debugging
     resolved_mode: str  # e.g., "ROAST_MASTER"
     
-    emotional_journey: JSONB  # {state_1, state_2, state_3}
-    critique_scores: JSONB    # {scroll_stop_power, ai_voice_risk, ...}
+    emotional_journey: JSONB  # {state_1, state_2, state_3} - DEPRECATED
+    emotional_arc: JSONB      # {entry_state, destabilization_trigger, ...}
+    critique_scores: JSONB    # {scroll_stop_power, ai_voice_risk, ..., pacing_breath}
     generation_attempts: int  # 1-3
     
     status: GeneratedContentStatus  # APPROVED, FLAGGED_FOR_REVIEW
@@ -1274,6 +1543,8 @@ Same pattern as Classification phase:
 | Scenario | Handling |
 |----------|----------|
 | Stage 1 UNSUITABLE | Flag for human review, skip remaining stages |
+| Stage 2.5 skeleton failure | Return error, skip remaining stages |
+| Stage 3.5 coherence failure (max attempts) | Proceed to Stage 4 with last content |
 | Stage 4 max attempts | Flag for human review |
 | Stage 5 filter failure | Store as FLAGGED, set SKIPPED status |
 | Rate limit | Exponential backoff with retries |
@@ -1284,8 +1555,9 @@ Same pattern as Classification phase:
 | Gap | Notes |
 |-----|-------|
 | Partial content recovery | Failed stages don't save partial work |
-| Fallback modes | If mode fails, no automatic mode switch |
+| Fallback modes | If mode sequence fails, no automatic mode switch |
 | Content length optimization | No automatic truncation |
+| Skeleton regeneration | If Stage 3 fails repeatedly, no skeleton refresh |
 
 ---
 

@@ -216,6 +216,114 @@ def schedule_exists_for_week(
     return count > 0
 
 
+def delete_week_schedule(
+    session: Session,
+    week_year: int,
+    week_number: int,
+) -> int:
+    """
+    Delete all ContentSchedule rows for a specific week.
+
+    GeneratedContent is cascade-deleted by the database.
+    UsageHistory.schedule_id is SET NULL (history preserved).
+
+    Args:
+        session: SQLModel session
+        week_year: Year of the week
+        week_number: ISO week number
+
+    Returns:
+        Number of deleted rows
+    """
+    statement = (
+        select(ContentSchedule)
+        .where(
+            and_(
+                ContentSchedule.week_year == week_year,
+                ContentSchedule.week_number == week_number,
+            )
+        )
+    )
+
+    schedules = session.exec(statement).all()
+    count = len(schedules)
+
+    for schedule in schedules:
+        session.delete(schedule)
+
+    session.flush()
+
+    logger.info(
+        "Deleted %d ContentSchedule rows for week=%d-%d",
+        count,
+        week_year,
+        week_number,
+    )
+
+    return count
+
+
+def reset_week_schedule(
+    session: Session,
+    week_year: int,
+    week_number: int,
+) -> tuple[int, int]:
+    """
+    Reset all ContentSchedule rows for a week back to SCHEDULED status.
+
+    Also deletes associated GeneratedContent so the pipeline can be re-run.
+    ContentAtom usage is NOT reverted (times_used, last_used_at unchanged).
+
+    Args:
+        session: SQLModel session
+        week_year: Year of the week
+        week_number: ISO week number
+
+    Returns:
+        Tuple of (reset_count, deleted_generated_content_count)
+    """
+    from app.db.db_models.creation import GeneratedContent
+
+    # Get all schedules for the week
+    statement = (
+        select(ContentSchedule)
+        .where(
+            and_(
+                ContentSchedule.week_year == week_year,
+                ContentSchedule.week_number == week_number,
+            )
+        )
+    )
+
+    schedules = session.exec(statement).all()
+    reset_count = 0
+    deleted_content_count = 0
+
+    for schedule in schedules:
+        # Delete associated GeneratedContent first
+        if schedule.generated_content is not None:
+            session.delete(schedule.generated_content)
+            deleted_content_count += 1
+
+        # Reset status to SCHEDULED
+        if schedule.status != ScheduleStatus.SCHEDULED:
+            schedule.status = ScheduleStatus.SCHEDULED
+            session.add(schedule)
+            reset_count += 1
+
+    session.flush()
+
+    logger.info(
+        "Reset %d ContentSchedule rows, deleted %d GeneratedContent for week=%d-%d",
+        reset_count,
+        deleted_content_count,
+        week_year,
+        week_number,
+    )
+
+    return reset_count, deleted_content_count
+
+
 # ════════════════════════════════════════════════════════════════════════════════
 # USAGE HISTORY OPERATIONS
 # ════════════════════════════════════════════════════════════════════════════════

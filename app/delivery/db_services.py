@@ -54,6 +54,46 @@ def get_approved_content_for_week(
     return list(results)
 
 
+def get_all_content_for_week(
+    session: Session,
+    week_year: int,
+    week_number: int,
+) -> List[Tuple[GeneratedContent, ContentSchedule]]:
+    """
+    Fetch ALL GeneratedContent for a week regardless of status.
+
+    Used for markdown export where we want to include flagged/rejected content
+    with their status and flag reasons visible.
+
+    Args:
+        session: SQLModel session
+        week_year: Year (e.g., 2026)
+        week_number: ISO week number (1-53)
+
+    Returns:
+        List of (GeneratedContent, ContentSchedule) tuples
+    """
+    statement = (
+        select(GeneratedContent, ContentSchedule)
+        .join(ContentSchedule, GeneratedContent.schedule_id == ContentSchedule.id)
+        .where(
+            and_(
+                ContentSchedule.week_year == week_year,
+                ContentSchedule.week_number == week_number,
+            )
+        )
+        .order_by(ContentSchedule.slot_number)
+    )
+
+    results = session.exec(statement).all()
+
+    logger.debug(
+        f"[DELIVERY] Fetched {len(results)} total items for week {week_year}-W{week_number}"
+    )
+
+    return list(results)
+
+
 def update_schedule_to_delivered(
     session: Session,
     schedule_id: uuid.UUID,

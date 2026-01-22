@@ -3,7 +3,7 @@ Base transformer for converting GeneratedContent to Markdown.
 """
 
 from abc import ABC, abstractmethod
-from typing import Dict, Any
+from typing import Dict, Any, List
 
 from app.delivery.schemas import (
     QualityScoreSummary,
@@ -67,8 +67,10 @@ class BaseBriefTransformer(ABC):
         pillar: str,
         resolved_mode: str,
         quality_avg: float,
+        status: str = "APPROVED",
+        flag_reasons: List[str] = None,
     ) -> str:
-        """Render the common header section."""
+        """Render the common header section with status badge."""
         emoji_map = {
             "REEL": "🎬",
             "CAROUSEL": "📊",
@@ -76,14 +78,31 @@ class BaseBriefTransformer(ABC):
         }
         emoji = emoji_map.get(format_type, "📝")
 
-        return f"""# {emoji} {format_type} #{slot_number} — {day_of_week.title()}, {scheduled_date} @ {scheduled_time}
+        # Status badge
+        status_map = {
+            "APPROVED": "✅ APPROVED",
+            "FLAGGED_FOR_REVIEW": "⚠️ FLAGGED FOR REVIEW",
+            "REJECTED": "❌ REJECTED",
+        }
+        status_badge = status_map.get(status, f"❓ {status}")
+
+        header = f"""# {emoji} {format_type} #{slot_number} — {day_of_week.title()}, {scheduled_date} @ {scheduled_time}
+
+**Status:** {status_badge}
 
 | Pillar | Mode | Quality |
 |--------|------|---------|
 | {pillar} | {resolved_mode} | ⭐ {quality_avg:.1f}/10 |
-
----
 """
+
+        # Add flag reasons if present
+        if status == "FLAGGED_FOR_REVIEW" and flag_reasons:
+            header += "\n> [!WARNING]\n> **Flag Reasons:**\n"
+            for reason in flag_reasons:
+                header += f"> - {reason}\n"
+
+        header += "\n---\n"
+        return header
 
     def render_emotional_journey(self, journey: EmotionalJourneySummary) -> str:
         """Render the emotional journey section. DEPRECATED: Use render_emotional_arc."""

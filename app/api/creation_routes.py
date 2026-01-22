@@ -19,6 +19,7 @@ from sqlmodel import Session, select
 
 from app.api.schemas.creation import (
     ContentScheduleBriefResponse,
+    DeleteGeneratedContentResponse,
     GeneratedContentDetailResponse,
     GeneratedContentItem,
     GeneratedContentListResponse,
@@ -517,6 +518,85 @@ async def get_content_schedule_brief(
             detail={
                 "error": "database_error",
                 "message": "Error fetching content brief.",
+                "request_id": request_id,
+            },
+        )
+
+
+@router.delete(
+    "/generated/{content_id}",
+    response_model=DeleteGeneratedContentResponse,
+)
+async def delete_generated_content(
+    content_id: uuid.UUID = Path(..., description="UUID of the GeneratedContent record"),
+) -> DeleteGeneratedContentResponse:
+    """
+    Delete a generated content record.
+
+    Permanently removes a GeneratedContent record from the database.
+
+    Args:
+        content_id: UUID of the GeneratedContent record to delete
+    """
+    request_id = _generate_request_id()
+
+    logger.info(
+        "[API] delete_generated_content_start request_id=%s content_id=%s",
+        request_id,
+        content_id,
+    )
+
+    try:
+        session_gen = get_session()
+        session = cast(Session, next(session_gen))
+
+        try:
+            deleted = db_services.delete_generated_content(
+                session=session,
+                content_id=content_id,
+            )
+
+            if not deleted:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail={
+                        "error": "not_found",
+                        "message": f"GeneratedContent with ID {content_id} not found.",
+                        "request_id": request_id,
+                    },
+                )
+
+            session.commit()
+        finally:
+            next(session_gen, None)
+
+        logger.info(
+            "[API] delete_generated_content_done request_id=%s deleted=%s",
+            request_id,
+            deleted,
+        )
+
+        return DeleteGeneratedContentResponse(
+            request_id=request_id,
+            content_id=content_id,
+            deleted=True,
+            message=f"Successfully deleted GeneratedContent {content_id}",
+        )
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.exception(
+            "[API] delete_generated_content_failed request_id=%s error_type=%s error=%s",
+            request_id,
+            type(e).__name__,
+            e,
+        )
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail={
+                "error": "database_error",
+                "message": "Error deleting generated content.",
                 "request_id": request_id,
             },
         )

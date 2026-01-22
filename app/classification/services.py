@@ -85,9 +85,9 @@ class ClassificationService:
     # This ensures balanced classification across different content sources
     DEFAULT_SOURCE_RATIOS: Dict[str, float] = {
         "REDDIT": 0.30,
-        "BOOK": 0.20,
+        "BOOK": 0.10,
         "BLOG": 0.30,
-        "YOUTUBE": 0.20,
+        "YOUTUBE": 0.30,
     }
 
     def __init__(

@@ -160,3 +160,12 @@ class ContentScheduleBriefResponse(BaseModel):
     required_pillar: str
     required_format: str
     brief: Dict[str, Any]
+
+
+class DeleteGeneratedContentResponse(BaseModel):
+    """Response schema for deleting generated content."""
+
+    request_id: str
+    content_id: uuid.UUID
+    deleted: bool
+    message: str

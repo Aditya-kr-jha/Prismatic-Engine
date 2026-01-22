@@ -21,7 +21,9 @@ from sqlmodel import Session
 
 from app.api.schemas.strategy import (
     ContentScheduleItem,
+    DeleteScheduleResponse,
     GenerateScheduleRequest,
+    ResetScheduleResponse,
     ScheduleExistsResponse,
     ScheduleGenerationResponse,
     SlotFillResultItem,
@@ -311,6 +313,160 @@ async def check_schedule_exists(
             detail={
                 "error": "database_error",
                 "message": "Error checking schedule existence.",
+                "request_id": request_id,
+            },
+        )
+
+
+@router.delete("/week/{week_year}/{week_number}", response_model=DeleteScheduleResponse)
+async def delete_week_schedule(
+    week_year: int,
+    week_number: int = Path(..., ge=1, le=53, description="ISO week number (1-53)"),
+) -> DeleteScheduleResponse:
+    """
+    Delete an entire weekly schedule.
+
+    Removes all ContentSchedule rows for the week. GeneratedContent is
+    cascade-deleted. UsageHistory.schedule_id is SET NULL (history preserved).
+
+    Args:
+        week_year: Year (e.g., 2026)
+        week_number: ISO week number (1-53)
+    """
+    request_id = _generate_request_id()
+
+    logger.info(
+        "[API] delete_week_schedule_start request_id=%s week=%d-%d",
+        request_id,
+        week_year,
+        week_number,
+    )
+
+    try:
+        session_gen = get_session()
+        session = cast(Session, next(session_gen))
+
+        try:
+            deleted_count = db_services.delete_week_schedule(
+                session=session,
+                week_year=week_year,
+                week_number=week_number,
+            )
+            session.commit()
+        finally:
+            next(session_gen, None)
+
+        message = (
+            f"Deleted {deleted_count} schedule(s) for week {week_year}-{week_number}"
+            if deleted_count > 0
+            else f"No schedules found for week {week_year}-{week_number}"
+        )
+
+        logger.info(
+            "[API] delete_week_schedule_done request_id=%s deleted=%d",
+            request_id,
+            deleted_count,
+        )
+
+        return DeleteScheduleResponse(
+            request_id=request_id,
+            week_year=week_year,
+            week_number=week_number,
+            deleted_count=deleted_count,
+            message=message,
+        )
+
+    except Exception as e:
+        logger.exception(
+            "[API] delete_week_schedule_failed request_id=%s error_type=%s error=%s",
+            request_id,
+            type(e).__name__,
+            e,
+        )
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail={
+                "error": "database_error",
+                "message": "Error deleting schedule.",
+                "request_id": request_id,
+            },
+        )
+
+
+@router.post("/week/{week_year}/{week_number}/reset", response_model=ResetScheduleResponse)
+async def reset_week_schedule(
+    week_year: int,
+    week_number: int = Path(..., ge=1, le=53, description="ISO week number (1-53)"),
+) -> ResetScheduleResponse:
+    """
+    Reset a weekly schedule to SCHEDULED status for re-processing.
+
+    Resets all ContentSchedule rows back to SCHEDULED status and deletes
+    associated GeneratedContent so the creation pipeline can be re-run.
+
+    NOTE: ContentAtom usage (times_used, last_used_at) is NOT reverted.
+
+    Args:
+        week_year: Year (e.g., 2026)
+        week_number: ISO week number (1-53)
+    """
+    request_id = _generate_request_id()
+
+    logger.info(
+        "[API] reset_week_schedule_start request_id=%s week=%d-%d",
+        request_id,
+        week_year,
+        week_number,
+    )
+
+    try:
+        session_gen = get_session()
+        session = cast(Session, next(session_gen))
+
+        try:
+            reset_count, deleted_content_count = db_services.reset_week_schedule(
+                session=session,
+                week_year=week_year,
+                week_number=week_number,
+            )
+            session.commit()
+        finally:
+            next(session_gen, None)
+
+        message = (
+            f"Reset {reset_count} schedule(s), deleted {deleted_content_count} generated content"
+            if reset_count > 0 or deleted_content_count > 0
+            else f"No schedules needed resetting for week {week_year}-{week_number}"
+        )
+
+        logger.info(
+            "[API] reset_week_schedule_done request_id=%s reset=%d deleted_content=%d",
+            request_id,
+            reset_count,
+            deleted_content_count,
+        )
+
+        return ResetScheduleResponse(
+            request_id=request_id,
+            week_year=week_year,
+            week_number=week_number,
+            reset_count=reset_count,
+            deleted_generated_content_count=deleted_content_count,
+            message=message,
+        )
+
+    except Exception as e:
+        logger.exception(
+            "[API] reset_week_schedule_failed request_id=%s error_type=%s error=%s",
+            request_id,
+            type(e).__name__,
+            e,
+        )
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail={
+                "error": "database_error",
+                "message": "Error resetting schedule.",
                 "request_id": request_id,
             },
         )

@@ -93,16 +93,16 @@ class DeliveryService:
         session = cast(Session, next(session_gen))
 
         try:
-            # Step 1: Fetch approved content
-            content_items = db_services.get_approved_content_for_week(
+            # Step 1: Fetch ALL content for file export (includes flagged/rejected)
+            all_content_items = db_services.get_all_content_for_week(
                 session=session,
                 week_year=week_year,
                 week_number=week_number,
             )
 
-            if not content_items:
+            if not all_content_items:
                 logger.warning(
-                    f"[DELIVERY] No approved content found for week {week_year}-W{week_number}"
+                    f"[DELIVERY] No content found for week {week_year}-W{week_number}"
                 )
                 result.duration_seconds = time.time() - start_time
                 return result
@@ -114,15 +114,21 @@ class DeliveryService:
                 week_number=week_number,
             )
 
-            # Step 3: Transform to delivery briefs
+            # Step 3: Transform ALL content to delivery briefs (for file export)
             briefs: List[DeliveryBrief] = []
+            approved_briefs: List[DeliveryBrief] = []  # For Telegram (approved only)
             schedule_ids: List[uuid.UUID] = []
 
-            for generated_content, schedule in content_items:
+            for generated_content, schedule in all_content_items:
                 try:
                     brief = self._transform_to_brief(generated_content, schedule)
                     briefs.append(brief)
-                    schedule_ids.append(schedule.id)
+                    
+                    # Track approved content for Telegram and status updates
+                    if generated_content.status.value == "APPROVED":
+                        approved_briefs.append(brief)
+                        schedule_ids.append(schedule.id)
+                    
                     result.successful += 1
                 except Exception as e:
                     logger.exception(
@@ -130,7 +136,7 @@ class DeliveryService:
                     )
                     result.failed += 1
 
-            result.total_processed = len(content_items)
+            result.total_processed = len(all_content_items)
 
             # Step 4: Build week package
             package = self._build_week_package(
@@ -150,10 +156,18 @@ class DeliveryService:
                     / f"week_{week_number:02d}_{week_year}"
                 )
 
-            # Step 6: Send via Telegram
+            # Step 6: Send via Telegram (APPROVED content only)
             if self.enable_telegram and self.telegram_exporter.is_configured:
+                # Build package with only approved briefs for Telegram
+                approved_package = self._build_week_package(
+                    week_year=week_year,
+                    week_number=week_number,
+                    start_date=start_date,
+                    end_date=end_date,
+                    briefs=approved_briefs,
+                )
                 messages_sent, telegram_errors = await self.telegram_exporter.send_week(
-                    package
+                    approved_package
                 )
                 result.telegram_messages_sent = messages_sent
                 result.telegram_errors = telegram_errors
@@ -252,6 +266,14 @@ class DeliveryService:
         )
         date_str = schedule.scheduled_date.strftime("%b %d, %Y")
 
+        # Extract status and flag_reasons
+        status = (
+            content.status.value
+            if hasattr(content.status, "value")
+            else str(content.status)
+        )
+        flag_reasons = content.flag_reasons or []
+
         header = transformer.render_header(
             format_type=format_type,
             slot_number=schedule.slot_number,
@@ -261,6 +283,8 @@ class DeliveryService:
             pillar=pillar,
             resolved_mode=content.resolved_mode,
             quality_avg=quality_scores.average,
+            status=status,
+            flag_reasons=flag_reasons,
         )
 
         # Add quality scores section
@@ -301,6 +325,8 @@ class DeliveryService:
             angle_id=brief_data.get("angle_id"),
             angle_name=brief_data.get("angle_name"),
             generated_at=content.generated_at,
+            status=status,
+            flag_reasons=flag_reasons,
         )
 
     def _build_week_package(

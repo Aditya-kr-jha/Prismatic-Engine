@@ -137,6 +137,10 @@ class DeliveryBrief(BaseModel):
     angle_name: Optional[str] = None
     generated_at: datetime
 
+    # === STATUS ===
+    status: str = Field(default="APPROVED", description="Content review status: APPROVED, FLAGGED_FOR_REVIEW, REJECTED")
+    flag_reasons: List[str] = Field(default_factory=list, description="Reasons why content was flagged for review")
+
     @property
     def filename(self) -> str:
         """Generate filename for this brief."""

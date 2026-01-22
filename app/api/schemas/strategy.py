@@ -103,3 +103,24 @@ class ScheduleExistsResponse(BaseModel):
     week_number: int
     exists: bool
     slot_count: int = 0
+
+
+class DeleteScheduleResponse(BaseModel):
+    """Response schema for deleting a weekly schedule."""
+
+    request_id: str
+    week_year: int
+    week_number: int
+    deleted_count: int
+    message: str
+
+
+class ResetScheduleResponse(BaseModel):
+    """Response schema for resetting a weekly schedule."""
+
+    request_id: str
+    week_year: int
+    week_number: int
+    reset_count: int
+    deleted_generated_content_count: int
+    message: str
