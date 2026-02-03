@@ -1299,22 +1299,25 @@ QuoteContent:
 
 ---
 
-### Stage 3.5: Coherence Audit (NEW)
+### Stage 3.5: Coherence + Retention Audit (RETENTION-OPTIMIZED)
 
-**Purpose:** Evaluate whether generated content functions as a **SEQUENCE** or merely a **COLLECTION** of unrelated units.
+**Purpose:** Evaluate whether generated content functions as a **SEQUENCE** (not a COLLECTION) AND implements the **RETENTION ARCHITECTURE** specified in the skeleton. Both must pass.
 
 **When Applied:**
-- **CAROUSEL and REEL**: Full coherence audit against skeleton
-- **QUOTE**: Skipped (single-unit content)
+- **CAROUSEL and REEL**: Full coherence + retention audit against skeleton
+- **QUOTE**: Simplified retention audit (standalone power, specificity, visual rhythm)
 - **High-quality briefs** (score ≥ 9): Skipped (cost optimization)
 
-**Coherence Tests:**
+---
+
+#### Part 1: Narrative Coherence Tests
+
 1. **Dependency Chain (Per Transition):** Does each unit create/resolve the specified tension?
 2. **Energy Curve:** Does energy vary as specified? Any plateaus?
 3. **Mode Adherence:** Does each unit use the mode specified in skeleton?
 4. **"Since... Then..." Verification:** Can you complete the sentence for each adjacent pair?
 
-**Failure Modes:**
+**Narrative Failure Modes:**
 | Failure | Description |
 |---------|-------------|
 | PLATEAU | Two adjacent units at same energy level |
@@ -1325,30 +1328,139 @@ QuoteContent:
 | MODE_VIOLATION | Unit uses wrong mode for its position |
 | BROKEN_HANDOVER | Unit doesn't create specified tension |
 
-**Outputs:**
-```python
-CoherenceAuditResult:
-    sequence_integrity_score: int  # 1-10 (must be ≥ 7 to pass)
-    is_collection_not_sequence: bool
-    dependency_chain_results: List[TransitionResult]
-    energy_curve_valid: bool
-    energy_curve_issues: List[str]
-    mode_adherence_valid: bool
-    mode_violations: List[str]
-    since_then_completions: List[SinceThenCompletion]
-    coherence_pass: bool
-    failures_requiring_rewrite: List[CoherenceFailure]
-    rewrite_required: bool
-    rewrite_instruction: Optional[str]
-```
+---
 
-**Pass Threshold:**
+#### Part 2: Retention Mechanics Tests (Format-Specific)
+
+##### Reel Retention Tests (RT1-RT5)
+
+| Test | Description | Fail Conditions |
+|------|-------------|-----------------|
+| **RT1: Hook Implementation** | Hook matches skeleton's `hook_type`, is specific/visceral, completes in <3 seconds | Starts with "People"/"Many", uses "this"/"that" without referent, sounds like essay opening |
+| **RT2: Re-engagement Beat** | Pattern interrupt at 10-15 second mark, tonal/energy shift | No secondary hook, no pattern interrupt, energy doesn't shift |
+| **RT3: Screenshot Line Isolation** | ONE line isolated, works without context, <15 words | No clear screenshot line, requires context, buried in flow, multiple competing lines |
+| **RT4: Open Loop Ending** | Creates incompleteness, no summary/advice/closure | Summarizes content, gives advice, provides emotional closure |
+| **RT5: Breath Architecture** | At least one soft moment, energy drops below 0.5, rhythmic variation | Every line high intensity, no soft moment, uniform sentence length, wall of sound |
+
+##### Carousel Retention Tests (CT1-CT5)
+
+| Test | Description | Fail Conditions |
+|------|-------------|-----------------|
+| **CT1: Slide 1 Incompleteness** | Slide 1 is an incomplete thought, creates swipe compulsion | Complete thought, abstract/conceptual, no reason to swipe |
+| **CT2: Swipe Trigger Chain** | Each slide creates specified `swipe_trigger`, no completeness until final | Any slide feels complete, triggers not implemented, filler slides |
+| **CT3: Save Trigger Slides** | Slides marked `is_save_trigger: true` are reference-worthy | Save triggers are just narrative, no "I'll need this later" content |
+| **CT4: Share Slide (Final)** | Works completely without prior slides, <20 words, triggers send impulse | Requires context, summarizes carousel, too long/dense |
+| **CT5: Drip Architecture** | Mechanism revealed piece by piece, one layer per slide | All insight on 1-2 slides, info dump, slides that could combine |
+
+##### Quote Retention Tests (QT1-QT3)
+
+| Test | Description | Fail Conditions |
+|------|-------------|-----------------|
+| **QT1: Standalone Power** | Works with zero context, hits immediately | Requires explanation, undefined references, confusing on first read |
+| **QT2: Specificity Check** | Visceral/behavioral language, specific moments | Abstract language, no specific behaviors, too generic |
+| **QT3: Visual Rhythm** | Appropriate length, natural line breaks | Too long for image, awkward breaks, dense/cramped |
+
+---
+
+#### Retention Failure Modes
+
+| Failure | Description |
+|---------|-------------|
+| WEAK_HOOK | Hook is abstract, incomplete, or doesn't stop scroll |
+| NO_REENGAGEMENT | Missing secondary hook at 10-15 second mark (Reels) |
+| BURIED_SCREENSHOT | Screenshot line not isolated or not standalone |
+| CLOSED_ENDING | Ending provides closure instead of open loop |
+| WALL_OF_SOUND | No breath moments, uniform intensity |
+| COMPLETE_SLIDE_1 | First carousel slide doesn't create swipe compulsion |
+| FILLER_SLIDE | Slide with no swipe trigger (Carousels) |
+| WEAK_SAVE_TRIGGER | Save trigger slides aren't reference-worthy |
+| CONTEXT_DEPENDENT_SHARE | Final slide requires prior context |
+| INFO_DUMP | Multiple insights crammed into single unit |
+
+---
+
+#### Pass Thresholds
+
+**Narrative Coherence:**
 - `sequence_integrity_score` ≥ 7
 - `is_collection_not_sequence` = false
 - No more than 1 transition failure
-- All mode violations must be zero
+- Zero mode violations
 
-**If Failed:** Content returns to Stage 3 with specific rewrite instructions (max 2 coherence attempts).
+**Retention Mechanics (Format-Specific):**
+
+| Format | Requirements |
+|--------|--------------|
+| **REEL** | hook_implementation_score ≥ 7, reengagement_present = true, screenshot_line_isolated = true, ending_is_open_loop = true, has_breath_moment = true |
+| **CAROUSEL** | slide_1_incomplete = true, swipe_chain_score ≥ 7, save_triggers_valid = true, share_slide_standalone = true, drip_not_dump = true |
+| **QUOTE** | standalone_power ≥ 8, specificity_score ≥ 7, visual_rhythm_ok = true |
+
+---
+
+#### Outputs
+
+**NarrativeCoherenceAudit:**
+```python
+NarrativeCoherenceAudit:
+    sequence_integrity_score: int       # 1-10 (must be ≥ 7)
+    is_collection_not_sequence: bool
+    transition_audits: List[TransitionAudit]
+    mode_audits: List[ModeAudit]
+    energy_curve_valid: bool
+    energy_curve_issues: List[str]
+    peak_location: int                  # Which unit has peak energy
+    narrative_passes: bool
+```
+
+**ReelRetentionAudit:**
+```python
+ReelRetentionAudit:
+    hook_matches_type: bool
+    hook_implementation_score: int      # 1-10 (must be ≥ 7)
+    reengagement_present: bool
+    reengagement_beat_location: Optional[str]
+    screenshot_line_isolated: bool
+    screenshot_line_standalone: bool
+    ending_is_open_loop: bool
+    has_breath_moment: bool
+    retention_passes: bool
+```
+
+**CarouselRetentionAudit:**
+```python
+CarouselRetentionAudit:
+    slide_1_incomplete: bool
+    slide_swipe_audits: List[SlideSwipeAudit]
+    swipe_chain_score: int              # % of slides with working triggers
+    save_triggers_valid: bool
+    share_slide_standalone: bool
+    drip_not_dump: bool
+    retention_passes: bool
+```
+
+**QuoteRetentionAudit:**
+```python
+QuoteRetentionAudit:
+    standalone_power: int               # 1-10 (must be ≥ 8)
+    specificity_score: int              # 1-10 (must be ≥ 7)
+    visual_rhythm_ok: bool
+    retention_passes: bool
+```
+
+**CoherenceAuditResult (Combined):**
+```python
+CoherenceAuditResult:
+    format_type: str                    # REEL, CAROUSEL, QUOTE
+    narrative_audit: NarrativeCoherenceAudit
+    reel_retention: Optional[ReelRetentionAudit]
+    carousel_retention: Optional[CarouselRetentionAudit]
+    quote_retention: Optional[QuoteRetentionAudit]
+    overall_pass: bool                  # Both narrative AND retention must pass
+    rewrite_instructions: List[CoherenceRewriteInstruction]
+    rewrite_required: bool
+```
+
+**If Failed:** Content returns to Stage 3 with prioritized rewrite instructions (max 2 coherence attempts). Hook failures take priority over ending failures, which take priority over middle failures.
 
 ---
 

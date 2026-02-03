@@ -10,6 +10,8 @@ import logging
 from typing import Optional, Union
 
 from langchain_openai import ChatOpenAI
+# Uncomment to use Anthropic instead of OpenAI:
+# from langchain_anthropic import ChatAnthropic
 
 from app.config import settings
 from app.creation.prompts.stage_3_carousel import STAGE3_CAROUSEL_PROMPT
@@ -41,14 +43,22 @@ class Stage3Generator:
     def __init__(
         self,
         model: Optional[str] = None,
+        provider: Optional[str] = None,
     ):
         """
         Initialize the Stage 3 generator.
 
         Args:
             model: LLM model name (defaults to settings.CREATION_LLM_MODEL)
+            provider: LLM provider - 'openai' or 'anthropic' (defaults to settings.CREATION_LLM_PROVIDER)
         """
-        self.model = model or settings.CREATION_LLM_MODEL
+        self.provider = provider or settings.CREATION_LLM_PROVIDER
+
+        # Select model based on provider
+        if self.provider == "anthropic":
+            self.model = model or settings.ANTHROPIC_CREATION_MODEL
+        else:
+            self.model = model or settings.CREATION_LLM_MODEL
 
         # Build format-specific chains
         self._chains = {}
@@ -65,6 +75,14 @@ class Stage3Generator:
         for format_type, (prompt, schema) in formats.items():
             temperature = creation_temperatures.stage_3_generate.get(format_type)
 
+            # Uncomment to use Anthropic:
+            # if self.provider == "anthropic":
+            #     llm = ChatAnthropic(
+            #         model=self.model,
+            #         temperature=temperature,
+            #         api_key=settings.ANTHROPIC_API_KEY,
+            #     )
+            # else:
             llm = ChatOpenAI(
                 model=self.model,
                 temperature=temperature,
@@ -108,6 +126,14 @@ class Stage3Generator:
                 "QUOTE": (STAGE3_QUOTE_PROMPT, QuoteContent),
             }[format_upper]
 
+            # Uncomment to use Anthropic:
+            # if self.provider == "anthropic":
+            #     llm = ChatAnthropic(
+            #         model=self.model,
+            #         temperature=temperature,
+            #         api_key=settings.ANTHROPIC_API_KEY,
+            #     )
+            # else:
             llm = ChatOpenAI(
                 model=self.model,
                 temperature=temperature,
@@ -239,6 +265,17 @@ class Stage3Generator:
             "brief": json.dumps(context.brief, indent=2, default=str),
             # Skeleton from Stage 2.5
             "skeleton_json": skeleton_json or "Not provided",
+            # Platform-Native Extraction (RETENTION)
+            "hook_ammunition": "\n".join(f"- {h}" for h in context.hook_ammunition) if context.hook_ammunition else "N/A",
+            "hyper_specific_moment": context.hyper_specific_moment or "N/A",
+            "screenshot_candidates": "\n".join(f"- {s}" for s in context.screenshot_candidates) if context.screenshot_candidates else "N/A",
+            "accusation_angle": context.accusation_angle or "N/A",
+            # Re-engagement Architecture (RETENTION)
+            "primary_hook": context.primary_hook or "N/A",
+            "secondary_hook": context.secondary_hook or "N/A",
+            "pivot_hook": context.pivot_hook or "N/A",
+            "screenshot_moment": context.screenshot_moment or "N/A",
+            "open_loop": context.open_loop or "N/A",
         }
 
         logger.debug(

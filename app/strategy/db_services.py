@@ -224,7 +224,7 @@ def delete_week_schedule(
     """
     Delete all ContentSchedule rows for a specific week.
 
-    GeneratedContent is cascade-deleted by the database.
+    GeneratedContent is explicitly deleted first (ORM doesn't cascade properly).
     UsageHistory.schedule_id is SET NULL (history preserved).
 
     Args:
@@ -249,6 +249,10 @@ def delete_week_schedule(
     count = len(schedules)
 
     for schedule in schedules:
+        # Explicitly delete GeneratedContent first to avoid NOT NULL violation
+        # on schedule_id when SQLAlchemy tries to nullify FK before delete
+        if schedule.generated_content is not None:
+            session.delete(schedule.generated_content)
         session.delete(schedule)
 
     session.flush()

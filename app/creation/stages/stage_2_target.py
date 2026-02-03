@@ -9,6 +9,8 @@ import logging
 from typing import Any, Dict, Optional
 
 from langchain_openai import ChatOpenAI
+# Uncomment to use Anthropic instead of OpenAI:
+# from langchain_anthropic import ChatAnthropic
 
 from app.config import settings
 from app.creation.prompts.stage_2 import STAGE2_PROMPT
@@ -35,6 +37,7 @@ class Stage2Targeter:
         self,
         model: Optional[str] = None,
         temperature: Optional[float] = None,
+        provider: Optional[str] = None,
     ):
         """
         Initialize the Stage 2 targeter.
@@ -42,19 +45,39 @@ class Stage2Targeter:
         Args:
             model: LLM model name (defaults to settings.CREATION_LLM_MODEL)
             temperature: LLM temperature (defaults to creation_temperatures.stage_2_target)
+            provider: LLM provider - 'openai' or 'anthropic' (defaults to settings.CREATION_LLM_PROVIDER)
         """
-        self.model = model or settings.CREATION_LLM_MODEL
+        self.provider = provider or settings.CREATION_LLM_PROVIDER
         self.temperature = (
             temperature
             if temperature is not None
             else creation_temperatures.stage_2_target
         )
 
-        self.llm = ChatOpenAI(
-            model=self.model,
-            temperature=self.temperature,
-            api_key=settings.OPENAI_API_KEY,
-        )
+        # Select model based on provider
+        if self.provider == "anthropic":
+            self.model = model or settings.ANTHROPIC_CREATION_MODEL
+            # Uncomment to use Anthropic:
+            # self.llm = ChatAnthropic(
+            #     model=self.model,
+            #     temperature=self.temperature,
+            #     api_key=settings.ANTHROPIC_API_KEY,
+            # )
+            # For now, fall back to OpenAI
+            self.model = model or settings.CREATION_LLM_MODEL
+            self.llm = ChatOpenAI(
+                model=self.model,
+                temperature=self.temperature,
+                api_key=settings.OPENAI_API_KEY,
+            )
+        else:
+            # Default: OpenAI
+            self.model = model or settings.CREATION_LLM_MODEL
+            self.llm = ChatOpenAI(
+                model=self.model,
+                temperature=self.temperature,
+                api_key=settings.OPENAI_API_KEY,
+            )
 
         # Use structured output for deterministic parsing
         self.structured_llm = self.llm.with_structured_output(
@@ -105,6 +128,12 @@ class Stage2Targeter:
                 "why_someone_shares_this": stage1_analysis.emotional_core.why_someone_shares_this,
                 "requires_heavy_reframe": str(stage1_analysis.requires_heavy_reframe),
                 "suggested_reframe": stage1_analysis.suggested_reframe or "N/A",
+                # New Stage 1 retention fields
+                "hook_ammunition": "\n".join(f"- {h}" for h in stage1_analysis.hook_ammunition),
+                "hyper_specific_moment": stage1_analysis.hyper_specific_moment,
+                "screenshot_candidates": "\n".join(f"- {s}" for s in stage1_analysis.screenshot_candidates),
+                "accusation_angle": stage1_analysis.accusation_angle,
+                "share_trigger_person": stage1_analysis.share_trigger_person,
             }
         )
 
@@ -155,6 +184,12 @@ class Stage2Targeter:
             strongest_hook=stage1_analysis.strongest_hook_in_material,
             primary_emotion=stage1_analysis.emotional_core.primary_emotion,
             secondary_emotion=stage1_analysis.emotional_core.secondary_emotion,
+            # From Stage 1: Platform-Native Extraction (RETENTION)
+            hook_ammunition=stage1_analysis.hook_ammunition,
+            hyper_specific_moment=stage1_analysis.hyper_specific_moment,
+            screenshot_candidates=stage1_analysis.screenshot_candidates,
+            accusation_angle=stage1_analysis.accusation_angle,
+            share_trigger_person=stage1_analysis.share_trigger_person,
             # From Stage 2: New fields
             mode_sequence=targeting.mode_sequence,
             emotional_arc=targeting.emotional_arc,
@@ -163,6 +198,13 @@ class Stage2Targeter:
             physical_response_goal=targeting.physical_response_goal,
             share_trigger=targeting.share_trigger,
             share_target=targeting.share_target,
+            # From Stage 2: Re-engagement Architecture (RETENTION)
+            primary_hook=targeting.primary_hook,
+            secondary_hook=targeting.secondary_hook,
+            pivot_hook=targeting.pivot_hook,
+            screenshot_moment=targeting.screenshot_moment,
+            open_loop=targeting.open_loop,
+            share_message=targeting.share_message,
             # Backward compatibility
             resolved_mode=resolved_mode,
             structural_note=targeting.mode_sequence.opener.function,
@@ -173,3 +215,4 @@ class Stage2Targeter:
         )
 
         return context
+

@@ -9,16 +9,17 @@ Stages:
     2. Resolve Mode & Target - Mode sequence (Manson Protocol) + emotional arc
     2.5. Logic Skeleton - Structural plan before copy is written
     3. Generate Content - Format-specific content generation from skeleton
-    3.5. Coherence Audit - Evaluate narrative sequence integrity
+    3.5. Coherence Audit - Evaluate narrative sequence + retention mechanics
     4. Self-Critique Loop - Score and rewrite if needed
     5. Hard Filters & Storage - Final validation and DB storage
 """
 
 from app.creation.schemas import (
     CarouselContent,
+    CarouselRetentionAudit,
     CarouselSkeleton,
     CoherenceAuditResult,
-    CoherenceFailure,
+    CoherenceRewriteInstruction,
     CritiqueFailure,
     CritiqueResult,
     CritiqueScores,
@@ -27,12 +28,17 @@ from app.creation.schemas import (
     EmotionalJourney,
     GenerationContext,
     HardFilterResult,
+    ModeAudit,
     ModeSequence,
     ModeStep,
+    NarrativeCoherenceAudit,
     QuoteContent,
+    QuoteRetentionAudit,
     QuoteSkeleton,
     ReelContent,
+    ReelRetentionAudit,
     ReelSkeleton,
+    SlideSwipeAudit,
     Stage1Analysis,
     Stage2Targeting,
     Stage2_5Result,
@@ -40,13 +46,15 @@ from app.creation.schemas import (
     Stage3_5Result,
     Stage4Result,
     Stage5Result,
+    TransitionAudit,
 )
 
 __all__ = [
     "CarouselContent",
+    "CarouselRetentionAudit",
     "CarouselSkeleton",
     "CoherenceAuditResult",
-    "CoherenceFailure",
+    "CoherenceRewriteInstruction",
     "CritiqueFailure",
     "CritiqueResult",
     "CritiqueScores",
@@ -55,12 +63,17 @@ __all__ = [
     "EmotionalJourney",
     "GenerationContext",
     "HardFilterResult",
+    "ModeAudit",
     "ModeSequence",
     "ModeStep",
+    "NarrativeCoherenceAudit",
     "QuoteContent",
+    "QuoteRetentionAudit",
     "QuoteSkeleton",
     "ReelContent",
+    "ReelRetentionAudit",
     "ReelSkeleton",
+    "SlideSwipeAudit",
     "Stage1Analysis",
     "Stage2Targeting",
     "Stage2_5Result",
@@ -68,4 +81,5 @@ __all__ = [
     "Stage3_5Result",
     "Stage4Result",
     "Stage5Result",
+    "TransitionAudit",
 ]

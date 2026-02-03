@@ -10,6 +10,8 @@ import logging
 from typing import Optional, Union
 
 from langchain_openai import ChatOpenAI
+# Uncomment to use Anthropic instead of OpenAI:
+# from langchain_anthropic import ChatAnthropic
 
 from app.config import settings
 from app.creation.prompts.stage_3_5_coherence import STAGE3_5_COHERENCE_PROMPT
@@ -46,6 +48,7 @@ class Stage3_5CoherenceAuditor:
         self,
         model: Optional[str] = None,
         temperature: Optional[float] = None,
+        provider: Optional[str] = None,
     ):
         """
         Initialize the Stage 3.5 coherence auditor.
@@ -53,19 +56,39 @@ class Stage3_5CoherenceAuditor:
         Args:
             model: LLM model name (defaults to settings.CREATION_LLM_MODEL)
             temperature: LLM temperature (defaults to stage_4_critique temperature)
+            provider: LLM provider - 'openai' or 'anthropic' (defaults to settings.CREATION_LLM_PROVIDER)
         """
-        self.model = model or settings.CREATION_ANALYTICAL_MODEL
+        self.provider = provider or settings.CREATION_LLM_PROVIDER
         self.temperature = (
             temperature
             if temperature is not None
             else creation_temperatures.stage_4_critique
         )
 
-        llm = ChatOpenAI(
-            model=self.model,
-            temperature=self.temperature,
-            api_key=settings.OPENAI_API_KEY,
-        )
+        # Select model based on provider
+        if self.provider == "anthropic":
+            self.model = model or settings.ANTHROPIC_ANALYTICAL_MODEL
+            # Uncomment to use Anthropic:
+            # llm = ChatAnthropic(
+            #     model=self.model,
+            #     temperature=self.temperature,
+            #     api_key=settings.ANTHROPIC_API_KEY,
+            # )
+            # For now, fall back to OpenAI
+            self.model = model or settings.CREATION_ANALYTICAL_MODEL
+            llm = ChatOpenAI(
+                model=self.model,
+                temperature=self.temperature,
+                api_key=settings.OPENAI_API_KEY,
+            )
+        else:
+            # Default: OpenAI
+            self.model = model or settings.CREATION_ANALYTICAL_MODEL
+            llm = ChatOpenAI(
+                model=self.model,
+                temperature=self.temperature,
+                api_key=settings.OPENAI_API_KEY,
+            )
 
         self.structured_llm = llm.with_structured_output(
             CoherenceAuditResult,
@@ -98,13 +121,15 @@ class Stage3_5CoherenceAuditor:
         self,
         stage3_result: Stage3Result,
         stage2_5_result: Stage2_5Result,
+        generation_context: Optional[dict] = None,
     ) -> Stage3_5Result:
         """
-        Run coherence audit on generated content against its skeleton.
+        Run coherence and retention audit on generated content against its skeleton.
 
         Args:
             stage3_result: Result from Stage 3 generation
             stage2_5_result: Result from Stage 2.5 skeleton generation
+            generation_context: Optional dict with retention context fields
 
         Returns:
             Stage3_5Result with audit results
@@ -130,10 +155,22 @@ class Stage3_5CoherenceAuditor:
         content_json = json.dumps(content.model_dump(), indent=2, default=str)
         skeleton_json = json.dumps(skeleton.model_dump(), indent=2, default=str)
 
+        # Extract retention context fields (with defaults)
+        ctx = generation_context or {}
+        hook_ammunition = ctx.get("hook_ammunition", [])
+        screenshot_candidates = ctx.get("screenshot_candidates", [])
+
         prompt_input = {
             "format_type": stage3_result.format_type,
             "skeleton": skeleton_json,
             "generated_content": content_json,
+            # Retention context fields
+            "primary_hook": ctx.get("primary_hook", "Not specified"),
+            "secondary_hook": ctx.get("secondary_hook", "Not specified"),
+            "screenshot_moment": ctx.get("screenshot_moment", "Not specified"),
+            "open_loop": ctx.get("open_loop", "Not specified"),
+            "hook_ammunition": "\n".join(f"- {h}" for h in hook_ammunition) if hook_ammunition else "N/A",
+            "screenshot_candidates": "\n".join(f"- {s}" for s in screenshot_candidates) if screenshot_candidates else "N/A",
         }
 
         logger.debug(
@@ -147,17 +184,20 @@ class Stage3_5CoherenceAuditor:
             result.audit_result = audit_result
 
             logger.debug(
-                "[CREATION:S3.5] audit complete score=%d pass=%s trace_id=%s",
+                "[CREATION:S3.5] audit complete score=%d pass=%s retention_pass=%s trace_id=%s",
                 audit_result.sequence_integrity_score,
                 audit_result.coherence_pass,
+                audit_result.retention_passes,
                 stage3_result.trace_id,
             )
 
             if not audit_result.coherence_pass:
+                primary_failure = audit_result.primary_failure or "Unknown"
                 logger.info(
-                    "[CREATION:S3.5] coherence_failed score=%d rewrite=%s trace_id=%s",
+                    "[CREATION:S3.5] coherence_failed score=%d rewrite=%s primary_failure=%s trace_id=%s",
                     audit_result.sequence_integrity_score,
                     audit_result.rewrite_required,
+                    primary_failure[:50],
                     stage3_result.trace_id,
                 )
 

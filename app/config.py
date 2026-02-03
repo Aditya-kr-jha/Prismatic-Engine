@@ -74,6 +74,20 @@ class Settings(BaseSettings):
         default="gpt-5-mini",
         description="Cheaper LLM model for analytical stages (3.5 coherence, 4 critique)",
     )
+
+    # Anthropic Model Settings (alternative to OpenAI)
+    CREATION_LLM_PROVIDER: str = Field(
+        default="openai",
+        description="LLM provider for Phase 5 creation: 'openai' or 'anthropic'",
+    )
+    ANTHROPIC_CREATION_MODEL: str = Field(
+        default="claude-sonnet-4-20250514",
+        description="Anthropic model for Phase 5 content creation",
+    )
+    ANTHROPIC_ANALYTICAL_MODEL: str = Field(
+        default="claude-sonnet-4-20250514",
+        description="Anthropic model for analytical stages (3.5 coherence, 4 critique)",
+    )
     ELEVENLABS_API_KEY: str = Field(
         default="",
         description="ElevenLabs API key for TTS",

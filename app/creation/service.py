@@ -383,8 +383,16 @@ class CreationService:
                 stage3_5_result = None
                 break
 
-            # Run Stage 3.5 coherence audit
-            stage3_5_result = await self.run_stage3_5(stage3_result, stage2_5_result)
+            # Run Stage 3.5 coherence audit with retention context
+            retention_context = {
+                "primary_hook": getattr(stage2_context, 'primary_hook', None),
+                "secondary_hook": getattr(stage2_context, 'secondary_hook', None),
+                "screenshot_moment": getattr(stage2_context, 'screenshot_moment', None),
+                "open_loop": getattr(stage2_context, 'open_loop', None),
+                "hook_ammunition": stage2_context.hook_ammunition if stage2_context.hook_ammunition else [],
+                "screenshot_candidates": stage2_context.screenshot_candidates if stage2_context.screenshot_candidates else [],
+            }
+            stage3_5_result = await self.run_stage3_5(stage3_result, stage2_5_result, retention_context)
             if stage3_5_result is None or stage3_5_result.error:
                 item_result.error = (
                     stage3_5_result.error
@@ -418,8 +426,16 @@ class CreationService:
         # Run Stage 4 critique loop
         # COST OPTIMIZATION: Reduce max attempts for high-quality briefs
         stage4_max_attempts = 1 if is_high_quality_brief else 2
+        # Build coherence audit summary for Stage 4
+        coherence_summary = "Not available"
+        if stage3_5_result and stage3_5_result.audit_result:
+            audit = stage3_5_result.audit_result
+            coherence_summary = f"Coherence Pass: {audit.coherence_pass}, Score: {audit.sequence_integrity_score}/10"
+            if not audit.coherence_pass:
+                coherence_summary += f", Issues: {audit.rewrite_instruction or 'N/A'}"
         stage4_result = await self.run_stage4(
-            stage3_result, stage2_context, max_attempts=stage4_max_attempts
+            stage3_result, stage2_context, max_attempts=stage4_max_attempts,
+            coherence_audit_summary=coherence_summary,
         )
         if stage4_result is None or stage4_result.error:
             item_result.error = (
@@ -679,8 +695,9 @@ class CreationService:
         self,
         stage3_result: Stage3Result,
         stage2_5_result: Stage2_5Result,
+        generation_context: Optional[dict] = None,
     ) -> Optional[Stage3_5Result]:
-        """Run Stage 3.5 coherence audit on generated content."""
+        """Run Stage 3.5 coherence and retention audit on generated content."""
         last_error: Optional[Exception] = None
 
         for attempt in range(self.MAX_RETRIES):
@@ -688,6 +705,7 @@ class CreationService:
                 result = await self.coherence_auditor.audit(
                     stage3_result=stage3_result,
                     stage2_5_result=stage2_5_result,
+                    generation_context=generation_context,
                 )
                 if result and not result.error:
                     logger.debug(
@@ -732,6 +750,7 @@ class CreationService:
         stage3_result: Stage3Result,
         context: GenerationContext,
         max_attempts: int = 2,
+        coherence_audit_summary: str = "Not available",
     ) -> Optional[Stage4Result]:
         """
         Run Stage 4 critique loop with rewrites.
@@ -743,6 +762,7 @@ class CreationService:
             stage3_result: Stage 3 generation result
             context: Generation context
             max_attempts: Max critique/rewrite attempts (default 2, reduced from 3)
+            coherence_audit_summary: Summary from Stage 3.5 coherence audit
         """
         try:
             stage4_result = await self.critic.run_critique_loop(
@@ -750,6 +770,7 @@ class CreationService:
                 initial_stage3_result=stage3_result,
                 context=context,
                 max_attempts=max_attempts,
+                coherence_audit_summary=coherence_audit_summary,
             )
             logger.debug(
                 "[CREATION:S4] complete trace_id=%s passed=%s attempts=%d",
@@ -774,6 +795,7 @@ class CreationService:
                         initial_stage3_result=stage3_result,
                         context=context,
                         max_attempts=max_attempts,
+                        coherence_audit_summary=coherence_audit_summary,
                     )
                 except Exception as retry_error:
                     logger.warning(

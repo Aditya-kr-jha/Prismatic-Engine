@@ -10,6 +10,8 @@ import logging
 from typing import Optional, Union
 
 from langchain_openai import ChatOpenAI
+# Uncomment to use Anthropic instead of OpenAI:
+# from langchain_anthropic import ChatAnthropic
 
 from app.config import settings
 from app.creation.prompts.stage_2_5_carousel import STAGE2_5_CAROUSEL_PROMPT
@@ -44,6 +46,7 @@ class Stage2_5SkeletonGenerator:
         self,
         model: Optional[str] = None,
         temperature: Optional[float] = None,
+        provider: Optional[str] = None,
     ):
         """
         Initialize the Stage 2.5 skeleton generator.
@@ -51,8 +54,16 @@ class Stage2_5SkeletonGenerator:
         Args:
             model: LLM model name (defaults to settings.CREATION_LLM_MODEL)
             temperature: LLM temperature (defaults to stage_2_target temperature)
+            provider: LLM provider - 'openai' or 'anthropic' (defaults to settings.CREATION_LLM_PROVIDER)
         """
-        self.model = model or settings.CREATION_LLM_MODEL
+        self.provider = provider or settings.CREATION_LLM_PROVIDER
+
+        # Select model based on provider
+        if self.provider == "anthropic":
+            self.model = model or settings.ANTHROPIC_CREATION_MODEL
+        else:
+            self.model = model or settings.CREATION_LLM_MODEL
+
         # Use a slightly lower temperature for structural planning
         self.temperature = (
             temperature
@@ -73,6 +84,14 @@ class Stage2_5SkeletonGenerator:
         }
 
         for format_type, (prompt, schema) in formats.items():
+            # Uncomment to use Anthropic:
+            # if self.provider == "anthropic":
+            #     llm = ChatAnthropic(
+            #         model=self.model,
+            #         temperature=self.temperature,
+            #         api_key=settings.ANTHROPIC_API_KEY,
+            #     )
+            # else:
             llm = ChatOpenAI(
                 model=self.model,
                 temperature=self.temperature,
@@ -117,6 +136,7 @@ class Stage2_5SkeletonGenerator:
         prompt_input = {
             # Core content
             "core_truth": context.core_truth,
+            "counter_truth": context.counter_truth,
             "required_pillar": context.required_pillar,
             # Mode sequence
             "opener_mode": context.mode_sequence.opener.mode,
@@ -137,6 +157,17 @@ class Stage2_5SkeletonGenerator:
             "pacing_note": context.emotional_arc.pacing_note,
             # Tone
             "tone_shift_instruction": context.tone_shift_instruction,
+            # Re-engagement Architecture (RETENTION)
+            "primary_hook": context.primary_hook,
+            "secondary_hook": context.secondary_hook,
+            "pivot_hook": context.pivot_hook,
+            "screenshot_moment": context.screenshot_moment,
+            "open_loop": context.open_loop,
+            # Platform-Native Extraction (RETENTION)
+            "hook_ammunition": "\n".join(f"- {h}" for h in context.hook_ammunition) if context.hook_ammunition else "N/A",
+            "hyper_specific_moment": context.hyper_specific_moment or "N/A",
+            "screenshot_candidates": "\n".join(f"- {s}" for s in context.screenshot_candidates) if context.screenshot_candidates else "N/A",
+            "accusation_angle": context.accusation_angle or "N/A",
             # For Quote
             "primary_emotion": context.primary_emotion,
             "share_trigger": context.share_trigger,

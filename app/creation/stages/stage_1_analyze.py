@@ -10,6 +10,8 @@ import logging
 from typing import Any, Dict, Optional
 
 from langchain_openai import ChatOpenAI
+# Uncomment to use Anthropic instead of OpenAI:
+# from langchain_anthropic import ChatAnthropic
 
 from app.config import settings
 from app.creation.prompts.stage_1 import STAGE1_PROMPT
@@ -31,6 +33,7 @@ class Stage1Analyzer:
         self,
         model: Optional[str] = None,
         temperature: Optional[float] = None,
+        provider: Optional[str] = None,
     ):
         """
         Initialize the Stage 1 analyzer.
@@ -38,19 +41,39 @@ class Stage1Analyzer:
         Args:
             model: LLM model name (defaults to settings.CREATION_LLM_MODEL)
             temperature: LLM temperature (defaults to creation_temperatures.stage_1_analyze)
+            provider: LLM provider - 'openai' or 'anthropic' (defaults to settings.CREATION_LLM_PROVIDER)
         """
-        self.model = model or settings.CREATION_LLM_MODEL
+        self.provider = provider or settings.CREATION_LLM_PROVIDER
         self.temperature = (
             temperature
             if temperature is not None
             else creation_temperatures.stage_1_analyze
         )
 
-        self.llm = ChatOpenAI(
-            model=self.model,
-            temperature=self.temperature,
-            api_key=settings.OPENAI_API_KEY,
-        )
+        # Select model based on provider
+        if self.provider == "anthropic":
+            self.model = model or settings.ANTHROPIC_CREATION_MODEL
+            # Uncomment to use Anthropic:
+            # self.llm = ChatAnthropic(
+            #     model=self.model,
+            #     temperature=self.temperature,
+            #     api_key=settings.ANTHROPIC_API_KEY,
+            # )
+            # For now, fall back to OpenAI
+            self.model = model or settings.CREATION_LLM_MODEL
+            self.llm = ChatOpenAI(
+                model=self.model,
+                temperature=self.temperature,
+                api_key=settings.OPENAI_API_KEY,
+            )
+        else:
+            # Default: OpenAI
+            self.model = model or settings.CREATION_LLM_MODEL
+            self.llm = ChatOpenAI(
+                model=self.model,
+                temperature=self.temperature,
+                api_key=settings.OPENAI_API_KEY,
+            )
 
         # Use structured output with JSON schema method for deterministic parsing
         self.structured_llm = self.llm.with_structured_output(

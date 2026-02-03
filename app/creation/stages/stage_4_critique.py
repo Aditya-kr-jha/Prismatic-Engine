@@ -11,6 +11,8 @@ import logging
 from typing import Optional, Union
 
 from langchain_openai import ChatOpenAI
+# Uncomment to use Anthropic instead of OpenAI:
+# from langchain_anthropic import ChatAnthropic
 
 from app.config import settings
 from app.creation.prompts.stage_4 import STAGE4_PROMPT
@@ -60,6 +62,7 @@ class Stage4Critic:
         self,
         model: Optional[str] = None,
         temperature: Optional[float] = None,
+        provider: Optional[str] = None,
     ):
         """
         Initialize the Stage 4 critic.
@@ -67,19 +70,39 @@ class Stage4Critic:
         Args:
             model: LLM model name (defaults to settings.CREATION_LLM_MODEL)
             temperature: LLM temperature (defaults to creation_temperatures.stage_4_critique)
+            provider: LLM provider - 'openai' or 'anthropic' (defaults to settings.CREATION_LLM_PROVIDER)
         """
-        self.model = model or settings.CREATION_ANALYTICAL_MODEL
+        self.provider = provider or settings.CREATION_LLM_PROVIDER
         self.temperature = (
             temperature
             if temperature is not None
             else creation_temperatures.stage_4_critique
         )
 
-        self.llm = ChatOpenAI(
-            model=self.model,
-            temperature=self.temperature,
-            api_key=settings.OPENAI_API_KEY,
-        )
+        # Select model based on provider
+        if self.provider == "anthropic":
+            self.model = model or settings.ANTHROPIC_ANALYTICAL_MODEL
+            # Uncomment to use Anthropic:
+            # self.llm = ChatAnthropic(
+            #     model=self.model,
+            #     temperature=self.temperature,
+            #     api_key=settings.ANTHROPIC_API_KEY,
+            # )
+            # For now, fall back to OpenAI
+            self.model = model or settings.CREATION_ANALYTICAL_MODEL
+            self.llm = ChatOpenAI(
+                model=self.model,
+                temperature=self.temperature,
+                api_key=settings.OPENAI_API_KEY,
+            )
+        else:
+            # Default: OpenAI
+            self.model = model or settings.CREATION_ANALYTICAL_MODEL
+            self.llm = ChatOpenAI(
+                model=self.model,
+                temperature=self.temperature,
+                api_key=settings.OPENAI_API_KEY,
+            )
 
         # Use structured output for deterministic parsing
         self.structured_llm = self.llm.with_structured_output(
@@ -144,6 +167,11 @@ class Stage4Critic:
             "landing_state": context.emotional_arc.landing_state,
             "physical_response_goal": context.physical_response_goal,
             "pacing_note": context.emotional_arc.pacing_note,
+            # Share target
+            "share_target": context.share_target,
+            # Platform-Native Extraction (RETENTION)
+            "hook_ammunition": "\n".join(f"- {h}" for h in context.hook_ammunition) if context.hook_ammunition else "N/A",
+            "screenshot_candidates": "\n".join(f"- {s}" for s in context.screenshot_candidates) if context.screenshot_candidates else "N/A",
             # Content and coherence
             "generated_content": self._serialize_content(content),
             "coherence_audit_summary": coherence_audit_summary,
@@ -183,6 +211,7 @@ class Stage4Critic:
         initial_stage3_result: Stage3Result,
         context: GenerationContext,
         max_attempts: int = 3,
+        coherence_audit_summary: str = "Not available",
     ) -> Stage4Result:
         """
         Full critique loop with rewrites.
@@ -198,6 +227,7 @@ class Stage4Critic:
             initial_stage3_result: Initial Stage 3 output
             context: GenerationContext (will be mutated with critique data)
             max_attempts: Maximum generation attempts (default 3)
+            coherence_audit_summary: Summary from Stage 3.5 coherence audit
 
         Returns:
             Stage4Result with final content and critique outcome
@@ -218,8 +248,8 @@ class Stage4Critic:
 
         while attempt <= max_attempts:
             try:
-                # Run critique
-                critique = await self.critique(current_content, context)
+                # Run critique with coherence summary
+                critique = await self.critique(current_content, context, coherence_audit_summary)
 
                 # Check if passed
                 if critique.overall_pass:
