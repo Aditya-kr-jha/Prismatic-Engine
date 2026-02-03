@@ -10,7 +10,7 @@
   <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python 3.11+"></a>
   <a href="https://fastapi.tiangolo.com/"><img src="https://img.shields.io/badge/FastAPI-0.100+-009688?style=for-the-badge&logo=fastapi&logoColor=white" alt="FastAPI"></a>
   <a href="https://www.postgresql.org/"><img src="https://img.shields.io/badge/PostgreSQL-14+-336791?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL"></a>
-  <a href="https://openai.com/"><img src="https://img.shields.io/badge/OpenAI-GPT--4-412991?style=for-the-badge&logo=openai&logoColor=white" alt="OpenAI GPT-4"></a>
+  <a href="https://openai.com/"><img src="https://img.shields.io/badge/OpenAI-GPT--5-412991?style=for-the-badge&logo=openai&logoColor=white" alt="OpenAI GPT-5"></a>
 </p>
 
 <p align="center">
@@ -25,7 +25,7 @@
 
 ## ✨ What is Prismatic Engine?
 
-Prismatic Engine is a **5-phase content automation pipeline** that harvests raw material from Reddit, books, and blogs, then transforms it into **Instagram-ready content** through sophisticated LLM analysis, strategic scheduling, and multi-stage generation.
+Prismatic Engine is a **5-phase content automation pipeline** that harvests raw material from Reddit, books, and blogs, youtube then transforms it into **Instagram-ready content** through sophisticated LLM analysis, strategic scheduling, and multi-stage generation.
 
 ```
 📥 Ingestion → 🏷️ Classification → 📅 Strategy → ✍️ Creation → 📤 Delivery
