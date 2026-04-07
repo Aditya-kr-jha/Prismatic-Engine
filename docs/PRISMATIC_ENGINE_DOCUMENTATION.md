@@ -967,28 +967,24 @@ The Creation phase transforms scheduled content briefs into production-ready Ins
 
 | Aspect | Implementation |
 |--------|----------------|
-| **Trigger** | Manual invocation via `CreationService.run_pipeline()` |
-| **Frequency** | Once per week (after Phase 3 scheduling) |
-| **Mode** | Async batch with concurrency control |
-| **Concurrency** | 3 parallel items (matching classification pattern) |
-| **Expected Runtime** | 5-10 minutes for 21 items |
-| **LLM Model** | `settings.CREATION_LLM_MODEL` with format-specific temperatures |
+| **Trigger** | `CreationService.run_pipeline()` |
+| **Frequency** | Weekly (after Phase 3) |
+| **Concurrency** | 3 parallel items, async batch |
+| **Runtime** | 5-10 min for 21 items |
+| **LLM** | `settings.CREATION_LLM_MODEL` |
 
 ---
 
 ## Core Components
 
-| File | Responsibility |
-|------|---------------|
-| [`service.py`](file:///Users/ngcaditya/PycharmProjects/Prismatic-Engine/app/creation/service.py) | **CreationService** - Main orchestrator. Runs all 7 stages with retry logic and cost optimizations. |
-| [`schemas.py`](file:///Users/ngcaditya/PycharmProjects/Prismatic-Engine/app/creation/schemas.py) | Extensive Pydantic schemas: Stage1Analysis, ModeSequence, EmotionalArc, GenerationContext, Skeleton schemas, ReelContent, CarouselContent, QuoteContent, CoherenceAuditResult, CritiqueResult. |
-| [`mode_matrix.py`](file:///Users/ngcaditya/PycharmProjects/Prismatic-Engine/app/creation/mode_matrix.py) | Format × Pillar → Mode resolution (8 modes) for backward compatibility. |
-| [`temperature_config.py`](file:///Users/ngcaditya/PycharmProjects/Prismatic-Engine/app/creation/temperature_config.py) | Stage-specific LLM temperatures. |
-| `stages/` | Individual stage handlers (Stage1Analyzer, Stage2Targeter, Stage2_5SkeletonGenerator, Stage3Generator, Stage3_5CoherenceAuditor, Stage4Critic, Stage5Storage). |
-| `prompts/` | Stage-specific prompt templates (stage_1.py through stage_4.py, stage_2_5_*.py, stage_3_5_*.py, format-specific stage_3). |
-| `prompts/blocks/` | Shared prompt blocks (mode definitions, voice guidelines, anti-AI rules). |
-| `filters/` | Hard filter implementations for Stage 5 (character_limits.py, prohibited_phrases.py, structure_checks.py). |
-| [`db_services.py`](file:///Users/ngcaditya/PycharmProjects/Prismatic-Engine/app/creation/db_services.py) | CRUD for GeneratedContent, ContentSchedule status updates. |
+| Component | Responsibility |
+|-----------|---------------|
+| [`service.py`](file:///Users/ngcaditya/PycharmProjects/Prismatic-Engine/app/creation/service.py) | **CreationService** orchestrator with retry logic |
+| [`schemas.py`](file:///Users/ngcaditya/PycharmProjects/Prismatic-Engine/app/creation/schemas.py) | All Pydantic schemas for stages |
+| `stages/` | Stage handlers (Stage1-5) |
+| `prompts/`, `prompts/blocks/` | Prompt templates and shared blocks |
+| `filters/` | Hard filter implementations |
+| [`db_services.py`](file:///Users/ngcaditya/PycharmProjects/Prismatic-Engine/app/creation/db_services.py) | CRUD for GeneratedContent |
 
 ---
 
@@ -1131,41 +1127,14 @@ EmotionalArc:
     pacing_note: str              # Timing guidance
 ```
 
-**GenerationContext (Revised):**
+**GenerationContext:** Carries all targeting data through pipeline.
 ```python
 GenerationContext:
-    # From ContentSchedule
-    schedule_id, trace_id, required_format, required_pillar, brief
-    
-    # From Stage 1 (NEW fields)
-    core_truth: str          # THE DESTINATION
-    counter_truth: str       # THE STARTING POINT
-    contrast_pair: str       # The A→B journey phrase
-    requires_heavy_reframe: bool
-    suggested_reframe: Optional[str]
-    strongest_hook: str
-    primary_emotion, secondary_emotion: str
-    
-    # From Stage 2: NEW Mode Sequence (Manson Protocol)
-    mode_sequence: ModeSequence  # opener → bridge → closer
-    emotional_arc: EmotionalArc  # 5-stage continuous arc
-    tone_shift_instruction: str  # e.g., "Start sharp → Move clinical → End warm"
-    
-    # From Stage 2: Engagement triggers
-    physical_response_goal: str  # Somatic, not cognitive
-    share_trigger: str
-    share_target: str           # SPECIFIC person type (not "friends")
-    
-    # Backward compatibility
-    resolved_mode: str           # Primary mode (opener.mode)
-    structural_note: Optional[str]  # DEPRECATED
-    emotional_journey: Optional[EmotionalJourney]  # DEPRECATED
-    
-    # Rewrite context (populated on Stage 4 retry)
-    rewrite_focus: Optional[str]
-    specific_failures: List[CritiqueFailure]
-    ai_voice_violations: List[str]
-    attempt_number: int  # 1, 2, or 3
+    # Schedule: schedule_id, trace_id, required_format, required_pillar, brief
+    # Stage 1: core_truth, counter_truth, contrast_pair, strongest_hook, emotions
+    # Stage 2: mode_sequence, emotional_arc, tone_shift_instruction
+    # Engagement: physical_response_goal, share_trigger, share_target
+    # Rewrite (Stage 4): rewrite_focus, specific_failures, ai_voice_violations, attempt_number
 ```
 
 ---
@@ -1187,63 +1156,13 @@ GenerationContext:
 > For any two adjacent units, this must be true:
 > "Since [Unit N] establishes X, then [Unit N+1] naturally follows with Y."
 
-**Carousel Skeleton:**
-```python
-CarouselSkeleton:
-    narrative_arc_summary: str  # "From [State A] to [State B] via [Mechanism]"
-    total_slides: int           # 6-10 slides
-    skeleton: List[CarouselSlideSpec]
-    phase_structure: Dict[str, CarouselPhaseSpec]  # THE_TRAP, THE_SHIFT, THE_RELEASE
-    tone_progression: str       # e.g., "Sharp (1-2) → Clinical (3-5) → Warm (6-8)"
-    dependency_chain_valid: bool
-    golden_thread_test: str     # The complete "Since... Then..." chain
+**Skeleton Schemas:**
 
-CarouselSlideSpec:
-    slide: int              # 1-indexed
-    phase: str              # THE_TRAP, THE_SHIFT, or THE_RELEASE
-    mode: str               # Mode for this slide (can include transitions)
-    purpose: str            # What this slide must accomplish
-    energy_level: float     # 0.0-1.0
-    resolves_tension: Optional[str]  # What tension from previous slide this resolves
-    creates_tension: str    # Tension this slide creates for the next
-    handover_to_next: str   # What the reader needs/wants after this slide
-```
-
-**Reel Skeleton:**
-```python
-ReelSkeleton:
-    narrative_arc_summary: str
-    total_duration_target: int   # 15-60 seconds
-    beat_structure: List[ReelBeatSpec]
-    pacing_validation: ReelPacingValidation
-
-ReelBeatSpec:
-    beat: int               # 1-indexed
-    name: str               # THE_HOOK, THE_BUILD, THE_BREATH, THE_TRUTH, THE_LAND
-    mode: str
-    function: str
-    duration_seconds: int   # 1-20 seconds per beat
-    energy: float           # 0.0-1.0
-    sentence_style: str     # e.g., "Short. Punchy. Incomplete."
-    breath_point: bool      # True if this is a pause moment
-    ends_with: str          # State/tension at end of beat
-
-ReelPacingValidation:
-    has_breath_point: bool
-    energy_varies: bool
-    mode_shifts: bool
-    not_wall_of_sound: bool
-```
-
-**Quote Skeleton:**
-```python
-QuoteSkeleton:
-    core_tension: str       # The single tension the quote creates
-    resolution_style: str   # Implication vs statement
-    mode: str
-    energy: float
-    screenshot_quality: str  # Why someone would screenshot (the "tattoo test")
-```
+| Format | Key Fields |
+|--------|-----------|
+| **Carousel** | `narrative_arc_summary`, `total_slides` (6-10), `skeleton[]` with per-slide: phase (TRAP/SHIFT/RELEASE), mode, energy, tensions, handover |
+| **Reel** | `narrative_arc_summary`, `duration` (15-60s), `beat_structure[]` with: name (HOOK/BUILD/BREATH/TRUTH/LAND), mode, energy, breath_point |
+| **Quote** | `core_tension`, `resolution_style`, `mode`, `energy`, `screenshot_quality` (skipped in Stage 2.5) |
 
 **Validation Before Output:**
 1. Can you complete the "Since... Then..." sentence for EVERY adjacent pair?
@@ -1362,105 +1281,29 @@ QuoteContent:
 
 ---
 
-#### Retention Failure Modes
-
-| Failure | Description |
-|---------|-------------|
-| WEAK_HOOK | Hook is abstract, incomplete, or doesn't stop scroll |
-| NO_REENGAGEMENT | Missing secondary hook at 10-15 second mark (Reels) |
-| BURIED_SCREENSHOT | Screenshot line not isolated or not standalone |
-| CLOSED_ENDING | Ending provides closure instead of open loop |
-| WALL_OF_SOUND | No breath moments, uniform intensity |
-| COMPLETE_SLIDE_1 | First carousel slide doesn't create swipe compulsion |
-| FILLER_SLIDE | Slide with no swipe trigger (Carousels) |
-| WEAK_SAVE_TRIGGER | Save trigger slides aren't reference-worthy |
-| CONTEXT_DEPENDENT_SHARE | Final slide requires prior context |
-| INFO_DUMP | Multiple insights crammed into single unit |
-
----
-
 #### Pass Thresholds
 
-**Narrative Coherence:**
-- `sequence_integrity_score` ≥ 7
-- `is_collection_not_sequence` = false
-- No more than 1 transition failure
-- Zero mode violations
-
-**Retention Mechanics (Format-Specific):**
-
-| Format | Requirements |
-|--------|--------------|
-| **REEL** | hook_implementation_score ≥ 7, reengagement_present = true, screenshot_line_isolated = true, ending_is_open_loop = true, has_breath_moment = true |
-| **CAROUSEL** | slide_1_incomplete = true, swipe_chain_score ≥ 7, save_triggers_valid = true, share_slide_standalone = true, drip_not_dump = true |
-| **QUOTE** | standalone_power ≥ 8, specificity_score ≥ 7, visual_rhythm_ok = true |
+| Aspect | Requirements |
+|--------|-------------|
+| **Narrative** | sequence_integrity_score ≥ 7, ≤1 transition failure, zero mode violations |
+| **Reel** | hook_score ≥ 7, reengagement present, screenshot isolated, open loop ending, breath moment |
+| **Carousel** | slide 1 incomplete, swipe_chain ≥ 7, save triggers valid, share slide standalone |
+| **Quote** | standalone_power ≥ 8, specificity ≥ 7, visual_rhythm ok |
 
 ---
 
-#### Outputs
+#### Output: CoherenceAuditResult
 
-**NarrativeCoherenceAudit:**
-```python
-NarrativeCoherenceAudit:
-    sequence_integrity_score: int       # 1-10 (must be ≥ 7)
-    is_collection_not_sequence: bool
-    transition_audits: List[TransitionAudit]
-    mode_audits: List[ModeAudit]
-    energy_curve_valid: bool
-    energy_curve_issues: List[str]
-    peak_location: int                  # Which unit has peak energy
-    narrative_passes: bool
-```
-
-**ReelRetentionAudit:**
-```python
-ReelRetentionAudit:
-    hook_matches_type: bool
-    hook_implementation_score: int      # 1-10 (must be ≥ 7)
-    reengagement_present: bool
-    reengagement_beat_location: Optional[str]
-    screenshot_line_isolated: bool
-    screenshot_line_standalone: bool
-    ending_is_open_loop: bool
-    has_breath_moment: bool
-    retention_passes: bool
-```
-
-**CarouselRetentionAudit:**
-```python
-CarouselRetentionAudit:
-    slide_1_incomplete: bool
-    slide_swipe_audits: List[SlideSwipeAudit]
-    swipe_chain_score: int              # % of slides with working triggers
-    save_triggers_valid: bool
-    share_slide_standalone: bool
-    drip_not_dump: bool
-    retention_passes: bool
-```
-
-**QuoteRetentionAudit:**
-```python
-QuoteRetentionAudit:
-    standalone_power: int               # 1-10 (must be ≥ 8)
-    specificity_score: int              # 1-10 (must be ≥ 7)
-    visual_rhythm_ok: bool
-    retention_passes: bool
-```
-
-**CoherenceAuditResult (Combined):**
 ```python
 CoherenceAuditResult:
-    format_type: str                    # REEL, CAROUSEL, QUOTE
-    narrative_audit: NarrativeCoherenceAudit
-    reel_retention: Optional[ReelRetentionAudit]
-    carousel_retention: Optional[CarouselRetentionAudit]
-    quote_retention: Optional[QuoteRetentionAudit]
+    format_type: str
+    narrative_audit: NarrativeCoherenceAudit  # sequence_integrity_score, transition/mode_audits, energy_curve
+    retention_audit: ReelRetentionAudit | CarouselRetentionAudit | QuoteRetentionAudit
     overall_pass: bool                  # Both narrative AND retention must pass
     rewrite_instructions: List[CoherenceRewriteInstruction]
-    rewrite_required: bool
 ```
 
-**If Failed:** Content returns to Stage 3 with prioritized rewrite instructions (max 2 coherence attempts). Hook failures take priority over ending failures, which take priority over middle failures.
+**If Failed:** Returns to Stage 3 with prioritized rewrite instructions (max 2 attempts). Hook failures prioritized over ending, ending over middle.
 
 ---
 
@@ -1514,57 +1357,18 @@ Stage4Result:
     schedule_id: str
     trace_id: str
     final_content: Union[ReelContent, CarouselContent, QuoteContent]
-    final_critique: CritiqueResult
-    attempts_used: int  # 1-3
+    final_critique: CritiqueResult  # scores, specific_failures, ai_voice_violations
+    attempts_used: int
     passed: bool
-    flagged_for_review: bool
-    error: Optional[str]
-
-CritiqueScores:
-    scroll_stop_power: int
-    ai_voice_risk: int
-    share_impulse: int
-    emotional_precision: int
-    mode_progression: int
-    pacing_breath: int
-    format_execution: int
-
-CritiqueResult:
-    scores: CritiqueScores
-    lowest_score_criterion: str
-    overall_pass: bool
-    specific_failures: List[CritiqueFailure]
-    ai_voice_violations: List[str]
-    rewrite_required: bool
-    rewrite_focus: Optional[str]
 ```
 
 ---
 
 ### Stage 5: Filters & Storage
 
-**Purpose:** Run automated hard filters and store approved content.
+**Hard Filters:** Character limits, prohibited phrases, structure checks.
 
-**Hard Filters:**
-- **Character Limits:** Format-specific validation (slide count, duration, quote length)
-- **Prohibited Phrases:** AI voice detection patterns
-- **Structure Checks:** Content policy and format compliance
-
-**Storage:**
-- Creates `GeneratedContent` record with full content JSON
-- Updates `ContentSchedule.status` to `DRAFT` (ready) or `SKIPPED` (needs review)
-
-**Outputs:** `Stage5Result`
-```python
-Stage5Result:
-    schedule_id: str
-    trace_id: str
-    filter_result: HardFilterResult  # passed, failures[]
-    stored: bool
-    generated_content_id: Optional[str]
-    final_status: "CONTENT_READY" | "NEEDS_REVIEW"
-    error: Optional[str]
-```
+**Output:** Creates `GeneratedContent` with full content JSON. Updates `ContentSchedule.status` to DRAFT or SKIPPED.
 
 ---
 

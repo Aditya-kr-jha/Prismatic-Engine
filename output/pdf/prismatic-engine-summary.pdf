@@ -1,0 +1,111 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 5 0 R /F2 6 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 2942 >>
+stream
+BT
+/F2 18 Tf
+1 0 0 1 40.00 752.00 Tm
+(Prismatic Engine - One-Page Summary) Tj
+/F1 10 Tf
+1 0 0 1 40.00 730.00 Tm
+(AI-powered content generation pipeline for Instagram \\(Reels, Carousels, Quotes\\)) Tj
+/F2 12 Tf
+1 0 0 1 40.00 714.00 Tm
+(Who It's For) Tj
+/F1 10 Tf
+1 0 0 1 50.00 700.00 Tm
+(- Instagram content creators and marketers who want a weekly pipeline for short-form assets.) Tj
+/F2 12 Tf
+1 0 0 1 40.00 684.00 Tm
+(What It Does) Tj
+/F1 10 Tf
+1 0 0 1 50.00 670.00 Tm
+(- Ingests raw material from Reddit, PDFs \\(books\\), and blogs into a staging table.) Tj
+1 0 0 1 50.00 658.00 Tm
+(- Classifies content into atomic content atoms and pillars using LLMs.) Tj
+1 0 0 1 50.00 646.00 Tm
+(- Generates 21-slot weekly schedules with diversity scoring and anti-repetition rules.) Tj
+1 0 0 1 50.00 634.00 Tm
+(- Runs a 7-stage creation pipeline to produce Reels, Carousels, and Quotes.) Tj
+1 0 0 1 50.00 622.00 Tm
+(- Applies retention mechanics like hooks, open loops, and swipe triggers.) Tj
+1 0 0 1 50.00 610.00 Tm
+(- Exports final content to Markdown and Telegram for review.) Tj
+/F2 12 Tf
+1 0 0 1 40.00 594.00 Tm
+(How It Works \\(Repo Evidence\\)) Tj
+/F1 10 Tf
+1 0 0 1 50.00 580.00 Tm
+(- FastAPI app with routers for ingestion, classification, strategy, creation, and delivery) Tj
+1 0 0 1 50.00 568.00 Tm
+(  \\(app/main.py\\).) Tj
+1 0 0 1 50.00 556.00 Tm
+(- Ingestion services include Reddit harvesting and a reservoir PDF pipeline into) Tj
+1 0 0 1 50.00 544.00 Tm
+(  content_reservoir.) Tj
+1 0 0 1 50.00 532.00 Tm
+(- SQLModel + Alembic migrations manage tables like raw_ingest, content_atoms,) Tj
+1 0 0 1 50.00 520.00 Tm
+(  content_schedule, generated_content.) Tj
+1 0 0 1 50.00 508.00 Tm
+(- Creation pipeline stages live in app/creation/stages with prompt templates under) Tj
+1 0 0 1 50.00 496.00 Tm
+(  app/creation/prompts.) Tj
+1 0 0 1 50.00 484.00 Tm
+(- Delivery exporters output Markdown and Telegram messages \\(app/delivery/exporters\\).) Tj
+1 0 0 1 50.00 472.00 Tm
+(- Data flow: sources -> raw_ingest -> content_atoms -> content_schedule -> 7-stage creation ->) Tj
+1 0 0 1 50.00 460.00 Tm
+(  generated_content -> Markdown/Telegram.) Tj
+/F2 12 Tf
+1 0 0 1 40.00 444.00 Tm
+(How To Run \\(Minimal\\)) Tj
+/F1 10 Tf
+1 0 0 1 50.00 430.00 Tm
+(- Python version: README says 3.11+, but pyproject.toml requires 3.13-3.14.) Tj
+1 0 0 1 50.00 418.00 Tm
+(- Install deps: Poetry implied by pyproject.toml + poetry.lock \\(e.g., poetry install\\).) Tj
+1 0 0 1 50.00 406.00 Tm
+(- requirements.txt: Not found in repo.) Tj
+1 0 0 1 50.00 394.00 Tm
+(- Configure env: app/.env is loaded by app/config.py; .env.example not found in repo.) Tj
+1 0 0 1 50.00 382.00 Tm
+(- Provision PostgreSQL and set DB vars \\(DB user/password/host/port/name\\); DB uses) Tj
+1 0 0 1 50.00 370.00 Tm
+(  postgresql+psycopg with SSL.) Tj
+1 0 0 1 50.00 358.00 Tm
+(- Run migrations: alembic upgrade head.) Tj
+1 0 0 1 50.00 346.00 Tm
+(- Start API: uvicorn app.main:app --reload.) Tj
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+6 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
+endobj
+xref
+0 7
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000251 00000 n 
+0000003245 00000 n 
+0000003315 00000 n 
+trailer
+<< /Size 7 /Root 1 0 R >>
+startxref
+3390
+%%EOF
